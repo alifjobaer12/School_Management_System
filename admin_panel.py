@@ -59,7 +59,6 @@ def see_all_std_info():
     see_info = cursor.fetchall()
 
     all_std_textbox.delete('0.0', 'end')
-
     header = "ID\tUsername\t\t\tName\t\t\tClass\tRoll\tSection\tGrade\tPhone\t\t\tAddress\t\t\tTuition Fee\t\tPaid Fee\n"
     all_std_textbox.insert('end', header)
     all_std_textbox.insert('end', "-"*280 + '\n')

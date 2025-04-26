@@ -26,7 +26,7 @@ def hover_off(event, color, btn_name):
     btn_name.configure(text_color=color)
 
 login_window = ctk.CTk()
-login_window.geometry("700x400+1200+100")
+login_window.geometry("700x400")
 login_window.title("Login - School Management System")
 
 
@@ -40,7 +40,7 @@ std_panal_frame.place(x=350, y=200, anchor="center")
 # student panel header
 
 std_lable = CTkLabel(std_panal_frame, text=f"Student\n{'Hi! '}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"), )
-std_lable.place(x=350, y=50, anchor="center")
+std_lable.place(x=400, y=50, anchor="center")
 
 # logout btn
 std_logout = CTkButton(std_panal_frame, text="⏻ Log Out", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",16, "bold"), hover=False, )
@@ -84,7 +84,7 @@ for i, (f, d) in enumerate(zip(fee_lable, fee_det)):
 
 # student Info & SQL
 
-fields = ["Name", "Class", "Roll", "Section", "Grade", "Total Subject"]
+fields = ["Name", "Class", "Roll", "Section", "Grade"]
 
 # std info SQL
 cursor.execute("select s_name, class, roll, section, grade from students where username = 'rafihossain275';")
@@ -100,19 +100,26 @@ for i, (a, b) in enumerate(zip(fields, info)):
 
 # class Routine & SQL
 
-cursor.execute("SELECT sub_name, teacher_name, class_start_time, class_end_time  FROM class_subjects WHERE class = '10';")
+cursor.execute("SELECT sub_name, t_name, class_start_time, class_end_time  FROM subjects WHERE class = '10';")
 results = cursor.fetchall()
 
 ruttin_lable = CTkLabel(std_info_view_frame, text="Class Routine", text_color="black", width=1, height=1, fg_color="transparent", font=("Helvetica",13, "bold"))
-ruttin_lable.place(x=380, y=140, anchor="center")
+# ruttin_lable.place(x=380, y=140, anchor="center")
+ruttin_lable.place(x=350, y=150,)
 
-subject_box = CTkTextbox(std_info_view_frame, wrap="none", activate_scrollbars=True, width=600, height=160, fg_color="transparent", scrollbar_button_color="sky blue", font=("Helvetica",13, "bold"),)
-subject_box.place(x=100, y=150,)
+subject_box = CTkTextbox(std_info_view_frame, wrap="none", activate_scrollbars=True, width=500, height=160, fg_color="transparent", scrollbar_button_color="sky blue", font=("Helvetica",13, "bold"),)
+subject_box.place(x=160, y=170,)
+# subject_box.place(x=400, y=250, anchor="center")
 
-subject_box.insert(END, "Subject\t\t\tTeacher\t\t\tClass Start\t\t\tClass End\n")
-subject_box.insert(END, "-"*200 + '\n')
+subject_box.delete('0.0', 'end')
+header = "  Subject\t\t\t   Teacher\t\tStart Time\t\tEnd Time\n"
+subject_box.insert('end', header)
+subject_box.insert('end', "-"*115 + '\n')
 
-for sub_name in results:
-    subject_box.insert(END,'\t\t\t'.join(sub_name) + '\n')
+for info in results:
+    line = f"{info[0]}\t\t\t{info[1]}\t\t   {info[2]}\t\t  {info[3]}\n"
+    subject_box.insert('end', line)
+subject_box.configure(state="disabled")
+
 
 login_window.mainloop()
