@@ -17,6 +17,7 @@ def hover_off(event, color, btn_name):
     btn_name.configure(text_color=color)
 
 delete = 0
+fees=0
 
 def add_std_slide_right(frame, add_std_anime_x):
     # add_std_anime_x = st
@@ -80,7 +81,7 @@ def std_add(admin_frame):
 def std_find(admin_frame):
 
     def std_find_result():
-        global delete
+        global delete, fees
         find_std_result_frame = CTkFrame(admin_frame, fg_color="transparent", width=700, height=350 )
         find_std_result_frame.place(x=4*263, y=260, anchor="center")
 
@@ -100,6 +101,24 @@ def std_find(admin_frame):
             e_s_delete_btn.place(x=350, y=280, anchor="center")
 
             delete = 0
+
+        if fees == 1:
+            update_fees_frame = CTkFrame(find_std_result_frame, width=200, height=200, fg_color="transparent", border_width=2, border_color="white" )
+            update_fees_frame.place(x=580, y=150, anchor="center")
+
+            f_lable = CTkLabel(update_fees_frame, text_color="black", text="Fees Update", width=1, height=1, font=("Helvetica",16, "bold"), anchor="w")
+            f_lable.place(x=100, y=15+20, anchor="center")
+
+            f_d_entry = CTkEntry(update_fees_frame, font=("Helvetica",14), placeholder_text=" Tution Fee ", fg_color="transparent",)
+            f_d_entry.place(x=100, y=15+60, anchor="center")
+            f_p_entry = CTkEntry(update_fees_frame, font=("Helvetica",14), placeholder_text=" Now Payed ", fg_color="transparent",)
+            f_p_entry.place(x=100, y=15+100, anchor="center")
+
+            update_btn = CTkButton(update_fees_frame, text="Update", command=std_add, font=("Helvetica",14, "bold"), hover=True,)
+            update_btn.place(x=100, y=15+140, anchor="center")
+
+            fees = 0
+            pass
         
     
     find_std_frame = CTkFrame(admin_frame, fg_color="transparent", width=700, height=350 )
@@ -175,6 +194,14 @@ def tec_delete(admin_frame):
     pass
 
 
+def fee_update(admin_frame):
+    global fees
+    fees = 1
+    std_find(admin_frame)
+
+    pass
+
+
 login_window = ctk.CTk()
 login_window.geometry("700x400")
 login_window.title("Login - School Management System")
@@ -220,6 +247,11 @@ admin_logout.place(x=640, y=50, anchor="center")
 admin_logout.bind("<Enter>", lambda event: hover_on(event, "red", admin_logout))
 admin_logout.bind("<Leave>", lambda event: hover_off(event, "black", admin_logout))
 
+
+std_fee_update = CTkButton(admin_frame, text="Update Fees", width=1, height=1, fg_color="transparent", command=lambda:fee_update(admin_frame), text_color="black", font=("Helvetica",16, "bold"), hover=False, )
+std_fee_update.place(x=350, y=300, anchor="center")
+std_fee_update.bind("<Enter>", lambda event: hover_on(event, "blue", std_fee_update))
+std_fee_update.bind("<Leave>", lambda event: hover_off(event, "black", std_fee_update))
 
 
 login_window.mainloop()
