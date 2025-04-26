@@ -10,6 +10,16 @@ import time
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
 
+db = mysql.connector.connect(
+    host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
+    user="Pondit",
+    password="AVNS_CBteuh8GdWD6fO6BrBg",
+    database="alif",
+    port="12492"
+)
+cursor = db.cursor()
+
+
 def hover_on(event, color, btn_name):
     btn_name.configure(text_color=color)
 
@@ -34,6 +44,32 @@ def add_std_slide_left(frame, add_std_anime_x):
     if add_std_anime_x >= 350:
         frame.place(x=add_std_anime_x, y=260, anchor="center")
         login_window.after(3,lambda:add_std_slide_left(frame, int(add_std_anime_x)))
+
+def see_all_std_info():
+    all_std_info = CTk()
+    all_std_info.geometry("1150x900")
+    all_std_info.title("All Student Info")
+
+    all_std_textbox = CTkTextbox(all_std_info, font=("Helvetica",12))
+    all_std_textbox.pack(fill="both", expand=True, side="top")
+
+    # sql  
+    all_std_sql = f"select * from students;"
+    cursor.execute(all_std_sql)
+    see_info = cursor.fetchall()
+
+    all_std_textbox.delete('0.0', 'end')
+
+    header = "ID\tUsername\t\t\tName\t\t\tClass\tRoll\tSection\tGrade\tPhone\t\t\tAddress\t\t\tTuition Fee\t\tPaid Fee\n"
+    all_std_textbox.insert('end', header)
+    all_std_textbox.insert('end', "-"*280 + '\n')
+
+    for info in see_info:
+        line = f"{info[0]}\t{info[1]}\t\t\t{info[2]}\t\t\t{info[3]}\t{info[4]}\t{info[5]}\t{info[6]}\t{info[7]}\t\t\t{info[8]}\t\t\t{info[9]}\t\t{info[10]}\n"
+        all_std_textbox.insert('end', line)
+
+    all_std_info.mainloop()
+
 
 
 def std_add(admin_frame):
@@ -249,9 +285,15 @@ admin_logout.bind("<Leave>", lambda event: hover_off(event, "black", admin_logou
 
 
 std_fee_update = CTkButton(admin_frame, text="Update Fees", width=1, height=1, fg_color="transparent", command=lambda:fee_update(admin_frame), text_color="black", font=("Helvetica",16, "bold"), hover=False, )
-std_fee_update.place(x=350, y=300, anchor="center")
+std_fee_update.place(x=250, y=300, anchor="center")
 std_fee_update.bind("<Enter>", lambda event: hover_on(event, "blue", std_fee_update))
 std_fee_update.bind("<Leave>", lambda event: hover_off(event, "black", std_fee_update))
+
+
+all_std_btn = CTkButton(admin_frame, text="See All Student Info", width=1, height=1, fg_color="transparent", command=see_all_std_info, text_color="black", font=("Helvetica",16, "bold"), hover=False, )
+all_std_btn.place(x=450, y=300, anchor="center")
+all_std_btn.bind("<Enter>", lambda event: hover_on(event, "blue", all_std_btn))
+all_std_btn.bind("<Leave>", lambda event: hover_off(event, "black", all_std_btn))
 
 
 login_window.mainloop()

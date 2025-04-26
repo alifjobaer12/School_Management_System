@@ -63,7 +63,7 @@ fee_frame.place(x=570, y=60, anchor="center")
 fee_lable = ["Tution Fees", "Total Payed", "Due"]
 
 # Fees SQL
-cursor.execute("SELECT demand_fee, payed_fee, (demand_fee - payed_fee) AS remaining_fee FROM student where s_username = 'alex_lee';")
+cursor.execute("SELECT tution_fee, payed_fee, (tution_fee - payed_fee) AS remaining_fee FROM students where username = 'rafihossain275';")
 fee_det = list(cursor.fetchone())
 
 fee_h_l = CTkLabel(fee_frame, text_color="black", text="Fees", width=1, height=1, font=("Helvetica",16, "bold"), anchor="w")
@@ -73,7 +73,7 @@ for i, (f, d) in enumerate(zip(fee_lable, fee_det)):
     fee_l = CTkLabel(fee_frame, text_color="black", text=f, width=1, height=1, font=("Helvetica",14, "bold"), anchor="w")
     fee_l.place(x=50, y=45 + i * 20, anchor="center")
 
-    fee_dettles = CTkLabel(fee_frame, text=f":     {d}", text_color="black", width=1, height=1, font=("Helvetica",14, "bold"), anchor="w")
+    fee_dettles = CTkLabel(fee_frame, text=f":  {d}", text_color="black", width=1, height=1, font=("Helvetica",14, "bold"), anchor="w")
     fee_dettles.place(x=120, y=35 + i * 20)
 
     if f == "Due":
@@ -84,18 +84,18 @@ for i, (f, d) in enumerate(zip(fee_lable, fee_det)):
 
 # student Info & SQL
 
-fields = ["Name", "Class", "Section", "Grade", "Total Subject"]
+fields = ["Name", "Class", "Roll", "Section", "Grade", "Total Subject"]
 
 # std info SQL
-cursor.execute("select s_name, s_class, s_section, s_grade from student where s_username = 'alex_lee';")
+cursor.execute("select s_name, class, roll, section, grade from students where username = 'rafihossain275';")
 info = list(cursor.fetchone())
 
 for i, (a, b) in enumerate(zip(fields, info)):
-    label_field = ctk.CTkLabel(std_info_view_frame, text_color="black", text=a, font=("Helvetica",16, "bold"), anchor="w")
-    label_field.place(x=100, y=10 + i * 30)
+    label_field = ctk.CTkLabel(std_info_view_frame, text_color="black", text=a, font=("Helvetica",14, "bold"), anchor="w")
+    label_field.place(x=100, y=10 + i * 25)
 
-    label_colon = ctk.CTkLabel(std_info_view_frame, text=f":     {b}", text_color="black", font=("Helvetica",16, "bold"), anchor="w")
-    label_colon.place(x=200, y=10 + i * 30)
+    label_colon = ctk.CTkLabel(std_info_view_frame, text=f":     {b}", text_color="black", font=("Helvetica",14, "bold"), anchor="w")
+    label_colon.place(x=200, y=10 + i * 25)
 
 
 # class Routine & SQL
@@ -110,7 +110,7 @@ subject_box = CTkTextbox(std_info_view_frame, wrap="none", activate_scrollbars=T
 subject_box.place(x=100, y=150,)
 
 subject_box.insert(END, "Subject\t\t\tTeacher\t\t\tClass Start\t\t\tClass End\n")
-subject_box.insert(END, "--------------------------------------------------------------------------------------------------------------------------------------------------\n")
+subject_box.insert(END, "-"*200 + '\n')
 
 for sub_name in results:
     subject_box.insert(END,'\t\t\t'.join(sub_name) + '\n')
