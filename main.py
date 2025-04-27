@@ -4,6 +4,13 @@ from customtkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from pathlib import Path
+from teacher_panel import teacher_panal
+from admin_panel import admin_panel
+from test import student_panel
+from animasion import SlideAnimation
+
+
+import time
 
 
 # MySQL Connection
@@ -11,7 +18,7 @@ db = mysql.connector.connect(
     host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
     user="Pondit",
     password="AVNS_CBteuh8GdWD6fO6BrBg",
-    database="school",
+    database="alif",
     port="12492"
 )
 cursor = db.cursor()
@@ -41,12 +48,20 @@ def slide_left():
         login_window.after(1,slide_left)
 
 
-def slide_up():
+def slide_up(callback=None):
+    loading_lable = CTkLabel(uper_main_frame, text="Loading...", width=1, height=1, fg_color="transparent")
+    loading_lable.place(x=350, y=200, anchor="center")
     global anime_y
-    anime_y -= 2
-    if anime_y >= -202:
+    anime_y -= 3
+    if anime_y >= -203:
+        # loading_lable.pack_forget()
         frame_main.place(x=320, y=anime_y, anchor="center")
-        login_window.after(5,slide_up)
+        login_window.after(2,lambda: slide_up(callback))
+    else:
+        if callback:
+            callback()
+
+
 
 
 
@@ -140,9 +155,10 @@ def open_student_panel(username):
 
 
 def login():
-    global error_lable
+    global error_lable, login_window, anime_y, frame_main
     username = entry_username.get()
     password = entry_password.get()
+    # animasion = SlideAnimation(anime_y, frame_main, login_window)
     # print(username, " ", password)
 
     if username and password:
@@ -154,9 +170,12 @@ def login():
                 with open("remember.txt", "w") as f:
                     f.write(username)
                 if role == "admin":
-                    open_admin_panel()
+                    slide_up(lambda: admin_panel(uper_main_frame, username, anime_y, frame_main, login_window))
+                elif role == "teacher":
+                    slide_up(lambda: teacher_panal(uper_main_frame, username, anime_y, frame_main, login_window))
+                    # teacher_panal(uper_main_frame, username, anime_y, frame_main, login_window)
                 elif role == "student":
-                    open_student_panel(username)
+                    slide_up(lambda: student_panel(uper_main_frame, username, anime_y, frame_main, login_window))
             else:
                 error_lable.configure(text="Invalid password.")
                 # messagebox.showerror("Error", "Invalid password.")
