@@ -1,6 +1,6 @@
 import mysql.connector
-import customtkinter as ctk
 from tkinter import messagebox
+from customtkinter import *
 from PIL import Image, ImageTk
 from customtkinter import *
 from pathlib import Path
@@ -10,8 +10,8 @@ import time
 
 class teacher_panal:
     def __init__(self, tec_root_frame, t_username, anime_y, frame_main, login_window):
-        ctk.set_appearance_mode("light")
-        ctk.set_default_color_theme("blue")
+        set_appearance_mode("light")
+        set_default_color_theme("blue")
 
         self.db = mysql.connector.connect(
             host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
@@ -79,11 +79,11 @@ class teacher_panal:
                                     font=("Helvetica", 15, "bold"), anchor="w")
         tec_tclass_label.place(x=220, y=40)
 
-        name_value_label = ctk.CTkLabel(self.tec_info_view_frame, text=f":     {t_name[0]}", text_color="black",
+        name_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {t_name[0]}", text_color="black",
                                         font=("Helvetica", 14, "bold"), anchor="w")
         name_value_label.place(x=320, y=10)
 
-        class_value_label = ctk.CTkLabel(self.tec_info_view_frame, text=f":     {total_sub[0]}", text_color="black",
+        class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {total_sub[0]}", text_color="black",
                                          font=("Helvetica", 14, "bold"), anchor="w")
         class_value_label.place(x=320, y=40)
 
