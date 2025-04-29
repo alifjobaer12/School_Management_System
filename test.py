@@ -91,7 +91,7 @@ class student_panel:
 
         fee_labels = ["Tution Fees", "Total Payed", "Due"]
 
-        self.cursor.execute("SELECT tution_fee, payed_fee, (tution_fee - payed_fee) AS remaining_fee FROM students WHERE username = 'rafihossain275';")
+        self.cursor.execute("SELECT tution_fee, paid_fee, (tution_fee - paid_fee) AS remaining_fee FROM students WHERE username = 'rafihossain275';")
         fee_details = list(self.cursor.fetchone())
 
         fee_header = ctk.CTkLabel(fee_frame, text_color="black", text="Fees", width=1, height=1,
