@@ -1,125 +1,140 @@
 import mysql.connector
 import customtkinter as ctk
 from tkinter import messagebox
-from PIL import Image, ImageTk
-from customtkinter import *
+from animasion import SlideAnimation
 from pathlib import Path
-import time
+
+class student_panel:
+    def __init__(self, std_root_frame, s_username, anime_y, frame_main, login_window):
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")
+
+        self.db = mysql.connector.connect(
+            host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
+            user="Pondit",
+            password="AVNS_CBteuh8GdWD6fO6BrBg",
+            database="alif",
+            port="12492"
+        )
+        self.std_root_frame = std_root_frame
+        self.cursor = self.db.cursor()
+        self.setup_login_window()
+        self.anime_y = anime_y 
+        self.frame_main = frame_main
+        self.login_window = login_window
 
 
-ctk.set_appearance_mode("light")
-ctk.set_default_color_theme("blue")
+    def setup_login_window(self):
+        self.login_window = self.std_root_frame
+        # self.login_window.geometry("700x400")
+        # self.login_window.title("Login - School Management System")
 
-db = mysql.connector.connect(
-    host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
-    user="Pondit",
-    password="AVNS_CBteuh8GdWD6fO6BrBg",
-    database="alif",
-    port="12492"
-)
-cursor = db.cursor()
+        self.create_student_panel()
+        # self.login_window.mainloop()
 
-def hover_on(event, color, btn_name):
-    btn_name.configure(text_color=color)
+    def create_student_panel(self):
+        self.std_panal_frame = ctk.CTkFrame(self.login_window, fg_color="sky blue", width=800, height=400)
+        self.std_panal_frame.place(x=350, y=200, anchor="center")
 
-def hover_off(event, color, btn_name):
-    btn_name.configure(text_color=color)
+        # Header
+        self.std_label = ctk.CTkLabel(self.std_panal_frame, text="Student\nHi!", width=1, height=1, fg_color="transparent",
+                                      text_color="black", font=("Helvetica", 22, "bold"))
+        self.std_label.place(x=400, y=50, anchor="center")
 
-login_window = ctk.CTk()
-login_window.geometry("700x400")
-login_window.title("Login - School Management System")
+        # Logout Button
+        self.std_logout = ctk.CTkButton(self.std_panal_frame, text="⏻ Log Out", width=1, height=1,
+                                        fg_color="transparent", text_color="black", font=("Helvetica", 16, "bold"),
+                                        hover=False, command=lambda:self.logout(self.std_panal_frame))
+        self.std_logout.place(x=640, y=50, anchor="center")
+        self.std_logout.bind("<Enter>", lambda event: self.hover_on(event, "red", self.std_logout))
+        self.std_logout.bind("<Leave>", lambda event: self.hover_off(event, "black", self.std_logout))
 
+        # Info Frame
+        self.std_info_view_frame = ctk.CTkFrame(self.std_panal_frame, width=700, height=300, fg_color="transparent")
+        self.std_info_view_frame.place(x=350, y=230, anchor="center")
 
+        self.show_student_info()
+        self.show_fee_info()
+        self.show_class_routine()
 
-#  student panal main frame
+    def hover_on(self, event, color, btn_name):
+        btn_name.configure(text_color=color)
 
-std_panal_frame = CTkFrame(login_window, fg_color="sky blue", width=800, height=400)
-std_panal_frame.place(x=350, y=200, anchor="center")
+    def hover_off(self, event, color, btn_name):
+        btn_name.configure(text_color=color)
 
+    def logout(self, log_out_f):
+        confirm = messagebox.askyesno("Confirm Exit", "Are you sure you want to logout?")
+        if confirm:
+            animation = SlideAnimation(self.anime_y, self.frame_main, self.login_window)
+            animation.slide_down()
+            log_out_f.destroy()
 
-# student panel header
+    def show_student_info(self):
+        fields = ["Name", "Class", "Roll", "Section", "Grade"]
+        self.cursor.execute("SELECT s_name, class, roll, section, grade FROM students WHERE username = 'rafihossain275';")
+        info = list(self.cursor.fetchone())
 
-std_lable = CTkLabel(std_panal_frame, text=f"Student\n{'Hi! '}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"), )
-std_lable.place(x=400, y=50, anchor="center")
+        for i, (field, value) in enumerate(zip(fields, info)):
+            label_field = ctk.CTkLabel(self.std_info_view_frame, text_color="black", text=field,
+                                       font=("Helvetica", 14, "bold"), anchor="w")
+            label_field.place(x=100, y=10 + i * 25)
 
-# logout btn
-std_logout = CTkButton(std_panal_frame, text="⏻ Log Out", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",16, "bold"), hover=False, )
-std_logout.place(x=640, y=50, anchor="center")
-std_logout.bind("<Enter>", lambda event: hover_on(event, "red", std_logout))
-std_logout.bind("<Leave>", lambda event: hover_off(event, "black", std_logout))
+            label_value = ctk.CTkLabel(self.std_info_view_frame, text=f":     {value}", text_color="black",
+                                       font=("Helvetica", 14, "bold"), anchor="w")
+            label_value.place(x=200, y=10 + i * 25)
 
+    def show_fee_info(self):
+        fee_frame = ctk.CTkFrame(self.std_info_view_frame, width=200, height=110, fg_color="transparent",
+                                 border_width=2, border_color="white")
+        fee_frame.place(x=570, y=60, anchor="center")
 
-# student Info Frame
+        fee_labels = ["Tution Fees", "Total Payed", "Due"]
 
-std_info_view_frame = CTkFrame(std_panal_frame, width=700, height=300, fg_color="transparent",)
-std_info_view_frame.place(x=350, y=230, anchor="center")
+        self.cursor.execute("SELECT tution_fee, paid_fee, (tution_fee - paid_fee) AS remaining_fee FROM students WHERE username = 'rafihossain275';")
+        fee_details = list(self.cursor.fetchone())
 
+        fee_header = ctk.CTkLabel(fee_frame, text_color="black", text="Fees", width=1, height=1,
+                                  font=("Helvetica", 16, "bold"), anchor="w")
+        fee_header.place(x=100, y=15, anchor="center")
 
-# student Fee Info
+        for i, (label, detail) in enumerate(zip(fee_labels, fee_details)):
+            fee_label = ctk.CTkLabel(fee_frame, text_color="black", text=label, width=1, height=1,
+                                     font=("Helvetica", 14, "bold"), anchor="w")
+            fee_label.place(x=50, y=45 + i * 20, anchor="center")
 
-fee_frame = CTkFrame(std_info_view_frame, width=200, height=110, fg_color="transparent", border_width=2, border_color="white" )
-fee_frame.place(x=570, y=60, anchor="center")
+            fee_value = ctk.CTkLabel(fee_frame, text=f":  {detail}", text_color="black", width=1, height=1,
+                                     font=("Helvetica", 14, "bold"), anchor="w")
+            fee_value.place(x=120, y=35 + i * 20)
 
-fee_lable = ["Tution Fees", "Total Payed", "Due"]
+            if label == "Due":
+                fee_label.configure(text_color="red")
+                fee_value.configure(text_color="red")
 
-# Fees SQL
-cursor.execute("SELECT tution_fee, payed_fee, (tution_fee - payed_fee) AS remaining_fee FROM students where username = 'rafihossain275';")
-fee_det = list(cursor.fetchone())
+    def show_class_routine(self):
+        self.cursor.execute("SELECT sub_name, t_name, class_start_time, class_end_time FROM subjects WHERE class = '10';")
+        routine = self.cursor.fetchall()
 
-fee_h_l = CTkLabel(fee_frame, text_color="black", text="Fees", width=1, height=1, font=("Helvetica",16, "bold"), anchor="w")
-fee_h_l.place(x=100, y=15, anchor="center")
+        routine_label = ctk.CTkLabel(self.std_info_view_frame, text="Class Routine", text_color="black", width=1,
+                                     height=1, fg_color="transparent", font=("Helvetica", 13, "bold"))
+        routine_label.place(x=350, y=150)
 
-for i, (f, d) in enumerate(zip(fee_lable, fee_det)):
-    fee_l = CTkLabel(fee_frame, text_color="black", text=f, width=1, height=1, font=("Helvetica",14, "bold"), anchor="w")
-    fee_l.place(x=50, y=45 + i * 20, anchor="center")
+        subject_box = ctk.CTkTextbox(self.std_info_view_frame, wrap="none", activate_scrollbars=True,
+                                     width=500, height=160, fg_color="transparent", scrollbar_button_color="sky blue",
+                                     font=("Helvetica", 13, "bold"))
+        subject_box.place(x=160, y=170)
 
-    fee_dettles = CTkLabel(fee_frame, text=f":  {d}", text_color="black", width=1, height=1, font=("Helvetica",14, "bold"), anchor="w")
-    fee_dettles.place(x=120, y=35 + i * 20)
+        subject_box.delete('0.0', 'end')
+        header = "  Subject\t\t\t   Teacher\t\tStart Time\t\tEnd Time\n"
+        subject_box.insert('end', header)
+        subject_box.insert('end', "-" * 115 + '\n')
 
-    if f == "Due":
-        fee_l.configure(text_color="red")
-        fee_dettles.configure(text_color="red")
+        for subject in routine:
+            line = f"{subject[0]}\t\t\t{subject[1]}\t\t   {subject[2]}\t\t  {subject[3]}\n"
+            subject_box.insert('end', line)
 
-
-
-# student Info & SQL
-
-fields = ["Name", "Class", "Roll", "Section", "Grade"]
-
-# std info SQL
-cursor.execute("select s_name, class, roll, section, grade from students where username = 'rafihossain275';")
-info = list(cursor.fetchone())
-
-for i, (a, b) in enumerate(zip(fields, info)):
-    label_field = ctk.CTkLabel(std_info_view_frame, text_color="black", text=a, font=("Helvetica",14, "bold"), anchor="w")
-    label_field.place(x=100, y=10 + i * 25)
-
-    label_colon = ctk.CTkLabel(std_info_view_frame, text=f":     {b}", text_color="black", font=("Helvetica",14, "bold"), anchor="w")
-    label_colon.place(x=200, y=10 + i * 25)
-
-
-# class Routine & SQL
-
-cursor.execute("SELECT sub_name, t_name, class_start_time, class_end_time  FROM subjects WHERE class = '10';")
-results = cursor.fetchall()
-
-ruttin_lable = CTkLabel(std_info_view_frame, text="Class Routine", text_color="black", width=1, height=1, fg_color="transparent", font=("Helvetica",13, "bold"))
-# ruttin_lable.place(x=380, y=140, anchor="center")
-ruttin_lable.place(x=350, y=150,)
-
-subject_box = CTkTextbox(std_info_view_frame, wrap="none", activate_scrollbars=True, width=500, height=160, fg_color="transparent", scrollbar_button_color="sky blue", font=("Helvetica",13, "bold"),)
-subject_box.place(x=160, y=170,)
-# subject_box.place(x=400, y=250, anchor="center")
-
-subject_box.delete('0.0', 'end')
-header = "  Subject\t\t\t   Teacher\t\tStart Time\t\tEnd Time\n"
-subject_box.insert('end', header)
-subject_box.insert('end', "-"*115 + '\n')
-
-for info in results:
-    line = f"{info[0]}\t\t\t{info[1]}\t\t   {info[2]}\t\t  {info[3]}\n"
-    subject_box.insert('end', line)
-subject_box.configure(state="disabled")
+        subject_box.configure(state="disabled")
 
 
-login_window.mainloop()
+if __name__ == "__main__":
+    student_panel()

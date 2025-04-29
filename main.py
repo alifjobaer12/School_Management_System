@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 from pathlib import Path
 from teacher_panel import teacher_panal
 from admin_panel import admin_panel
-from test import student_panel
+from student_panal import student_panel
 from animasion import SlideAnimation
 
 
