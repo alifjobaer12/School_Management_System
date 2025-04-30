@@ -2,6 +2,8 @@ import mysql.connector
 from customtkinter import *
 from tkinter import messagebox
 from animasion import SlideAnimation
+import time
+from sql_query import MySQLQuery
 
 
 class admin_panel:
@@ -16,9 +18,11 @@ class admin_panel:
             database="alif",
             port=12492
         )
+        self.sql = MySQLQuery()
         self.cursor = self.db.cursor()
         self.delete = 0
         self.fees = 0
+        self.username = a_username
 
         self.login_window = admin_root_frame
         self.anime_y = anime_y 
@@ -77,6 +81,52 @@ class admin_panel:
         all_std_info.mainloop()
 
     def std_add(self):
+
+        # take std info and add database
+        def add_std(self):
+            nonlocal e_s_username, e_s_name, e_s_class, e_s_roll, e_s_section, e_s_grade, e_s_pnumber, e_s_adderss, error_l
+
+            # Retrieve all input values
+            username = e_s_username.get().strip()
+            name = e_s_name.get().strip()
+            std_class = e_s_class.get().strip()
+            roll = e_s_roll.get().strip()
+            section = e_s_section.get().strip()
+            grade = e_s_grade.get().strip()
+            phone = e_s_pnumber.get().strip()
+            address = e_s_adderss.get("1.0", "end-1c").strip()
+
+            # Check for missing fields
+            if not all([username, name, std_class, roll, section, grade, phone, address]) or address == "Address":
+                error_l.configure(text="⚠️ All fields are required.")
+                error_l.update()
+                time.sleep(5)
+                error_l.configure(text="")
+                error_l.update()
+                return
+            else:
+                error_l.configure(text="")  # Clear error if no missing fields
+
+    # Store the data in a list
+            student_info = [username, name, std_class, roll, section, grade, phone, address]
+
+            ck = self.sql.add_student(student_info)
+
+            if ck == True:
+                error_l.configure(text="Student Add Successfully", text_color="green")
+                error_l.update()
+                time.sleep(5)
+                error_l.configure(text="")
+                error_l.update()
+
+            else:
+                error_l.configure(text=ck, text_color="red")
+                error_l.update()
+                time.sleep(5)
+                error_l.configure(text="")
+                error_l.update()
+
+
         def add_placeholder(event=None):
             if e_s_adderss.get("1.0", "end-1c").strip() == "":
                 e_s_adderss.insert("1.0", "Address")
@@ -117,11 +167,14 @@ class admin_panel:
         e_s_adderss.bind("<FocusIn>", remove_placeholder)
         e_s_adderss.bind("<FocusOut>", add_placeholder)
 
-        e_s_submit_btn = CTkButton(add_std_frame, text="ADD Student", command=self.std_add, font=("Helvetica",14, "bold"), hover=True)
+        e_s_submit_btn = CTkButton(add_std_frame, text="ADD Student", command=lambda: add_std(self), font=("Helvetica",14, "bold"), hover=True)
         e_s_submit_btn.place(x=350, y=280, anchor="center")
 
         e_s_back_btn = CTkButton(add_std_frame, text="❌", command=add_std_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
         e_s_back_btn.place(x=670, y=20, anchor="center")
+
+        error_l = CTkLabel(self.admin_frame, text="", height=1, width=1, fg_color="transparent", text_color="red")
+        error_l.place(x=350, y=100, anchor="center")
 
         self.add_std_slide_left(add_std_frame, int(4*263))
 
@@ -234,7 +287,7 @@ class admin_panel:
         self.std_find()
 
     def setup_admin_ui(self):
-        admin_label = CTkLabel(self.admin_frame, text="Admin\nHi!", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"))
+        admin_label = CTkLabel(self.admin_frame, text=f"Admin\nHi! {self.username}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"))
         admin_label.place(x=350, y=50, anchor="center")
 
         buttons = [
