@@ -1,0 +1,4 @@
+customtkinter>=5.2.0
+mysql-connector-python>=9.3.0
+pillow>=11.2.1
+python>=3.13.2
