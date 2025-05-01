@@ -66,7 +66,7 @@ class admin_panel:
         all_std_textbox.pack(fill="both", expand=True, side="top")
 
         # sql backend
-        see_info = self.sql.add_student()
+        see_info = self.sql.all_students()
 
         all_std_textbox.delete('0.0', 'end')
         header = "ID\tUsername\t\t\tName\t\t\tClass\tRoll\tSection\tGrade\tPhone\t\t\tAddress\t\t\tTuition Fee\t\tPaid Fee\n"
@@ -121,12 +121,11 @@ class admin_panel:
             if not all([username, name, std_class, roll, section, grade, phone, address]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
-                time.sleep(5)
-                error_l.configure(text="")
-                error_l.update()
                 return
+            
             else:
                 error_l.configure(text="") 
+                error_l.update()
 
             # student_info = [username, name, std_class, roll, section, grade, phone, address]
 
@@ -152,9 +151,8 @@ class admin_panel:
             ck_u = self.sql.add_users(user_info)
 
             if ck_s == True and ck_u == True:
-                error_l.configure(text="Student Add Successfully", text_color="green")
-                error_l.update()
-                time.sleep(5)
+                error_l.configure(text="✔️ Student Add Successfully", text_color="green")
+                time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
 
@@ -164,9 +162,7 @@ class admin_panel:
                 else:
                     error_l.configure(text=ck_u, text_color="red")
                 error_l.update()
-                time.sleep(5)
-                error_l.configure(text="")
-                error_l.update()
+                
 
 
         def add_placeholder(event=None):
@@ -224,12 +220,52 @@ class admin_panel:
 
         def std_find_result():
 
+            def updat_fee():
+                # nonlocal find_s_username, header_label, show_s_f_result
+            
+                t_fee = f_d_entry.get()
+                p_fee = f_p_entry.get()
+            
+                if not p_fee.strip():
+                    f_p_entry.configure(border_color="red", placeholder_text_color="red")
+                    f_p_entry.update()
+                    return
+                update_fee = self.sql.update_fees(find_s_username, t_fee, p_fee)
+            
+                if update_fee == True:
+                    header_label.configure(text="✔️Fees Update Successful", text_color="green")
+                    header_label.update()
+            
+                    # Refresh only the display box, not the entire UI
+                    updated_data = self.sql.find_student(find_s_username)
+                    if updated_data:
+                        tuition_fee = float(updated_data[9])
+                        paid_fee = float(updated_data[10])
+                        due_fee = tuition_fee - paid_fee
+            
+                        show_s_f_result.configure(state="normal")
+                        show_s_f_result.delete("1.0", END)
+                        show_s_f_result.insert(END,
+                            f"ID \t\t:  {s_f_result[0]}\t\t\n"
+                            f"Username \t\t:  {s_f_result[1]}\t\n"
+                            f"Name \t\t:  {s_f_result[2]}\t\t\n"
+                            f"Class\t\t:  {s_f_result[3]}\n"
+                            f"Roll \t\t:  {s_f_result[4]}\nSection \t\t:  {s_f_result[5]}\n\n"
+                            f"Tution Fee \t\t:  {s_f_result[9]}/-\nPaid Fee \t\t:  {s_f_result[10]}/-\nDue \t\t:  {due_fee}/-"
+                        )
+                        show_s_f_result.configure(state="disable")
+                else:
+                    header_label.configure(text=update_fee, text_color="red")
+                    header_label.update()
+
+                return
+
             def std_del(username):
 
                 if tec == 0:
                     ck = self.sql.delete_student(username)
                     if ck == True:
-                        header_label.configure(text="✅️ Delete Student Successfull", text_color="green")
+                        header_label.configure(text="✔️Delete Student Successfull", text_color="green")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -238,7 +274,7 @@ class admin_panel:
                 else:
                     ck = self.sql.delete_teacher(username)
                     if ck == True:
-                        header_label.configure(text="✅️ Delete Teacher Successfull", text_color="green")
+                        header_label.configure(text="✔️Delete Teacher Successfull", text_color="green")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -251,17 +287,13 @@ class admin_panel:
             header_label = CTkLabel(find_std_result_frame, text="", text_color="green", fg_color="transparent", width=1, height=1, font=("Helvetica",12, "bold"))
             header_label.place(x=350, y=25, anchor="center")
 
-            show_s_f_result = CTkTextbox(find_std_result_frame, fg_color="transparent", width=300, height=220, font=("Helvetica",14, "bold"))
-            show_s_f_result.place(x=350, y=150, anchor="center")
+            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=False, fg_color="red", width=500, height=230, font=("Helvetica",16, "bold"))
+            show_s_f_result.place(x=350, y=160, anchor="center")
 
             find_s_username = e_s_username.get()
 
             if find_s_username == "":
-                # e_s_username.update()
                 e_s_username.configure(placeholder_text_color="red", border_color="red")
-                # time.sleep(5)
-                # e_s_username.configure(text="")
-                # e_s_username.update()
                 return
             else:
                 e_s_username.configure(placeholder_text_color="light_color", border_color="#979da2")
@@ -275,9 +307,9 @@ class admin_panel:
                     header_label.update
 
                     show_s_f_result.insert(END,
-                        f"ID : \t\t{s_f_result[0]}\nUsername : \t\t{s_f_result[1]}\n"
-                        f"Name : \t\t{s_f_result[2]}\nnPhone Number :\t\t{s_f_result[3]}\n"
-                        f"Address : \t\t{s_f_result[4]}\n"
+                        f"ID : \t\t{s_f_result[0]}\n\nUsername \t\t:  {s_f_result[1]}\n\n"
+                        f"Name \t\t:  {s_f_result[2]}\n\nPhone Number \t\t:  {s_f_result[3]}\n\n"
+                        f"Address \t\t:  {s_f_result[4]}\n"
                     )
                     show_s_f_result.configure(state="disable")
 
@@ -296,14 +328,27 @@ class admin_panel:
                     tuition_fee = float(s_f_result[9])
                     paid_fee = float(s_f_result[10])
                     due_fee = tuition_fee - paid_fee
-                    show_s_f_result.insert(END,
-                        f"ID : \t\t{s_f_result[0]}\nUsername : \t\t{s_f_result[1]}\n"
-                        f"Name : \t\t{s_f_result[2]}\nClass :\t\t{s_f_result[3]}\n"
-                        f"Roll : \t\t{s_f_result[4]}\nSection : \t\t{s_f_result[5]}\n"
-                        f"Grade : \t\t{s_f_result[6]}\nPhone Number : \t\t{s_f_result[7]}\n"
-                        f"Address : \t\t{s_f_result[8]}\nTution Fee : \t\t{s_f_result[9]}\n"
-                        f"Paid Fee : \t\t{s_f_result[10]}\nDue : \t\t{due_fee}\n"
-                    )
+
+                    if fees == 0:
+                        show_s_f_result.insert(END,
+                            f"ID \t\t:  {s_f_result[0]}\t\tTution Fee \t\t:  {s_f_result[9]}/-\n"
+                            f"Username \t\t:  {s_f_result[1]}\t\tPaid Fee \t\t:  {s_f_result[10]}/-\n"
+                            f"Name \t\t:  {s_f_result[2]}\t\tDue \t\t:  {due_fee}/-\n"
+                            f"Class\t\t:  {s_f_result[3]}\n"
+                            f"Roll \t\t:  {s_f_result[4]}\nSection \t\t:  {s_f_result[5]}\n"
+                            f"Grade \t\t:  {s_f_result[6]}\nPhone Number \t\t:  {s_f_result[7]}\n"
+                            f"Address \t\t:  {s_f_result[8]}\n"
+                        )
+                    else:
+                        show_s_f_result.insert(END,
+                            f"ID \t\t:  {s_f_result[0]}\t\t\n"
+                            f"Username \t\t:  {s_f_result[1]}\t\n"
+                            f"Name \t\t:  {s_f_result[2]}\t\t\n"
+                            f"Class\t\t:  {s_f_result[3]}\n"
+                            f"Roll \t\t:  {s_f_result[4]}\nSection \t\t:  {s_f_result[5]}\n\n"
+                            f"Tution Fee \t\t:  {s_f_result[9]}/-\nPaid Fee \t\t:  {s_f_result[10]}/-\nDue \t\t:  {due_fee}/-"
+                        )
+
                     show_s_f_result.configure(state="disable")
 
                 else:
@@ -318,26 +363,13 @@ class admin_panel:
             e_s_back_btn.place(x=670, y=20, anchor="center")
 
             if delete == 1:
-                # nonlocal find_s_username
                 e_s_delete_btn = CTkButton(find_std_result_frame, text="Delete", command=lambda: std_del(find_s_username), font=("Helvetica",14, "bold"), hover=True)
                 e_s_delete_btn.place(x=350, y=280, anchor="center")
-                # self.delete = 0
 
             if fees == 1:
-
-                def up_fee():
-                    nonlocal find_s_username, header_label
-
-                    # sql backend
-                    update_fee = self.fee_update(find_s_username, f_d_entry.get(), f_p_entry.get())
-
-                    if update_fee == True:
-                        header_label.configure(text="Fees Update Successfull", text_color="green")
-                    else:
-                        header_label.configure(text="Fees Update Faild", text_color="red")
-
-
-                show_s_f_result.place(x=250, y=150, anchor="center")
+                
+                show_s_f_result.configure(width=300, )
+                show_s_f_result.place(x=250, y=160, anchor="center")
 
                 update_fees_frame = CTkFrame(find_std_result_frame, width=200, height=200, fg_color="transparent", border_width=2, border_color="white")
                 update_fees_frame.place(x=580, y=150, anchor="center")
@@ -351,7 +383,7 @@ class admin_panel:
                 f_p_entry = CTkEntry(update_fees_frame, font=("Helvetica",14), placeholder_text="Now Payed", fg_color="transparent")
                 f_p_entry.place(x=100, y=115, anchor="center")
 
-                update_btn = CTkButton(update_fees_frame, text="Update", command=up_fee, font=("Helvetica",14, "bold"), hover=True)
+                update_btn = CTkButton(update_fees_frame, text="Update", command=lambda: updat_fee(), font=("Helvetica",14, "bold"), hover=True)
                 update_btn.place(x=100, y=155, anchor="center")
                 # self.fees = 0
 
@@ -397,7 +429,7 @@ class admin_panel:
             if not all([username, name, std_class, sub, section, phone, class_et, class_st]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
-                time.sleep(5)
+                time.sleep(3)
                 error_l.configure(text="")
                 error_l.update()
                 return
@@ -432,7 +464,7 @@ class admin_panel:
             if (ck_t == True) and (ck_s == True) and (ck_u == True):
                 error_l.configure(text="Teacher Add Successfully", text_color="green")
                 error_l.update()
-                time.sleep(5)
+                time.sleep(3)
                 error_l.configure(text="")
                 error_l.update()
 
@@ -444,7 +476,7 @@ class admin_panel:
                 else:
                     error_l.configure(text=ck_s, text_color="red")
                 error_l.update()
-                time.sleep(5)
+                time.sleep(3)
                 error_l.configure(text="")
                 error_l.update()
 
@@ -502,6 +534,7 @@ class admin_panel:
         self.std_delete(delete, fees, tec)
 
     def fee_update(self, delete, fees, tec):
+
         self.std_find(delete, fees, tec)
 
     def setup_admin_ui(self):

@@ -159,13 +159,49 @@ class MySQLQuery:
         self.cursor.execute("SELECT tuition_fee, paid_fee, (tuition_fee - paid_fee) AS due_fee FROM students WHERE username = %s", (username,))
         return self.cursor.fetchone()
     
-    def update_fees(self, username, tution_fee, paid_fee):
+    # def update_fees(self, username, tution_fee, paid_fee):
+    #     try:
+    #         self.cursor.execute("UPDATE students SET tution_fees = %s, paid_fees = %s WHERE = %s", (tution_fee, paid_fee, username,))
+    #         self.db.commit()
+    #         return True
+    #     except:
+    #         return False
+        
+
+    # Inside your database handler class
+    def update_fees(self, username, tuition_fee, paid_fee):
         try:
-            self.cursor.execute("UPDATE students SET tution_fees = %s, paid_fees = %s WHERE = %s", (tution_fee, paid_fee, username,))
+            self.cursor.execute("SELECT paid_fee, tution_fee FROM students WHERE username = %s", (username,))
+            result = self.cursor.fetchone()
+    
+            if not result:
+                return "❌ User not found."
+    
+            current_paid, current_tuition = result
+    
+            tuition_fee = int(tuition_fee) if tuition_fee else 0
+            paid_fee = int(paid_fee) if paid_fee else 0
+    
+            new_paid = current_paid + paid_fee
+            new_tuition = current_tuition + tuition_fee
+    
+            if tuition_fee > 0:
+                self.cursor.execute(
+                    "UPDATE students SET tution_fee = %s, paid_fee = %s WHERE username = %s",
+                    (new_tuition, new_paid, username)
+                )
+            else:
+                self.cursor.execute(
+                    "UPDATE students SET paid_fee = %s WHERE username = %s",
+                    (new_paid, username)
+                )
+    
             self.db.commit()
             return True
-        except:
-            return False
+    
+        except Exception as e:
+            return f"❌ Error updating fees: {e}"
+
 
 
 # UPDATE table_name SET column_name = new_value WHERE condition;
