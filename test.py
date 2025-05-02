@@ -1,14 +1,18 @@
 import mysql.connector
-import customtkinter as ctk
+from customtkinter import *
 from tkinter import messagebox
-from animasion import SlideAnimation
+from PIL import Image, ImageTk
 from pathlib import Path
+from teacher_panel import teacher_panal
+from admin_panel import admin_panel
+from student_panal import student_panel
+import threading
+import time
 
-class student_panel:
-    def __init__(self, std_root_frame, s_username, anime_y, frame_main, login_window):
-        ctk.set_appearance_mode("light")
-        ctk.set_default_color_theme("blue")
 
+class LoginApp:
+    def __init__(self):
+        # MySQL Connection
         self.db = mysql.connector.connect(
             host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
             user="Pondit",
@@ -16,125 +20,193 @@ class student_panel:
             database="alif",
             port="12492"
         )
-        self.std_root_frame = std_root_frame
         self.cursor = self.db.cursor()
-        self.setup_login_window()
-        self.anime_y = anime_y 
-        self.frame_main = frame_main
-        self.login_window = login_window
 
+        # State variables
+        self.anime_x = 320
+        self.anime_r_x = -302
+        self.anime_y = 200
 
-    def setup_login_window(self):
-        self.login_window = self.std_root_frame
-        # self.login_window.geometry("700x400")
-        # self.login_window.title("Login - School Management System")
+        # Setup UI
+        set_appearance_mode("light")
+        set_default_color_theme("blue")
 
-        self.create_student_panel()
-        # self.login_window.mainloop()
+        self.login_window = CTk()
+        self.login_window.geometry("700x400")
+        self.login_window.title("School Management System")
 
-    def create_student_panel(self):
-        self.std_panal_frame = ctk.CTkFrame(self.login_window, fg_color="sky blue", width=800, height=400)
-        self.std_panal_frame.place(x=350, y=200, anchor="center")
+        self.setup_ui()
+        self.login_window.mainloop()
 
-        # Header
-        self.std_label = ctk.CTkLabel(self.std_panal_frame, text="Student\nHi!", width=1, height=1, fg_color="transparent",
-                                      text_color="black", font=("Helvetica", 22, "bold"))
-        self.std_label.place(x=400, y=50, anchor="center")
+    def setup_ui(self):
+        self.main_windo = CTkFrame(self.login_window, width=700, height=400, fg_color="white")
+        self.main_windo.pack(fill="both", expand=True)
 
-        # Logout Button
-        self.std_logout = ctk.CTkButton(self.std_panal_frame, text="⏻ Log Out", width=1, height=1,
-                                        fg_color="transparent", text_color="black", font=("Helvetica", 16, "bold"),
-                                        hover=False, command=lambda:self.logout(self.std_panal_frame))
-        self.std_logout.place(x=640, y=50, anchor="center")
-        self.std_logout.bind("<Enter>", lambda event: self.hover_on(event, "red", self.std_logout))
-        self.std_logout.bind("<Leave>", lambda event: self.hover_off(event, "black", self.std_logout))
+        self.uper_main_frame = CTkFrame(self.main_windo, width=700, height=400, fg_color="white")
+        self.uper_main_frame.place(x=350, y=200, anchor="center")
 
-        # Info Frame
-        self.std_info_view_frame = ctk.CTkFrame(self.std_panal_frame, width=700, height=300, fg_color="transparent")
-        self.std_info_view_frame.place(x=350, y=230, anchor="center")
+        self.frame_main = CTkFrame(self.uper_main_frame, fg_color="transparent")
+        self.frame_main.place(x=self.anime_x, y=200, anchor="center")
 
-        self.show_student_info()
-        self.show_fee_info()
-        self.show_class_routine()
+        self.loading_l = CTkLabel(self.uper_main_frame, text="", font=("Harvatika", 18), height=1, width=1, fg_color="transparent")
+        self.loading_l.place(x=350, y=200, anchor="center")
 
-    def hover_on(self, event, color, btn_name):
-        btn_name.configure(text_color=color)
+        self.setup_left_panel()
+        self.setup_right_panel()
+        self.setup_register_panel()
 
-    def hover_off(self, event, color, btn_name):
-        btn_name.configure(text_color=color)
+    def setup_left_panel(self):
+        self.frame_left = CTkFrame(self.frame_main, width=200, fg_color="transparent", corner_radius=0)
+        self.frame_left.pack(side="left",)
 
-    def logout(self, log_out_f):
-        confirm = messagebox.askyesno("Confirm Exit", "Are you sure you want to logout?")
-        if confirm:
-            animation = SlideAnimation(self.anime_y, self.frame_main, self.login_window)
-            animation.slide_down()
-            log_out_f.destroy()
+        try:
+            BASE_DIR = Path(__file__).resolve().parent
+            icon1_path = BASE_DIR / "image" / "login.png"
+            icon1 = CTkImage(light_image=Image.open(icon1_path), size=(300, 300))
+            CTkLabel(self.frame_left, image=icon1, text="").pack(padx=30, pady=(80, 55))
+        except:
+            CTkLabel(self.frame_left, text="Image\nMissing", font=CTkFont(size=20, weight="bold")).pack(expand=True)
 
-    def show_student_info(self):
-        fields = ["Name", "Class", "Roll", "Section", "Grade"]
-        self.cursor.execute("SELECT s_name, class, roll, section, grade FROM students WHERE username = 'rafihossain275';")
-        info = list(self.cursor.fetchone())
+    def setup_right_panel(self):
+        self.frame_right = CTkFrame(self.frame_main, fg_color="transparent")
+        self.frame_right.pack(side="right", fill="both", expand=True, padx=(20, 0), pady=(70, 0), anchor="center")
 
-        for i, (field, value) in enumerate(zip(fields, info)):
-            label_field = ctk.CTkLabel(self.std_info_view_frame, text_color="black", text=field,
-                                       font=("Helvetica", 14, "bold"), anchor="w")
-            label_field.place(x=100, y=10 + i * 25)
+        CTkLabel(self.frame_right, text_color="#58a2f9", text="WELCOME", font=("Helvetica", 22, "bold")).pack(pady=(10, 0))
+        CTkLabel(self.frame_right, text_color="#9a9a9a", text="Login in to your account to continue",
+                 font=CTkFont(size=12, weight="bold")).pack(pady=(0, 10))
 
-            label_value = ctk.CTkLabel(self.std_info_view_frame, text=f":     {value}", text_color="black",
-                                       font=("Helvetica", 14, "bold"), anchor="w")
-            label_value.place(x=200, y=10 + i * 25)
+        self.error_lable = CTkLabel(self.frame_right, text_color="red", width=1, height=1, text="", font=("Helvetica", 12))
+        self.error_lable.place(x=110, y=75, anchor="center")
 
-    def show_fee_info(self):
-        fee_frame = ctk.CTkFrame(self.std_info_view_frame, width=200, height=110, fg_color="transparent",
-                                 border_width=2, border_color="white")
-        fee_frame.place(x=570, y=60, anchor="center")
+        self.entry_username = CTkEntry(self.frame_right, font=("Harvatika", 14), border_width=0,
+                                       fg_color="transparent", placeholder_text="Username", width=200)
+        self.entry_username.pack(pady=10)
+        try:
+            with open("remember.txt", "r") as f:
+                self.entry_username.insert(0, f.read())
+        except:
+            pass
 
-        fee_labels = ["Tution Fees", "Total Payed", "Due"]
+        self.entry_password = CTkEntry(self.frame_right, border_width=0, font=("Harvatika", 14), fg_color="transparent",
+                                       placeholder_text="Password", show="*", width=200)
+        self.entry_password.pack(pady=10)
 
-        self.cursor.execute("SELECT tution_fee, paid_fee, (tution_fee - paid_fee) AS remaining_fee FROM students WHERE username = 'rafihossain275';")
-        fee_details = list(self.cursor.fetchone())
+        CTkFrame(self.frame_right, height=2, width=200, fg_color="gray").place(x=110, y=110, anchor="center")
+        CTkFrame(self.frame_right, height=2, width=200, fg_color="gray").place(x=110, y=160, anchor="center")
 
-        fee_header = ctk.CTkLabel(fee_frame, text_color="black", text="Fees", width=1, height=1,
-                                  font=("Helvetica", 16, "bold"), anchor="w")
-        fee_header.place(x=100, y=15, anchor="center")
+        CTkButton(self.frame_right, height=1, width=1, text="Forgot Password?", fg_color="transparent",
+                  text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
 
-        for i, (label, detail) in enumerate(zip(fee_labels, fee_details)):
-            fee_label = ctk.CTkLabel(fee_frame, text_color="black", text=label, width=1, height=1,
-                                     font=("Helvetica", 14, "bold"), anchor="w")
-            fee_label.place(x=50, y=45 + i * 20, anchor="center")
+        CTkButton(self.frame_right, text="Log in", command=self.login, width=200).pack(pady=(30, 0))
 
-            fee_value = ctk.CTkLabel(fee_frame, text=f":  {detail}", text_color="black", width=1, height=1,
-                                     font=("Helvetica", 14, "bold"), anchor="w")
-            fee_value.place(x=120, y=35 + i * 20)
+        CTkLabel(self.frame_right, text="Don't have an account?", font=CTkFont(size=12)).place(x=90, y=255, anchor="center")
 
-            if label == "Due":
-                fee_label.configure(text_color="red")
-                fee_value.configure(text_color="red")
+        CTkButton(self.frame_right, text="Sign up", command=self.slide_right, fg_color="transparent",
+                  font=CTkFont(size=12), text_color="#2a63db").place(x=180, y=255, anchor="center")
 
-    def show_class_routine(self):
-        self.cursor.execute("SELECT sub_name, t_name, class_start_time, class_end_time FROM subjects WHERE class = '10';")
-        routine = self.cursor.fetchall()
+    def setup_register_panel(self):
+        self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
+        self.e_lf_frame.place(x=-302, y=40)
 
-        routine_label = ctk.CTkLabel(self.std_info_view_frame, text="Class Routine", text_color="black", width=1,
-                                     height=1, fg_color="transparent", font=("Helvetica", 13, "bold"))
-        routine_label.place(x=350, y=150)
+        CTkLabel(self.e_lf_frame, text="Register", text_color="#58a2f9", font=("Helvetica", 20, "bold")).place(x=150, y=35, anchor="center")
+        CTkLabel(self.e_lf_frame, text="Create Your Account", text_color="#9a9a9a", font=("Helvetica", 12)).place(x=150, y=55, anchor="center")
 
-        subject_box = ctk.CTkTextbox(self.std_info_view_frame, wrap="none", activate_scrollbars=True,
-                                     width=500, height=160, fg_color="transparent", scrollbar_button_color="sky blue",
-                                     font=("Helvetica", 13, "bold"))
-        subject_box.place(x=160, y=170)
+        self.wrong_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", text_color="red")
+        self.wrong_lable.place(x=150, y=75, anchor="center")
 
-        subject_box.delete('0.0', 'end')
-        header = "  Subject\t\t\t   Teacher\t\tStart Time\t\tEnd Time\n"
-        subject_box.insert('end', header)
-        subject_box.insert('end', "-" * 115 + '\n')
+        self.r_username_entry = CTkEntry(self.e_lf_frame, placeholder_text=" Username ", width=200, fg_color="transparent")
+        self.r_username_entry.place(x=150, y=105, anchor="center")
+        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
 
-        for subject in routine:
-            line = f"{subject[0]}\t\t\t{subject[1]}\t\t   {subject[2]}\t\t  {subject[3]}\n"
-            subject_box.insert('end', line)
+        self.r_pass_entry = CTkEntry(self.e_lf_frame, placeholder_text=" Password ", width=200, fg_color="transparent")
+        self.r_pass_entry.place(x=150, y=145, anchor="center")
+        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
 
-        subject_box.configure(state="disabled")
+        self.r_cpass_entry = CTkEntry(self.e_lf_frame, placeholder_text=" Conform Password ", width=200, fg_color="transparent")
+        self.r_cpass_entry.place(x=150, y=185, anchor="center")
+        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
+
+        self.r_vq_entry = CTkEntry(self.e_lf_frame, placeholder_text=" Security Question ", width=200, fg_color="transparent")
+        self.r_vq_entry.place(x=150, y=225, anchor="center")
+        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
+
+        self.click = IntVar(value=0)
+        CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=self.click, checkbox_width=15,
+                    checkbox_height=15, fg_color="green", border_width=2).place(x=115, y=260, anchor="center")
+
+        CTkButton(self.e_lf_frame, text="T & C", fg_color="transparent", text_color="blue", hover=False).place(x=195, y=260, anchor="center")
+
+        CTkButton(self.e_lf_frame, text="Sign Up", command=self.slide_left).place(x=150, y=300, anchor="center")
+
+    def slide_right(self):
+        def animate():
+            if self.anime_r_x <= 30 or self.anime_x <= 650:
+                self.anime_x += 3
+                self.anime_r_x += 3
+                self.frame_main.place(x=self.anime_x, y=200, anchor="center")
+                self.e_lf_frame.place(x=self.anime_r_x, y=25)
+                self.login_window.after(1, animate)
+
+        animate()
+
+    def slide_left(self):
+        def animate():
+            if self.anime_r_x >= -303 or self.anime_x >= 350:
+                self.anime_x -= 3
+                self.anime_r_x -= 3
+                self.frame_main.place(x=self.anime_x, y=200, anchor="center")
+                self.e_lf_frame.place(x=self.anime_r_x, y=25)
+                self.login_window.after(1, animate)
+
+        animate()
+
+    def slide_up(self, callback=None):
+        self.loading_l.configure(text="Loading...")
+
+        def animate():
+            while self.anime_y >= -203:
+                self.anime_y -= 3
+                self.login_window.after(0, lambda: self.frame_main.place(x=320, y=self.anime_y, anchor="center"))
+                time.sleep(0.002)
+            if callback:
+                self.login_window.after(0, callback)
+                self.loading_l.configure(text="")
+
+        threading.Thread(target=animate, daemon=True).start()
+
+    def login(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+
+        if username and password:
+            self.cursor.execute(f"SELECT password, role FROM users WHERE username='{username}';")
+            user = self.cursor.fetchone()
+            if user:
+                stored_password, role = user
+                if password == stored_password:
+                    self.error_lable.configure(text="Login Successful", text_color="green")
+                    self.error_lable.update()
+                    time.sleep(0.7)
+                    with open("remember.txt", "w") as f:
+                        f.write(username)
+                    self.anime_y = 200
+                    if role == "admin":
+                        self.slide_up(lambda: admin_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                    elif role == "teacher":
+                        self.slide_up(lambda: teacher_panal(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                    elif role == "student":
+                        self.slide_up(lambda: student_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                    self.error_lable.configure(text="")
+                else:
+                    self.error_lable.configure(text="Invalid password.", text_color="red")
+                    self.error_lable.update()
+            else:
+                self.error_lable.configure(text="User not found.", text_color="red")
+                self.error_lable.update()
+        else:
+            self.error_lable.configure(text="Enter username and password.", text_color="red")
+            self.error_lable.update()
 
 
 if __name__ == "__main__":
-    student_panel()
+    LoginApp()
