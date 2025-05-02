@@ -203,3 +203,10 @@ class MySQLQuery:
         except Exception as e:
             return f"❌ Error updating fees: {e}"
 
+    def close_db(self):
+        try:
+            self.cursor.close()
+            self.conn.close()
+            return 0
+        except Exception as e:
+            return f"Error : {e}"

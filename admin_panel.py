@@ -569,6 +569,8 @@ class admin_panel:
             animation = SlideAnimation(self.anime_y, self.frame_main, self.login_window)
             animation.slide_down()
             log_out_f.destroy()
+            self.sql.close_db()
+
 
 
 if __name__ == "__main__":
