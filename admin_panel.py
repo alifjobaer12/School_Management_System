@@ -11,15 +11,7 @@ class admin_panel:
         set_appearance_mode("light")
         set_default_color_theme("blue")
 
-        self.db = mysql.connector.connect(
-            host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
-            user="Pondit",
-            password="AVNS_CBteuh8GdWD6fO6BrBg",
-            database="alif",
-            port=12492
-        )
         self.sql = MySQLQuery()
-        self.cursor = self.db.cursor()
         self.delete = 0
         self.fees = 0
         self.username = a_username
