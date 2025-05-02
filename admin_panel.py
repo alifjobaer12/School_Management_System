@@ -77,6 +77,8 @@ class admin_panel:
             line = f"{info[0]}\t{info[1]}\t\t\t{info[2]}\t\t\t{info[3]}\t{info[4]}\t{info[5]}\t{info[6]}\t{info[7]}\t\t\t{info[8]}\t\t\t{info[9]}\t\t{info[10]}\n"
             all_std_textbox.insert('end', line)
 
+        all_std_textbox.configure(state="disable")
+
         all_std_info.mainloop()
 
     def see_all_tec_info(self):
@@ -84,20 +86,23 @@ class admin_panel:
         all_tec_info.geometry("720x900")
         all_tec_info.title("All Teacher Info")
 
-        all_std_textbox = CTkTextbox(all_tec_info, font=("Helvetica", 12))
-        all_std_textbox.pack(fill="both", expand=True, side="top")
+        all_tec_textbox = CTkTextbox(all_tec_info, font=("Helvetica", 12))
+        all_tec_textbox.pack(fill="both", expand=True, side="top")
 
         # sql backend
         see_info = self.sql.all_teachers()
 
-        all_std_textbox.delete('0.0', 'end')
+        all_tec_textbox.delete('0.0', 'end')
         header = "ID\tUsername\t\t\tName\t\t\tPhone\t\t\tAddress\n"
-        all_std_textbox.insert('end', header)
-        all_std_textbox.insert('end', "-"*175 + '\n')
+        all_tec_textbox.insert('end', header)
+        all_tec_textbox.insert('end', "-"*175 + '\n')
 
         for info in see_info:
             line = f"{info[0]}\t{info[1]}\t\t\t{info[2]}\t\t\t{info[3]}\t\t\t{info[4]}\n"
-            all_std_textbox.insert('end', line)
+            all_tec_textbox.insert('end', line)
+
+        all_tec_textbox.configure(state="disable")
+
 
         all_tec_info.mainloop()
 
@@ -151,7 +156,8 @@ class admin_panel:
             ck_u = self.sql.add_users(user_info)
 
             if ck_s == True and ck_u == True:
-                error_l.configure(text="✔️ Student Add Successfully", text_color="green")
+                error_l.configure(text="✔️Student Add Successfully", text_color="green")
+                error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
@@ -284,10 +290,10 @@ class admin_panel:
             find_std_result_frame.place(x=4*263, y=200, anchor="center")
 
 
-            header_label = CTkLabel(find_std_result_frame, text="", text_color="green", fg_color="transparent", width=1, height=1, font=("Helvetica",12, "bold"))
+            header_label = CTkLabel(find_std_result_frame, text="", text_color="green", fg_color="transparent", width=1, height=1, font=("Helvetica",14, "bold"))
             header_label.place(x=350, y=25, anchor="center")
 
-            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=False, fg_color="red", width=500, height=230, font=("Helvetica",16, "bold"))
+            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=True, scrollbar_button_color="sky blue", fg_color="transparent", width=520, height=200, font=("Helvetica",16, "bold"))             # change sky blue to fg color
             show_s_f_result.place(x=350, y=160, anchor="center")
 
             find_s_username = e_s_username.get()
@@ -303,18 +309,18 @@ class admin_panel:
                 s_f_result = self.sql.find_teacher(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="Found", text_color="green")
+                    header_label.configure(text="✔️Found", text_color="green")
                     header_label.update
 
                     show_s_f_result.insert(END,
-                        f"ID : \t\t{s_f_result[0]}\n\nUsername \t\t:  {s_f_result[1]}\n\n"
+                        f"ID \t\t:  {s_f_result[0]}\n\nUsername \t\t:  {s_f_result[1]}\n\n"
                         f"Name \t\t:  {s_f_result[2]}\n\nPhone Number \t\t:  {s_f_result[3]}\n\n"
                         f"Address \t\t:  {s_f_result[4]}\n"
                     )
                     show_s_f_result.configure(state="disable")
 
                 else:
-                    header_label.configure(text="Not Found", text_color="red")
+                    header_label.configure(text="❌Not Found", text_color="red")
                     header_label.update
 
 
@@ -322,7 +328,7 @@ class admin_panel:
                 s_f_result = self.sql.find_student(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="Found", text_color="green")
+                    header_label.configure(text="✔️Found", text_color="green")
                     header_label.update
 
                     tuition_fee = float(s_f_result[9])
@@ -352,7 +358,7 @@ class admin_panel:
                     show_s_f_result.configure(state="disable")
 
                 else:
-                    header_label.configure(text="Not Found", text_color="red")
+                    header_label.configure(text="❌Not Found", text_color="red")
                     header_label.update
 
 
@@ -363,6 +369,7 @@ class admin_panel:
             e_s_back_btn.place(x=670, y=20, anchor="center")
 
             if delete == 1:
+
                 e_s_delete_btn = CTkButton(find_std_result_frame, text="Delete", command=lambda: std_del(find_s_username), font=("Helvetica",14, "bold"), hover=True)
                 e_s_delete_btn.place(x=350, y=280, anchor="center")
 
@@ -462,7 +469,7 @@ class admin_panel:
             ck_u = self.sql.add_users(user_info)
 
             if (ck_t == True) and (ck_s == True) and (ck_u == True):
-                error_l.configure(text="Teacher Add Successfully", text_color="green")
+                error_l.configure(text="✔️Teacher Add Successfully", text_color="green")
                 error_l.update()
                 time.sleep(3)
                 error_l.configure(text="")
