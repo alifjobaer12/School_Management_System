@@ -121,8 +121,24 @@ class MySQLQuery:
 
     # 9. Teacher Info
     def teacher_info(self, username):
-        self.cursor.execute("SELECT name, phone FROM teacher WHERE username = %s", (username,))
-        return self.cursor.fetchone()
+        try:
+            self.cursor.execute("SELECT t_name FROM teacher WHERE username = %s", (username,))
+            name = self.cursor.fetchone()
+
+            return name
+        
+        except Exception as e:
+            return False
+
+    def teacher_total_sub(self, username):
+        try:
+            self.cursor.execute("SELECT COUNT(sub_name) FROM subjects WHERE username= %s GROUP BY t_name;" , (username,))
+            t_t_sub = self.cursor.fetchone()
+
+            return t_t_sub
+        
+        except Exception as e:
+            return False
 
     # 10. All Teachers
     def all_teachers(self):
@@ -131,7 +147,7 @@ class MySQLQuery:
 
     # 11. Teacher Routine
     def teacher_routine(self, username):
-        self.cursor.execute("SELECT subject_name, class, section, class_start_time, class_end_time FROM subject WHERE username = %s", (username,))
+        self.cursor.execute("SELECT sub_name, class, section, class_start_time, class_end_time FROM subjects WHERE username = %s", (username,))
         return self.cursor.fetchall()
     
     def add_subject(self, sub_info: dict):
@@ -154,21 +170,6 @@ class MySQLQuery:
             return False
 
 
-    # 12. Student Fee
-    def student_fee(self, username):
-        self.cursor.execute("SELECT tuition_fee, paid_fee, (tuition_fee - paid_fee) AS due_fee FROM students WHERE username = %s", (username,))
-        return self.cursor.fetchone()
-    
-    # def update_fees(self, username, tution_fee, paid_fee):
-    #     try:
-    #         self.cursor.execute("UPDATE students SET tution_fees = %s, paid_fees = %s WHERE = %s", (tution_fee, paid_fee, username,))
-    #         self.db.commit()
-    #         return True
-    #     except:
-    #         return False
-        
-
-    # Inside your database handler class
     def update_fees(self, username, tuition_fee, paid_fee):
         try:
             self.cursor.execute("SELECT paid_fee, tution_fee FROM students WHERE username = %s", (username,))
@@ -202,6 +203,3 @@ class MySQLQuery:
         except Exception as e:
             return f"❌ Error updating fees: {e}"
 
-
-
-# UPDATE table_name SET column_name = new_value WHERE condition;
