@@ -94,14 +94,14 @@ def login():
                     slide_up(lambda: student_panel(uper_main_frame, username, anime_y, frame_main, login_window))
                     error_lable.configure(text="")
             else:
-                error_lable.configure(text="Invalid password.")
-                # messagebox.showerror("Error", "Invalid password.")
+                error_lable.configure(text="Invalid password.", text_color="red")
+                error_lable.update()
         else:
-            error_lable.configure(text="User not found.")
-            # messagebox.showerror("Error", "User not found.")
+            error_lable.configure(text="User not found.", text_color="red")
+            error_lable.update()
     else:
-        error_lable.configure(text="Enter username and password.")
-        # messagebox.showerror("Error", "Enter username and password.")
+        error_lable.configure(text="Enter username and password.", text_color="red")
+        error_lable.update()
 
 
 # CustomTkinter Setup
