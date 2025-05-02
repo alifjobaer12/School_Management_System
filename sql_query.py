@@ -11,6 +11,13 @@ class MySQLQuery:
         )
         self.cursor = self.db.cursor()
 
+    def log_in(self, username):
+        try:
+            self.cursor.execute("SELECT password, role FROM users WHERE username= %s;", (username,))
+            return self.cursor.fetchone()
+        except:
+            return False
+
 
     def add_users(self, user_info):
         try:
@@ -27,7 +34,6 @@ class MySQLQuery:
             return f"Error : {e}"
         except Exception as e:
             return f"Error : {e}"
-        pass
 
     # 1. Add Student
     def add_student(self, student_data: dict):

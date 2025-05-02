@@ -1,4 +1,3 @@
-import mysql.connector
 from customtkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageSequence
@@ -8,22 +7,17 @@ from admin_panel import admin_panel
 from student_panal import student_panel
 import threading
 import time
+from sql_query import MySQLQuery
+
 
 class LoginApp:
     def __init__(self):
         self.anime_x = 320
         self.anime_r_x = -302
         self.anime_y = 200
+        self.s = ""
+        self.swich = 0
 
-        # MySQL Connection
-        self.db = mysql.connector.connect(
-            host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
-            user="Pondit",
-            password="AVNS_CBteuh8GdWD6fO6BrBg",
-            database="alif",
-            port="12492"
-        )
-        self.cursor = self.db.cursor()
 
         # UI Setup
         set_appearance_mode("light")
@@ -56,7 +50,7 @@ class LoginApp:
             self.gif_frames.append(CTkImage(light_image=frame, size=(30, 30)))
 
         self.gif_label = CTkLabel(self.uper_main_frame, image=self.gif_frames[0], text="", fg_color="transparent")
-        self.gif_label.place(x=390, y=190)  # Positioned beside loading_l
+        self.gif_label.place(x=390, y=190) 
         self.current_frame = 0
         self.animate_gif()
 
@@ -69,7 +63,7 @@ class LoginApp:
     def animate_gif(self):
         self.current_frame = (self.current_frame + 1) % len(self.gif_frames)
         self.gif_label.configure(image=self.gif_frames[self.current_frame])
-        self.login_window.after(100, self.animate_gif)
+        self.login_window.after(10, self.animate_gif)
 
     def slide_right(self):
         self.anime_x += 3
@@ -109,12 +103,36 @@ class LoginApp:
         threading.Thread(target=animate, daemon=True).start()
 
     def login(self):
+        sql_error_l = CTkLabel(self.uper_main_frame, text_color="red", width=1, height=1, text="", font=("Helvetica",13))
+        sql_error_l.place(x=350, y=30, anchor="center")
+
+        try:
+            sql = MySQLQuery()
+        except:
+            sql_error_l.configure(text="Oops! We couldn't reach the database.\nMake sure you're connected to the internet and try again.", text_color="red")
+            sql_error_l.update()
+            time.sleep(2)
+            sql_error_l.configure(text="")
+            sql_error_l.update()
+            self.s = "🎉 Great! You're now connected to the database."
+            self.swich = 1
+            return
+        
+        if self.swich:
+            sql_error_l.configure(text=self.s, text_color="green")
+            sql_error_l.update()
+            time.sleep(2)
+            sql_error_l.configure(text="")
+            sql_error_l.update()
+            self.swich = 0
+
         username = self.entry_username.get()
         password = self.entry_password.get()
 
         if username and password:
-            self.cursor.execute(f"SELECT password, role FROM users WHERE username='{username}';")
-            user = self.cursor.fetchone()
+            user = sql.log_in(username)
+            sql.close_db()
+
             if user:
                 stored_password, role = user
                 if password == stored_password:
@@ -148,13 +166,13 @@ class LoginApp:
         try:
             BASE_DIR = Path(__file__).resolve().parent
             icon1_path = BASE_DIR / "image" / "login.png"
-            icon1 = CTkImage(light_image=Image.open(icon1_path), size=(300, 300))
+            icon1 = CTkImage(light_image=Image.open(icon1_path), size=(350, 350))
             CTkLabel(frame_left, image=icon1, text="").pack(padx=30, pady=(80,55))
         except:
             CTkLabel(frame_left, text="Image\nMissing", font=CTkFont(size=20, weight="bold")).pack(expand=True)
 
         frame_right = CTkFrame(self.frame_main, fg_color="transparent")
-        frame_right.pack(side="right", fill="both", expand=True, padx=(20,0), pady=(70,0), anchor="center")
+        frame_right.pack(side="right", fill="both", expand=True, padx=(20,0), pady=(100,0), anchor="center")
 
         CTkLabel(frame_right, text_color="#58a2f9", text="WELCOME", font=("Helvetica",22, "bold")).pack(pady=(10,0))
         CTkLabel(frame_right, text_color="#9a9a9a", text="Login in to your account to continue", font=CTkFont(size=12, weight="bold")).pack(pady=(0,10))
