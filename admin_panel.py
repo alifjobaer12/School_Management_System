@@ -156,7 +156,7 @@ class admin_panel:
             ck_u = self.sql.add_users(user_info)
 
             if ck_s == True and ck_u == True:
-                error_l.configure(text="✔️Student Add Successfully", text_color="green")
+                error_l.configure(text="✔️ Student Add Successfully", text_color="green")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -239,7 +239,7 @@ class admin_panel:
                 update_fee = self.sql.update_fees(find_s_username, t_fee, p_fee)
             
                 if update_fee == True:
-                    header_label.configure(text="✔️Fees Update Successful", text_color="green")
+                    header_label.configure(text="✔️ Fees Update Successful", text_color="green")
                     header_label.update()
             
                     # Refresh only the display box, not the entire UI
@@ -271,7 +271,7 @@ class admin_panel:
                 if tec == 0:
                     ck = self.sql.delete_student(username)
                     if ck == True:
-                        header_label.configure(text="✔️Delete Student Successfull", text_color="green")
+                        header_label.configure(text="✔️ Delete Student Successfull", text_color="green")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -280,7 +280,7 @@ class admin_panel:
                 else:
                     ck = self.sql.delete_teacher(username)
                     if ck == True:
-                        header_label.configure(text="✔️Delete Teacher Successfull", text_color="green")
+                        header_label.configure(text="✔️ Delete Teacher Successfull", text_color="green")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -309,7 +309,7 @@ class admin_panel:
                 s_f_result = self.sql.find_teacher(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="✔️Found", text_color="green")
+                    header_label.configure(text="✔️ Found", text_color="green")
                     header_label.update
 
                     show_s_f_result.insert(END,
@@ -320,7 +320,7 @@ class admin_panel:
                     show_s_f_result.configure(state="disable")
 
                 else:
-                    header_label.configure(text="❌Not Found", text_color="red")
+                    header_label.configure(text="❌ Not Found", text_color="red")
                     header_label.update
 
 
@@ -328,7 +328,7 @@ class admin_panel:
                 s_f_result = self.sql.find_student(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="✔️Found", text_color="green")
+                    header_label.configure(text="✔️ Found", text_color="green")
                     header_label.update
 
                     tuition_fee = float(s_f_result[9])
@@ -358,7 +358,7 @@ class admin_panel:
                     show_s_f_result.configure(state="disable")
 
                 else:
-                    header_label.configure(text="❌Not Found", text_color="red")
+                    header_label.configure(text="❌ Not Found", text_color="red")
                     header_label.update
 
 
@@ -469,7 +469,7 @@ class admin_panel:
             ck_u = self.sql.add_users(user_info)
 
             if (ck_t == True) and (ck_s == True) and (ck_u == True):
-                error_l.configure(text="✔️Teacher Add Successfully", text_color="green")
+                error_l.configure(text="✔️ Teacher Add Successfully", text_color="green")
                 error_l.update()
                 time.sleep(3)
                 error_l.configure(text="")
