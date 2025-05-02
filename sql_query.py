@@ -13,7 +13,8 @@ class MySQLQuery:
 
     def log_in(self, username):
         try:
-            self.cursor.execute("SELECT password, role FROM users WHERE username= %s;", (username,))
+            sql = "SELECT password, role FROM users WHERE username = %s"
+            self.cursor.execute(sql, (username,))
             return self.cursor.fetchone()
         except:
             return False
@@ -99,10 +100,8 @@ class MySQLQuery:
             self.db.commit()
             return True
         except mysql.connector.IntegrityError as e:
-            print(f"[Error] Failed to add teacher: {e}")
             return False
         except Exception as e:
-            print(f"[Error] Unexpected error: {e}")
             return False
 
     # 7. Find Teacher
@@ -169,10 +168,8 @@ class MySQLQuery:
             self.db.commit()
             return True
         except mysql.connector.IntegrityError as e:
-            print(f"[Error] Failed to add teacher: {e}")
             return False
         except Exception as e:
-            print(f"[Error] Unexpected error: {e}")
             return False
 
 
