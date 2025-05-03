@@ -570,8 +570,3 @@ class admin_panel:
             animation.slide_down()
             log_out_f.destroy()
             self.sql.close_db()
-
-
-
-if __name__ == "__main__":
-    admin_panel()

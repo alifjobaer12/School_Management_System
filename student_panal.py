@@ -135,6 +135,3 @@ class student_panel:
 
         subject_box.configure(state="disabled")
 
-
-if __name__ == "__main__":
-    student_panel()

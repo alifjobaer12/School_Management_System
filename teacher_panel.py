@@ -107,6 +107,3 @@ class teacher_panal:
     def hover_off(self, event, color, btn_name):
         btn_name.configure(text_color=color)
 
-
-if __name__ == "__main__":
-    teacher_panal()
