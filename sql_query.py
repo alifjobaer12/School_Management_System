@@ -56,7 +56,8 @@ class MySQLQuery:
 
     # 2. Find Student
     def find_student(self, username):
-        self.cursor.execute("SELECT * FROM students WHERE username = %s;", (username,))
+        sql = "SELECT * FROM students WHERE username = %s;"
+        self.cursor.execute(sql, (username,))
         f_s = self.cursor.fetchone()
         return f_s
         
@@ -67,7 +68,8 @@ class MySQLQuery:
         try:
             ck = self.find_student(username)
             if ck is not None:
-                self.cursor.execute("DELETE FROM students WHERE username = %s;", (username,))
+                sql = "DELETE FROM students WHERE username = %s;"
+                self.cursor.execute(sql, (username,))
                 self.db.commit()
                 return True
             else:
@@ -78,12 +80,14 @@ class MySQLQuery:
 
     # 4. All Students
     def all_students(self):
-        self.cursor.execute("SELECT * FROM students;")
+        sql = "SELECT * FROM students;"
+        self.cursor.execute(sql)
         return self.cursor.fetchall()
 
     # 5. Student Routine
     def student_routine(self, username):
-        self.cursor.execute("SELECT subject_name, class, section, class_start_time, class_end_time FROM subject WHERE username = %s", (username,))
+        sql = "SELECT subject_name, class, section, class_start_time, class_end_time FROM subject WHERE username = %s"
+        self.cursor.execute(sql, (username,))
         return self.cursor.fetchall()
 
     # 6. Add Teacher
@@ -106,7 +110,8 @@ class MySQLQuery:
 
     # 7. Find Teacher
     def find_teacher(self, username):
-        self.cursor.execute("SELECT * FROM teacher WHERE username = %s", (username,))
+        sql = "SELECT * FROM teacher WHERE username = %s"
+        self.cursor.execute(sql, (username,))
         f_t = self.cursor.fetchone()
         return f_t
 
@@ -115,7 +120,8 @@ class MySQLQuery:
         try:
             ck = self.find_teacher(username)
             if ck is not None:
-                self.cursor.execute("DELETE FROM teacher WHERE username = %s;", (username,))
+                sql = "DELETE FROM teacher WHERE username = %s;"
+                self.cursor.execute(sql, (username,))
                 self.db.commit()
                 return True
             else:
@@ -127,7 +133,8 @@ class MySQLQuery:
     # 9. Teacher Info
     def teacher_info(self, username):
         try:
-            self.cursor.execute("SELECT t_name FROM teacher WHERE username = %s", (username,))
+            sql = "SELECT t_name FROM teacher WHERE username = %s"
+            self.cursor.execute(sql, (username,))
             name = self.cursor.fetchone()
 
             return name
@@ -137,7 +144,8 @@ class MySQLQuery:
 
     def teacher_total_sub(self, username):
         try:
-            self.cursor.execute("SELECT COUNT(sub_name) FROM subjects WHERE username= %s GROUP BY t_name;" , (username,))
+            sql = "SELECT COUNT(sub_name) FROM subjects WHERE username= %s GROUP BY t_name;"
+            self.cursor.execute(sql, (username,))
             t_t_sub = self.cursor.fetchone()
 
             return t_t_sub
@@ -147,12 +155,14 @@ class MySQLQuery:
 
     # 10. All Teachers
     def all_teachers(self):
-        self.cursor.execute("SELECT * FROM teacher;")
+        sql = "SELECT * FROM teacher;"
+        self.cursor.execute(sql)
         return self.cursor.fetchall()
 
     # 11. Teacher Routine
     def teacher_routine(self, username):
-        self.cursor.execute("SELECT sub_name, class, section, class_start_time, class_end_time FROM subjects WHERE username = %s", (username,))
+        sql = "SELECT sub_name, class, section, class_start_time, class_end_time FROM subjects WHERE username = %s"
+        self.cursor.execute(sql, (username,))
         return self.cursor.fetchall()
     
     def add_subject(self, sub_info: dict):
@@ -175,7 +185,8 @@ class MySQLQuery:
 
     def update_fees(self, username, tuition_fee, paid_fee):
         try:
-            self.cursor.execute("SELECT paid_fee, tution_fee FROM students WHERE username = %s", (username,))
+            sql = "SELECT paid_fee, tution_fee FROM students WHERE username = %s"
+            self.cursor.execute(sql, (username,))
             result = self.cursor.fetchone()
     
             if not result:
@@ -190,10 +201,8 @@ class MySQLQuery:
             new_tuition = current_tuition + tuition_fee
     
             if tuition_fee > 0:
-                self.cursor.execute(
-                    "UPDATE students SET tution_fee = %s, paid_fee = %s WHERE username = %s",
-                    (new_tuition, new_paid, username)
-                )
+                sql = """UPDATE students SET tution_fee = %s, paid_fee = %s WHERE username = %s"""
+                self.cursor.execute(sql, (new_tuition, new_paid, username))
             else:
                 self.cursor.execute(
                     "UPDATE students SET paid_fee = %s WHERE username = %s",
