@@ -86,9 +86,18 @@ class MySQLQuery:
 
     # 5. Student Routine
     def student_routine(self, username):
-        sql = "SELECT subject_name, class, section, class_start_time, class_end_time FROM subject WHERE username = %s"
-        self.cursor.execute(sql, (username,))
-        return self.cursor.fetchall()
+        try:
+            sql = "SELECT class FROM students WHERE username = %s;"
+            self.cursor.execute(sql, (username,))
+            s_class = self.cursor.fetchone()
+            # print(s_class)
+
+            sql = "SELECT sub_name, t_name, class_start_time, class_end_time FROM subjects WHERE class = %s;"
+            self.cursor.execute(sql, (s_class[0],))
+            # print(self.cursor.fetchall())
+            return self.cursor.fetchall()
+        except Exception as e:
+            return f"❌ Error : {e}"
 
     # 6. Add Teacher
     def add_teacher(self, teacher_data: dict):
@@ -182,6 +191,13 @@ class MySQLQuery:
         except Exception as e:
             return False
 
+    def show_fees(self, username):
+        try:
+            sql = "SELECT tution_fee, paid_fee, (tution_fee - paid_fee) AS remaining_fee FROM students WHERE username = %s ;"
+            self.cursor.execute(sql, (username,))
+            return self.cursor.fetchone()
+        except Exception as e:
+            return f"❌ Error : {e}"
 
     def update_fees(self, username, tuition_fee, paid_fee):
         try:
