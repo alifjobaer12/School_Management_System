@@ -20,7 +20,7 @@ class MySQLQuery:
             return False
 
 
-    def add_users(self, user_info):
+    def add_users(self, user_info: dict):
         try:
             sql = """INSERT INTO users (username, password, role)
             VALUES (%s, %s, %s);"""
@@ -36,6 +36,18 @@ class MySQLQuery:
         except Exception as e:
             return f"Error : {e}"
 
+    def ck_class_roll_section(self, student_data: dict):
+        try:
+            sql = """SELECT COUNT(*) AS total FROM students WHERE class = %s AND roll = %s AND section = %s GROUP BY class, roll, LOWER(section) HAVING COUNT(*) > 0;"""
+            self.cursor.execute(sql, (student_data['class'], student_data['roll'], student_data['section']))
+            ck = self.cursor.fetchone()
+            if ck is not None:
+                return False
+            else:
+                return True
+        except mysql.connector.IntegrityError as e:
+            pass
+
     # 1. Add Student
     def add_student(self, student_data: dict):
         try:
@@ -49,8 +61,6 @@ class MySQLQuery:
 
             return True
         except mysql.connector.IntegrityError as e:
-            return f"Error : {e}"
-        except Exception as e:
             return f"Error : {e}"
 
 

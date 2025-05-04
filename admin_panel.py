@@ -20,6 +20,7 @@ class admin_panel:
         self.anime_y = anime_y 
         self.frame_main = frame_main
         self.login_window = login_window
+        self.sw = 0
 
         # self.login_window.geometry("700x400")
         # self.login_window.title("Login - School Management System")
@@ -144,10 +145,46 @@ class admin_panel:
             }
 
             # sql backend
-            ck_s = self.sql.add_student(student_info)
-            ck_u = self.sql.add_users(user_info)
 
-            if ck_s == True and ck_u == True:
+            ck_crs = self.sql.ck_class_roll_section(student_info)
+            if ck_crs == False:
+                error_l.configure(text="Check Class, Roll, Section", text_color="red")
+                e_s_class.configure(border_color="red")
+                e_s_roll.configure(border_color="red")
+                e_s_section.configure(border_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                self.sw = 1
+                return
+            
+            if self.sw:
+                e_s_class.configure(border_color="green")
+                e_s_roll.configure(border_color="green")
+                e_s_section.configure(border_color="green")
+                e_s_username.configure(border_color="green")
+                self.sw=0
+            else:
+                e_s_class.configure(border_color="#979da2")
+                e_s_roll.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
+                e_s_username.configure(border_color="#979da2")
+                
+            ck_u = self.sql.add_users(user_info)
+            if ck_u != True:
+                error_l.configure(text=ck_u, text_color="red")
+                e_s_username.configure(border_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                self.sw = 1
+                return
+
+            ck_s = self.sql.add_student(student_info)
+
+            if ck_s == True and ck_u == True and ck_crs == True:
                 error_l.configure(text="✔️ Student Add Successfully", text_color="green")
                 error_l.update()
                 time.sleep(2)
@@ -157,10 +194,18 @@ class admin_panel:
             else:
                 if ck_s != True:
                     error_l.configure(text=ck_s, text_color="red")
+                elif ck_crs != True:
+                    error_l.configure(text="Check Class, Roll, Section", text_color="red")
                 else:
                     error_l.configure(text=ck_u, text_color="red")
+                    e_s_username.configure(border_color="red")
+
                 error_l.update()
-                
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                self.sw = 1
+                return
 
 
         def add_placeholder(event=None):
@@ -456,14 +501,14 @@ class admin_panel:
             }
 
             # sql backend
+            ck_u = self.sql.add_users(user_info)
             ck_t = self.sql.add_teacher(teacher_info)
             ck_s = self.sql.add_subject(sub_info)
-            ck_u = self.sql.add_users(user_info)
 
             if (ck_t == True) and (ck_s == True) and (ck_u == True):
                 error_l.configure(text="✔️ Teacher Add Successfully", text_color="green")
                 error_l.update()
-                time.sleep(3)
+                time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
 
@@ -475,7 +520,7 @@ class admin_panel:
                 else:
                     error_l.configure(text=ck_s, text_color="red")
                 error_l.update()
-                time.sleep(3)
+                time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
 
