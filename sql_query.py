@@ -1,13 +1,17 @@
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MySQLQuery:
     def __init__(self):
         self.db = mysql.connector.connect(
-            host="mysql-3aa5cf7b-islam12islam1221-3bb6.h.aivencloud.com",
-            user="group_member",
-            password="AVNS_Q1-nT1BInCka8F6jYU7",
-            database="alif",
-            port=12492
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
+            port=os.getenv("PORT")
         )
         self.cursor = self.db.cursor()
 

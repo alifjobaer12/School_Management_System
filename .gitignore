@@ -1,4 +1,5 @@
 .env
+*.env
 __pycache__/
 test_m.py
 test.py
