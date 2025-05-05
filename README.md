@@ -62,13 +62,11 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 ## 🖼️ Screenshots
 
-> 📸 *Add screenshots by placing images in a folder like `assets/screenshots/` and inserting them below using the markdown syntax.*
-
 ```markdown
-![Login Page](image/Login_page.png)
-![Admin Dashboard](image/admin_panel.png)
-![Teacher Dashboard](image/teacher_panel.png)
-![Student Dashboard](image/student_panel.png)
+![Login Page](assets/screenshots/Login_page.png)
+![Admin Dashboard](assets/screenshots/admin_panel.png)
+![Teacher Dashboard](assets/screenshots/teacher_panel.png)
+![Student Dashboard](assets/screenshots/student_panel.png)
 ```
 
 ---
@@ -77,13 +75,12 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 | Name                         | Role             | GitHub Profile |
 |------------------------------|------------------|----------------|
-| **MD JOBAER ISLAM ALIF**     | Main Developer   | [GitHub](https://github.com/your-github-username) |
-| **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub](https://github.com/your-github-username-here) |
-| **MD RAKIB ALI**             | Developer        | [GitHub](https://github.com/your-github-username-here) |
+| **MD JOBAER ISLAM ALIF**     | Main Developer   | [GitHub]([https://github.com/your-github-username](https://github.com/alifjobaer12)) |
+| **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub]([https://github.com/your-github-username-here](https://github.com/kenshiro147)) |
+| **MD RAKIB ALI**             | Developer        | [GitHub]([https://github.com/your-github-username-here](https://github.com/Rakibislam22)) |
 | **PRANTA KUMER PANDIT**      | Developer        | [GitHub](https://github.com/your-github-username-here) |
-| **JUBAER RAHMAN**            | Developer        | [GitHub](https://github.com/your-github-username-here) |
+| **JUBAER RAHMAN**            | Developer        | [GitHub]([https://github.com/your-github-username-here](https://github.com/jubaerjisan)) |
 
-> ✏️ Replace each `your-github-username-here` with the actual GitHub usernames.
 
 ---
 
