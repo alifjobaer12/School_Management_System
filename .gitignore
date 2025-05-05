@@ -1,0 +1,6 @@
+.env
+__pycache__/
+test_m.py
+test.py
+remember.txt
+watcher.py
