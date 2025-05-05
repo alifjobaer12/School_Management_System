@@ -62,7 +62,6 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 ## 🖼️ Screenshots
 
-```markdown
 ![Login Page](assets/screenshots/Login_page.png)
 ![Admin Dashboard](assets/screenshots/admin_panel.png)
 ![Teacher Dashboard](assets/screenshots/teacher_panel.png)
