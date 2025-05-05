@@ -66,7 +66,7 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 ![Admin Dashboard](assets/screenshots/admin_panel.png)
 ![Teacher Dashboard](assets/screenshots/teacher_panel.png)
 ![Student Dashboard](assets/screenshots/student_panel.png)
-```
+
 
 ---
 
