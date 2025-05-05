@@ -76,10 +76,10 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 | Name                         | Role             | GitHub Profile |
 |------------------------------|------------------|----------------|
 | **MD JOBAER ISLAM ALIF**     | Main Developer   | [GitHub](https://github.com/alifjobaer12) |
-| **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub]((https://github.com/kenshiro147)) |
-| **MD RAKIB ALI**             | Developer        | [GitHub]((https://github.com/Rakibislam22)) |
+| **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub](https://github.com/kenshiro147) |
+| **MD RAKIB ALI**             | Developer        | [GitHub](https://github.com/Rakibislam22) |
 | **PRANTA KUMER PANDIT**      | Developer        | [GitHub](https://github.com/your-github-username-here) |
-| **JUBAER RAHMAN**            | Developer        | [GitHub]((https://github.com/jubaerjisan)) |
+| **JUBAER RAHMAN**            | Developer        | [GitHub](https://github.com/jubaerjisan) |
 
 
 ---
