@@ -70,20 +70,20 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 <p align="center">
   <em>Admin Dashboard</em>
-  <img src="assets/screenshots/admin_panel.png" alt="Admin Dashboard" width="600"/>
   <br>
+  <img src="assets/screenshots/admin_panel.png" alt="Admin Dashboard" width="600"/>
 </p>
 
 <p align="center">
   <em>Teacher Dashboard</em>
-  <img src="assets/screenshots/teacher_panel.png" alt="Teacher Dashboard" width="600"/>
   <br>
+  <img src="assets/screenshots/teacher_panel.png" alt="Teacher Dashboard" width="600"/>
 </p>
 
 <p align="center">
   <em>Student Dashboard</em>
-  <img src="assets/screenshots/student_panel.png" alt="Student Dashboard" width="600"/>
   <br>
+  <img src="assets/screenshots/student_panel.png" alt="Student Dashboard" width="600"/>
 </p>
 
 
