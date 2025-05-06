@@ -2,7 +2,7 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 class MySQLQuery:
     def __init__(self):
@@ -44,6 +44,18 @@ class MySQLQuery:
         try:
             sql = """SELECT COUNT(*) AS total FROM students WHERE class = %s AND roll = %s AND section = %s GROUP BY class, roll, LOWER(section) HAVING COUNT(*) > 0;"""
             self.cursor.execute(sql, (student_data['class'], student_data['roll'], student_data['section']))
+            ck = self.cursor.fetchone()
+            if ck is not None:
+                return False
+            else:
+                return True
+        except mysql.connector.IntegrityError as e:
+            pass
+
+    def ck_tec_class_sub_section(self, sub_info: dict):
+        try:
+            sql = """SELECT COUNT(*) AS total FROM subjects WHERE class = %s AND sub_name = %s AND section = %s AND class_start_time = %s AND class_end_time = %s GROUP BY class, LOWER(sub_name), LOWER(section), class_start_time, class_end_time HAVING COUNT(*) > 0;"""
+            self.cursor.execute(sql, (sub_info['class'], sub_info['subject'], sub_info['section'], sub_info['start_t'], sub_info['end_t']))
             ck = self.cursor.fetchone()
             if ck is not None:
                 return False

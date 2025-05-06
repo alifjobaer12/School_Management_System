@@ -140,7 +140,7 @@ class admin_panel:
                             'grade': grade,
                             'pn_number': phone,
                             'address': address,
-                            'tution_fee': 1000,
+                            'tution_fee': 0,
                             'paid_fee': 0
             }
 
@@ -155,6 +155,9 @@ class admin_panel:
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
+                e_s_class.configure(border_color="#979da2")
+                e_s_roll.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
                 error_l.update()
                 self.sw = 1
                 return
@@ -164,6 +167,13 @@ class admin_panel:
                 e_s_roll.configure(border_color="green")
                 e_s_section.configure(border_color="green")
                 e_s_username.configure(border_color="green")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                e_s_class.configure(border_color="#979da2")
+                e_s_roll.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
+                error_l.update()
                 self.sw=0
             else:
                 e_s_class.configure(border_color="#979da2")
@@ -178,6 +188,7 @@ class admin_panel:
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
+                e_s_username.configure(border_color="#979da2")
                 error_l.update()
                 self.sw = 1
                 return
@@ -501,7 +512,63 @@ class admin_panel:
             }
 
             # sql backend
+            ck_crs = self.sql.ck_tec_class_sub_section(sub_info)
+            if ck_crs == False:
+                error_l.configure(text="Check Subject, Class, Section, Class Start & End time", text_color="red")
+                e_s_class.configure(border_color="red")
+                e_s_sub.configure(border_color="red")
+                e_s_section.configure(border_color="red")
+                e_cs_time.configure(border_color="red")
+                e_ce_time.configure(border_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                e_s_class.configure(border_color="#979da2")
+                e_s_sub.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
+                e_cs_time.configure(border_color="#979da2")
+                e_ce_time.configure(border_color="#979da2")
+                error_l.update()
+                self.sw = 1
+                return
+            
+            if self.sw:
+                e_s_class.configure(border_color="green")
+                e_s_sub.configure(border_color="green")
+                e_s_section.configure(border_color="green")
+                e_cs_time.configure(border_color="green")
+                e_ce_time.configure(border_color="green")
+                e_s_username.configure(border_color="green")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                e_s_class.configure(border_color="#979da2")
+                e_s_sub.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
+                e_cs_time.configure(border_color="#979da2")
+                e_ce_time.configure(border_color="#979da2")
+                error_l.update()
+                self.sw=0
+            else:
+                e_s_class.configure(border_color="#979da2")
+                e_s_sub.configure(border_color="#979da2")
+                e_s_section.configure(border_color="#979da2")
+                e_cs_time.configure(border_color="#979da2")
+                e_ce_time.configure(border_color="#979da2")
+                e_s_username.configure(border_color="#979da2")
+            
             ck_u = self.sql.add_users(user_info)
+            if ck_u != True:
+                error_l.configure(text=ck_u, text_color="red")
+                e_s_username.configure(border_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                e_s_username.configure(border_color="#979da2")
+                error_l.update()
+                self.sw = 1
+                return
+            
             ck_t = self.sql.add_teacher(teacher_info)
             ck_s = self.sql.add_subject(sub_info)
 
@@ -518,7 +585,7 @@ class admin_panel:
                 elif ck_t != True:
                     error_l.configure(text=ck_t, text_color="red")
                 else:
-                    error_l.configure(text=ck_s, text_color="red")
+                    error_l.configure(text="Check Subject, Class, Section, Class Start & End time", text_color="red")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
