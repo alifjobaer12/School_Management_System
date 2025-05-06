@@ -62,10 +62,29 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 ## 🖼️ Screenshots
 
-![Login Page](assets/screenshots/Login_page.png)
-![Admin Dashboard](assets/screenshots/admin_panel.png)
-![Teacher Dashboard](assets/screenshots/teacher_panel.png)
-![Student Dashboard](assets/screenshots/student_panel.png)
+<p align="center">
+  <em>Login Page</em>
+  <img src="assets/screenshots/Login_page.png" alt="Login Page" width="600"/>
+  <br>
+</p>
+
+<p align="center">
+  <em>Admin Dashboard</em>
+  <img src="assets/screenshots/admin_panel.png" alt="Admin Dashboard" width="600"/>
+  <br>
+</p>
+
+<p align="center">
+  <em>Teacher Dashboard</em>
+  <img src="assets/screenshots/teacher_panel.png" alt="Teacher Dashboard" width="600"/>
+  <br>
+</p>
+
+<p align="center">
+  <em>Student Dashboard</em>
+  <img src="assets/screenshots/student_panel.png" alt="Student Dashboard" width="600"/>
+  <br>
+</p>
 
 
 ---
@@ -77,7 +96,7 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 | **MD JOBAER ISLAM ALIF**     | Main Developer   | [GitHub](https://github.com/alifjobaer12) |
 | **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub](https://github.com/kenshiro147) |
 | **MD RAKIB ALI**             | Developer        | [GitHub](https://github.com/Rakibislam22) |
-| **PRANTA KUMER PANDIT**      | Developer        | [GitHub](https://github.com/your-github-username-here) |
+| **PRANTA KUMER PANDIT**      | Developer        | [GitHub](https://github.com/pandit2003) |
 | **JUBAER RAHMAN**            | Developer        | [GitHub](https://github.com/jubaerjisan) |
 
 
