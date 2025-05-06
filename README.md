@@ -64,8 +64,8 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 <p align="center">
   <em>Login Page</em>
-  <img src="assets/screenshots/Login_page.png" alt="Login Page" width="600"/>
   <br>
+  <img src="assets/screenshots/Login_page.png" alt="Login Page" width="600"/>
 </p>
 
 <p align="center">
