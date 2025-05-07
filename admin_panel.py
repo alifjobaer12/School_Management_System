@@ -296,6 +296,7 @@ class admin_panel:
                         tuition_fee = float(updated_data[9])
                         paid_fee = float(updated_data[10])
                         due_fee = tuition_fee - paid_fee
+                        paid_fee = float(updated_data[9]) - due_fee
             
                         show_s_f_result.configure(state="normal")
                         show_s_f_result.delete("1.0", END)
@@ -305,7 +306,7 @@ class admin_panel:
                             f"Name \t\t:  {s_f_result[2]}\t\t\n"
                             f"Class\t\t:  {s_f_result[3]}\n"
                             f"Roll \t\t:  {s_f_result[4]}\nSection \t\t:  {s_f_result[5]}\n\n"
-                            f"Tution Fee \t\t:  {s_f_result[9]}/-\nPaid Fee \t\t:  {s_f_result[10]}/-\nDue \t\t:  {due_fee}/-"
+                            f"Tution Fee \t\t:  {s_f_result[9]}/-\nPaid Fee \t\t:  {paid_fee}/-\nDue \t\t:  {due_fee}/-"
                         )
                         show_s_f_result.configure(state="disable")
                 else:
