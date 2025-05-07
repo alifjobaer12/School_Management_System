@@ -166,13 +166,13 @@ class LoginApp:
         try:
             BASE_DIR = Path(__file__).resolve().parent
             icon1_path = BASE_DIR / "image" / "login.png"
-            icon1 = CTkImage(light_image=Image.open(icon1_path), size=(350, 350))
+            icon1 = CTkImage(light_image=Image.open(icon1_path), size=(315, 315))
             CTkLabel(frame_left, image=icon1, text="").pack(padx=30, pady=(80,55))
         except:
             CTkLabel(frame_left, text="Image\nMissing", font=CTkFont(size=20, weight="bold")).pack(expand=True)
 
         frame_right = CTkFrame(self.frame_main, fg_color="transparent")
-        frame_right.pack(side="right", fill="both", expand=True, padx=(20,0), pady=(100,0), anchor="center")
+        frame_right.pack(side="right", fill="both", expand=True, padx=(20,0), pady=(87,0), anchor="center")
 
         CTkLabel(frame_right, text_color="#58a2f9", text="WELCOME", font=("Helvetica",22, "bold")).pack(pady=(10,0))
         CTkLabel(frame_right, text_color="#9a9a9a", text="Login in to your account to continue", font=CTkFont(size=12, weight="bold")).pack(pady=(0,10))
