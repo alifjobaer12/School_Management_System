@@ -194,37 +194,86 @@ class LoginApp:
         CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=110, anchor="center")
         CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=160, anchor="center")
 
-        CTkButton(frame_right, height=1, width=1, text="Forgot Password?", fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
+        CTkButton(frame_right, height=1, width=1, text="Forgot Password?", command=lambda: self.reg_forgatpass(0, 1), fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
 
         CTkButton(frame_right, text="Log in", command=self.login, width=200).pack(pady=(30,0))
         CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=CTkFont(size=12)).place(x=90, y=255, anchor="center")
-        CTkButton(frame_right, text="Sign up", width=1, height=1, hover=False, command=self.slide_right, fg_color="transparent", font=CTkFont(size=12), text_color="#2a63db").place(x=180, y=255, anchor="center")
+        CTkButton(frame_right, text="Sign up", width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", font=CTkFont(size=12), text_color="#2a63db").place(x=180, y=255, anchor="center")
 
-        self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
-        self.e_lf_frame.place(x=-302, y=40)
+    # registration & forgate pass
+    def reg_forgatpass(self, reg, fpass):
+        
+        if reg == 1:
 
-        CTkLabel(self.e_lf_frame, text="Register", text_color="#58a2f9", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent").place(x=150, y=35, anchor="center")
-        CTkLabel(self.e_lf_frame, text="Create Your Account", text_color="#9a9a9a", width=1, height=1, font=("Helvetica",12), fg_color="transparent").place(x=150, y=55, anchor="center")
+            self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
+            self.e_lf_frame.place(x=-302, y=40)
 
-        CTkLabel(self.e_lf_frame, text="", fg_color="transparent", width=1, height=1, text_color="red").place(x=150, y=75, anchor="center")
+            h1_lable = CTkLabel(self.e_lf_frame, text="Register", text_color="#58a2f9", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent")
+            h1_lable.place(x=150, y=35, anchor="center")
+            h2_lable = CTkLabel(self.e_lf_frame, text="Create Your Account", text_color="#9a9a9a", width=1, height=1, font=("Helvetica",12), fg_color="transparent")
+            h2_lable.place(x=150, y=55, anchor="center")
 
-        CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent").place(x=150, y=105, anchor="center")
-        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
+            re_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", width=1, height=1, text_color="red")
+            re_lable.place(x=150, y=75, anchor="center")
 
-        CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Password ", width=200, fg_color="transparent").place(x=150, y=145, anchor="center")
-        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
+            r_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
+            r_Username.place(x=150, y=105, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
 
-        CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform Password ", width=200, fg_color="transparent").place(x=150, y=185, anchor="center")
-        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
+            r_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Password ", width=200, fg_color="transparent")
+            r_Password.place(x=150, y=145, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
 
-        CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent").place(x=150, y=225, anchor="center")
-        CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
+            r_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform Password ", width=200, fg_color="transparent")
+            r_C_Password.place(x=150, y=185, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
 
-        click = IntVar(value=0)
-        CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=click, checkbox_width=15, checkbox_height=15, fg_color="green", corner_radius=50, border_width=2, hover=False, onvalue=1, offvalue=0).place(x=115, y=260, anchor="center")
-        CTkButton(self.e_lf_frame, width=1, height=1, text_color="blue", fg_color="transparent", text="T & C", hover=False).place(x=195, y=260, anchor="center")
+            r_sq = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent")
+            r_sq.place(x=150, y=225, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
 
-        CTkButton(self.e_lf_frame, command=self.slide_left, text="Sign Up").place(x=150, y=300, anchor="center")
+            click = IntVar(value=0)
+            CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=click, checkbox_width=15, checkbox_height=15, fg_color="green", corner_radius=50, border_width=2, hover=False, onvalue=1, offvalue=0).place(x=115, y=260, anchor="center")
+            t_c = CTkButton(self.e_lf_frame, width=1, height=1, text_color="blue", fg_color="transparent", text="T & C", hover=False)
+            t_c.place(x=195, y=260, anchor="center")
+
+            signup_btn = CTkButton(self.e_lf_frame, command=self.slide_left, text="Sign Up")
+            signup_btn.place(x=150, y=300, anchor="center")
+
+
+        if fpass == 1:
+
+            self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
+            self.e_lf_frame.place(x=-302, y=40)
+
+            h1_lable = CTkLabel(self.e_lf_frame, text="Reset Your Password", text_color="#58a2f9", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent")
+            h1_lable.place(x=150, y=35, anchor="center")
+            h2_lable = CTkLabel(self.e_lf_frame, text="Fill All The Box", text_color="#9a9a9a", width=1, height=1, font=("Helvetica",12), fg_color="transparent")
+            h2_lable.place(x=150, y=55, anchor="center")
+
+            fpe_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", width=1, height=1, text_color="red")
+            fpe_lable.place(x=150, y=75, anchor="center")
+
+            fp_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
+            fp_Username.place(x=150, y=105, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
+
+            fp_sq = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent")
+            fp_sq.place(x=150, y=145, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
+
+            fp_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text="New Password ", width=200, fg_color="transparent")
+            fp_Password.place(x=150, y=185, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
+
+            fp_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform New Password ", width=200, fg_color="transparent")
+            fp_C_Password.place(x=150, y=225, anchor="center")
+            line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
+
+            signup_btn = CTkButton(self.e_lf_frame, command=self.slide_left, text="Reset Password")
+            signup_btn.place(x=150, y=285, anchor="center")
+
+        self.slide_right()
 
 if __name__ == "__main__":
     LoginApp()
