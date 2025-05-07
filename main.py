@@ -27,10 +27,10 @@ class LoginApp:
         self.login_window.geometry("700x400")
         self.login_window.title("School Management System")
 
-        self.main_windo = CTkFrame(self.login_window, width=700, height=400, fg_color="white")
+        self.main_windo = CTkFrame(self.login_window, width=700, height=400, fg_color="#b2fff5")
         self.main_windo.pack(fill="both", expand=True)
 
-        self.uper_main_frame = CTkFrame(self.main_windo, width=700, height=400, fg_color="white")
+        self.uper_main_frame = CTkFrame(self.main_windo, width=700, height=400, fg_color="#b2fff5")
         self.uper_main_frame.place(x=350, y=200, anchor="center")
 
         self.frame_main = CTkFrame(self.uper_main_frame, fg_color="transparent")
@@ -171,11 +171,11 @@ class LoginApp:
         except:
             CTkLabel(frame_left, text="Image\nMissing", font=CTkFont(size=20, weight="bold")).pack(expand=True)
 
-        frame_right = CTkFrame(self.frame_main, fg_color="transparent")
+        frame_right = CTkFrame(self.frame_main, fg_color="#b2fff5")
         frame_right.pack(side="right", fill="both", expand=True, padx=(20,0), pady=(87,0), anchor="center")
 
-        CTkLabel(frame_right, text_color="#58a2f9", text="WELCOME", font=("Helvetica",22, "bold")).pack(pady=(10,0))
-        CTkLabel(frame_right, text_color="#9a9a9a", text="Login in to your account to continue", font=CTkFont(size=12, weight="bold")).pack(pady=(0,10))
+        CTkLabel(frame_right, text_color="#3e4d5c", text="WELCOME", font=("Helvetica",24, "bold")).pack(pady=(10,0))
+        CTkLabel(frame_right, text_color="#607c84", text="Login in to your account to continue", font=("Helvetica",13, "bold")).pack(pady=(0,10))
 
         self.error_lable = CTkLabel(frame_right, text_color="red", width=1, height=1, text="", font=("Helvetica",12))
         self.error_lable.place(x=110, y=75, anchor="center")
@@ -194,11 +194,11 @@ class LoginApp:
         CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=110, anchor="center")
         CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=160, anchor="center")
 
-        CTkButton(frame_right, height=1, width=1, text="Forgot Password?", command=lambda: self.reg_forgatpass(0, 1), fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
+        CTkButton(frame_right, height=1, width=1, text="Forgot Password?", font=("Harvatika", 12), command=lambda: self.reg_forgatpass(0, 1), fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
 
-        CTkButton(frame_right, text="Log in", command=self.login, width=200).pack(pady=(30,0))
-        CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=CTkFont(size=12)).place(x=90, y=255, anchor="center")
-        CTkButton(frame_right, text="Sign up", width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", font=CTkFont(size=12), text_color="#2a63db").place(x=180, y=255, anchor="center")
+        CTkButton(frame_right, text="Log in", text_color="#b2fff5", fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 13, "bold"), command=self.login, width=200).pack(pady=(30,0))
+        CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=90, y=255, anchor="center")
+        CTkButton(frame_right, text="Sign up", font=("Harvatika", 12), width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", text_color="#2a63db").place(x=180, y=255, anchor="center")
 
     # registration & forgate pass
     def reg_forgatpass(self, reg, fpass):
@@ -208,12 +208,12 @@ class LoginApp:
             self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
             self.e_lf_frame.place(x=-302, y=40)
 
-            h1_lable = CTkLabel(self.e_lf_frame, text="Register", text_color="#58a2f9", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent")
-            h1_lable.place(x=150, y=35, anchor="center")
-            h2_lable = CTkLabel(self.e_lf_frame, text="Create Your Account", text_color="#9a9a9a", width=1, height=1, font=("Helvetica",12), fg_color="transparent")
-            h2_lable.place(x=150, y=55, anchor="center")
+            h1_lable = CTkLabel(self.e_lf_frame, text="Register", text_color="#3e4d5c", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent")
+            h1_lable.place(x=150, y=45, anchor="center")
+            h2_lable = CTkLabel(self.e_lf_frame, text="Create Your Account", text_color="#607c84", width=1, height=1, font=("Helvetica",13, "bold"), fg_color="transparent")
+            h2_lable.place(x=150, y=70, anchor="center")
 
-            re_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", width=1, height=1, text_color="red")
+            re_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", font=("Helvetica",12), width=1, height=1, text_color="red")
             re_lable.place(x=150, y=75, anchor="center")
 
             r_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
@@ -237,7 +237,7 @@ class LoginApp:
             t_c = CTkButton(self.e_lf_frame, width=1, height=1, text_color="blue", fg_color="transparent", text="T & C", hover=False)
             t_c.place(x=195, y=260, anchor="center")
 
-            signup_btn = CTkButton(self.e_lf_frame, command=self.slide_left, text="Sign Up")
+            signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Sign Up", text_color="#b2fff5")
             signup_btn.place(x=150, y=300, anchor="center")
 
 
@@ -246,12 +246,12 @@ class LoginApp:
             self.e_lf_frame = CTkFrame(self.uper_main_frame, width=300, height=350, fg_color="transparent")
             self.e_lf_frame.place(x=-302, y=40)
 
-            h1_lable = CTkLabel(self.e_lf_frame, text="Reset Your Password", text_color="#58a2f9", width=1, height=1, font=("Helvetica",20,"bold"), fg_color="transparent")
-            h1_lable.place(x=150, y=35, anchor="center")
-            h2_lable = CTkLabel(self.e_lf_frame, text="Fill All The Box", text_color="#9a9a9a", width=1, height=1, font=("Helvetica",12), fg_color="transparent")
-            h2_lable.place(x=150, y=55, anchor="center")
+            h1_lable = CTkLabel(self.e_lf_frame, text="Reset Your Password", text_color="#3e4d5c", width=1, height=1, font=("Helvetica",19,"bold"), fg_color="transparent")
+            h1_lable.place(x=150, y=45, anchor="center")
+            h2_lable = CTkLabel(self.e_lf_frame, text="Fill All The Box", text_color="#607c84", width=1, height=1, font=("Helvetica",13, "bold"), fg_color="transparent")
+            h2_lable.place(x=150, y=70, anchor="center")
 
-            fpe_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", width=1, height=1, text_color="red")
+            fpe_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", font=("Helvetica",12), width=1, height=1, text_color="red")
             fpe_lable.place(x=150, y=75, anchor="center")
 
             fp_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
@@ -270,7 +270,7 @@ class LoginApp:
             fp_C_Password.place(x=150, y=225, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
 
-            signup_btn = CTkButton(self.e_lf_frame, command=self.slide_left, text="Reset Password")
+            signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Reset Password", text_color="#b2fff5")
             signup_btn.place(x=150, y=285, anchor="center")
 
         self.slide_right()
