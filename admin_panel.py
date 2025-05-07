@@ -116,9 +116,22 @@ class admin_panel:
             address = e_s_adderss.get("1.0", "end-1c").strip()
 
             # Check for missing fields
+            enter_fild = [e_s_username, e_s_name, e_s_class, e_s_roll, e_s_section, e_s_grade, e_s_pnumber]
+
+            for fild in enter_fild:
+                    if not fild.get().strip():
+                        fild.configure(border_color="red")
+                    else:
+                        fild.configure(border_color="#979da2")
+                    fild.update()
+
             if not all([username, name, std_class, roll, section, grade, phone, address]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+
                 return
             
             else:
@@ -482,15 +495,26 @@ class admin_panel:
             address = e_s_adderss.get("1.0", "end-1c").strip()
 
             # Check for missing fields
+
+            enter_fild = [e_s_username, e_s_name, e_s_class, e_s_sub, e_s_section, e_s_pn, e_ce_time, e_cs_time]
+
+            for fild in enter_fild:
+                    if not fild.get().strip():
+                        fild.configure(border_color="red")
+                    else:
+                        fild.configure(border_color="#979da2")
+                    fild.update()
+
             if not all([username, name, std_class, sub, section, phone, class_et, class_st]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
-                time.sleep(3)
+                time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
                 return
             else:
                 error_l.configure(text="") 
+                error_l.update()
 
             sub_info = { 'subject': sub,
                         'username': username,
@@ -649,6 +673,84 @@ class admin_panel:
 
         self.std_find(delete, fees, tec)
 
+    def subject_asign(self):
+
+        def asign_sub(self):
+            nonlocal t_sa_username, t_sa_name, t_sa_class, t_sa_section, error_l, t_sa_subject, t_sa_Class_et, t_sa_Class_st
+
+            # Retrieve all input values
+            username = t_sa_username.get().strip()
+            name = t_sa_name.get().strip()
+            std_class = t_sa_class.get().strip()
+            section = t_sa_section.get().strip()
+            subject = t_sa_subject.get().strip() 
+            Class_st = t_sa_Class_et.get().strip() 
+            Class_et = t_sa_Class_et.get().strip() 
+
+            enter_fild = [t_sa_username, t_sa_name, t_sa_class, t_sa_section, t_sa_subject, t_sa_Class_et, t_sa_Class_st]
+
+            for fild in enter_fild:
+                    if not fild.get().strip():
+                        fild.configure(border_color="red")
+                    else:
+                        fild.configure(border_color="#979da2")
+                    fild.update()
+
+            # Check for missing fields
+            if not all([username, name, std_class, section,  subject, Class_et, Class_st]):
+                error_l.configure(text="⚠️ All fields are required.")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
+            
+            else:
+                error_l.configure(text="") 
+                error_l.update()
+
+
+            print("sub asign")
+
+        subject_asign_frame = CTkFrame(self.admin_frame, fg_color="transparent", width=700, height=350)
+        subject_asign_frame.place(x=4*263, y=260, anchor="center")
+
+        t_sa_username = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Username", width=200, fg_color="transparent")
+        t_sa_username.place(x=240, y=50, anchor="center")
+
+        t_sa_name = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Name", width=200, fg_color="transparent")
+        t_sa_name.place(x=460, y=50, anchor="center")
+
+        t_sa_class = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Class", width=200, fg_color="transparent")
+        t_sa_class.place(x=240, y=100, anchor="center")
+
+        # t_sa_roll = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Roll", width=200, fg_color="transparent")
+        # t_sa_roll.place(x=460, y=85, anchor="center")
+
+        t_sa_section = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Section", width=200, fg_color="transparent")
+        t_sa_section.place(x=240, y=150, anchor="center")
+
+        t_sa_Class_st = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Class Start Time", width=200, fg_color="transparent")
+        t_sa_Class_st.place(x=460, y=150, anchor="center")
+
+        t_sa_Class_et = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Class End Time", width=200, fg_color="transparent")
+        t_sa_Class_et.place(x=460, y=200, anchor="center")
+
+        t_sa_subject = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Subject", width=200, fg_color="transparent")
+        t_sa_subject.place(x=240, y=200, anchor="center")
+
+        t_sa_submit_btn = CTkButton(subject_asign_frame, text="Submit", command=lambda: asign_sub(self), font=("Helvetica",14, "bold"), hover=True)
+        t_sa_submit_btn.place(x=350, y=280, anchor="center")
+
+        t_sa_back_btn = CTkButton(subject_asign_frame, text="❌", command=subject_asign_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
+        t_sa_back_btn.place(x=670, y=20, anchor="center")
+
+        error_l = CTkLabel(self.admin_frame, text="", height=1, width=1, fg_color="transparent", text_color="red")
+        error_l.place(x=350, y=100, anchor="center")
+
+        self.add_std_slide_left(subject_asign_frame, int(4*263))
+        
+
     def setup_admin_ui(self):
         admin_label = CTkLabel(self.admin_frame, text=f"Admin\nHi! {self.username}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"))
         admin_label.place(x=350, y=50, anchor="center")
@@ -657,12 +759,13 @@ class admin_panel:
             ("ADD Student", self.std_add, 250, 130),
             ("Find Student", lambda: self.std_find(0, 0, 0), 250, 180),
             ("Delete Student", lambda: self.std_delete(1, 0, 0), 250, 230),
-            ("See All Student Info", self.see_all_std_info, 250, 280),
+            ("See All Student Info", self.see_all_std_info, 250, 330),
             ("ADD Teacher", self.tec_add, 450, 130),
             ("Find Teacher", lambda: self.tec_find(0, 0, 1), 450, 180),
             ("Delete Teacher", lambda: self.tec_delete(1, 0, 1), 450, 230),
-            ("See All Teacher Info", self.see_all_tec_info, 450, 280),
-            ("Update Fees", lambda: self.fee_update(0, 1, 0), 350, 330)
+            ("See All Teacher Info", self.see_all_tec_info, 450, 330),
+            ("Update Fees", lambda: self.fee_update(0, 1, 0), 250, 280),
+            ("Subject Assign", self.subject_asign, 450, 280)
         ]
 
         for text, command, x, y in buttons:
