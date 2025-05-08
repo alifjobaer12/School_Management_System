@@ -285,7 +285,7 @@ class admin_panel:
 
     def std_find(self, delete, fees, tec):
 
-        def std_find_result():
+        def std_find_result(event=None):
 
             def updat_fee():
                 # nonlocal find_s_username, header_label, show_s_f_result
@@ -465,7 +465,7 @@ class admin_panel:
 
         
         # print(find_s_username)
-
+        e_s_username.bind("<Return>", std_find_result)
         e_s_submit_btn = CTkButton(find_std_frame, text="Find", command= lambda: std_find_result(), font=("Helvetica",14, "bold"), hover=True)
         e_s_submit_btn.place(x=350, y=180, anchor="center")
 

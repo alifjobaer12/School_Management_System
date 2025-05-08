@@ -102,62 +102,65 @@ class LoginApp:
 
         threading.Thread(target=animate, daemon=True).start()
 
-    def login(self):
+    def login(self, event=None):
         sql_error_l = CTkLabel(self.uper_main_frame, text_color="red", width=1, height=1, text="", font=("Helvetica",13))
         sql_error_l.place(x=350, y=30, anchor="center")
-
-        try:
-            sql = MySQLQuery()
-        except:
-            sql_error_l.configure(text="Oops! We couldn't reach the database.\nMake sure you're connected to the internet and try again.", text_color="red")
-            sql_error_l.update()
-            time.sleep(2)
-            sql_error_l.configure(text="")
-            sql_error_l.update()
-            self.s = "🎉 Great! You're now connected to the database."
-            self.swich = 1
-            return
         
-        if self.swich:
-            sql_error_l.configure(text=self.s, text_color="green")
-            sql_error_l.update()
-            time.sleep(2)
-            sql_error_l.configure(text="")
-            sql_error_l.update()
-            self.swich = 0
+        def handle_login():
+            try:
+                sql = MySQLQuery()
+            except:
+                sql_error_l.configure(text="Oops! We couldn't reach the database.\nMake sure you're connected to the internet and try again.", text_color="red")
+                sql_error_l.update()
+                time.sleep(2)
+                sql_error_l.configure(text="")
+                sql_error_l.update()
+                self.s = "🎉 Great! You're now connected to the database."
+                self.swich = 1
+                return
 
-        username = self.entry_username.get()
-        password = self.entry_password.get()
+            if self.swich:
+                sql_error_l.configure(text=self.s, text_color="green")
+                sql_error_l.update()
+                time.sleep(2)
+                sql_error_l.configure(text="")
+                sql_error_l.update()
+                self.swich = 0
 
-        if username and password:
-            user = sql.log_in(username)
-            sql.close_db()
+            username = self.entry_username.get()
+            password = self.entry_password.get()
 
-            if user:
-                stored_password, role = user
-                if password == stored_password:
-                    self.error_lable.configure(text="Login Successful", text_color="green")
-                    self.error_lable.update()
-                    time.sleep(0.7)
-                    with open("remember.txt", "w") as f:
-                        f.write(username)
-                    self.anime_y = 200
-                    if role == "admin":
-                        self.slide_up(lambda: admin_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
-                    elif role == "teacher":
-                        self.slide_up(lambda: teacher_panal(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
-                    elif role == "student":
-                        self.slide_up(lambda: student_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
-                    self.error_lable.configure(text="")
+            if username and password:
+                user = sql.log_in(username)
+                sql.close_db()
+
+                if user:
+                    stored_password, role = user
+                    if password == stored_password:
+                        self.error_lable.configure(text="Login Successful", text_color="green")
+                        self.error_lable.update()
+                        time.sleep(0.7)
+                        with open("remember.txt", "w") as f:
+                            f.write(username)
+                        self.anime_y = 200
+                        if role == "admin":
+                            self.slide_up(lambda: admin_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                        elif role == "teacher":
+                            self.slide_up(lambda: teacher_panal(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                        elif role == "student":
+                            self.slide_up(lambda: student_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
+                        self.error_lable.configure(text="")
+                    else:
+                        self.error_lable.configure(text="Invalid password.", text_color="red")
+                        self.error_lable.update()
                 else:
-                    self.error_lable.configure(text="Invalid password.", text_color="red")
+                    self.error_lable.configure(text="User not found.", text_color="red")
                     self.error_lable.update()
             else:
-                self.error_lable.configure(text="User not found.", text_color="red")
+                self.error_lable.configure(text="Enter username and password.", text_color="red")
                 self.error_lable.update()
-        else:
-            self.error_lable.configure(text="Enter username and password.", text_color="red")
-            self.error_lable.update()
+        
+        threading.Thread(target=handle_login, daemon=True).start()
 
     def build_ui(self):
         frame_left = CTkFrame(self.frame_main, width=200, fg_color="transparent", corner_radius=0)
@@ -196,7 +199,9 @@ class LoginApp:
 
         CTkButton(frame_right, height=1, width=1, text="Forgot Password?", font=("Harvatika", 12), command=lambda: self.reg_forgatpass(0, 1), fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
 
+        self.entry_password.bind("<Return>", self.login)
         CTkButton(frame_right, text="Log in", text_color="#b2fff5", fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 13, "bold"), command=self.login, width=200).pack(pady=(30,0))
+
         CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=90, y=255, anchor="center")
         CTkButton(frame_right, text="Sign up", font=("Harvatika", 12), width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", text_color="#2a63db").place(x=180, y=255, anchor="center")
 
