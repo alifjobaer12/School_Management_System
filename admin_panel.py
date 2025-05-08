@@ -25,7 +25,7 @@ class admin_panel:
         # self.login_window.geometry("700x400")
         # self.login_window.title("Login - School Management System")
 
-        self.admin_frame = CTkFrame(self.login_window, fg_color="sky blue", width=700, height=400)
+        self.admin_frame = CTkFrame(self.login_window, fg_color="#C8D3Cc", width=700, height=400)
         self.admin_frame.place(x=350, y=200, anchor="center")
 
         self.setup_admin_ui()
@@ -176,10 +176,10 @@ class admin_panel:
                 return
             
             if self.sw:
-                e_s_class.configure(border_color="green")
-                e_s_roll.configure(border_color="green")
-                e_s_section.configure(border_color="green")
-                e_s_username.configure(border_color="green")
+                e_s_class.configure(border_color="#2e7d32")
+                e_s_roll.configure(border_color="#2e7d32")
+                e_s_section.configure(border_color="#2e7d32")
+                e_s_username.configure(border_color="#2e7d32")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -209,7 +209,7 @@ class admin_panel:
             ck_s = self.sql.add_student(student_info)
 
             if ck_s == True and ck_u == True and ck_crs == True:
-                error_l.configure(text="✔️ Student Add Successfully", text_color="green")
+                error_l.configure(text="✔️ Student Add Successfully", text_color="#2e7d32")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -272,11 +272,13 @@ class admin_panel:
         e_s_adderss.bind("<FocusIn>", remove_placeholder)
         e_s_adderss.bind("<FocusOut>", add_placeholder)
 
-        e_s_submit_btn = CTkButton(add_std_frame, text="ADD Student", command=lambda: add_std(self), font=("Helvetica",14, "bold"), hover=True)
+        e_s_submit_btn = CTkButton(add_std_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="ADD Student", command=lambda: add_std(self), font=("Helvetica",14, "bold"), hover=True)
         e_s_submit_btn.place(x=350, y=280, anchor="center")
 
-        e_s_back_btn = CTkButton(add_std_frame, text="❌", command=add_std_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
+        e_s_back_btn = CTkButton(add_std_frame, text="❌", text_color="black", fg_color="#C8D3Cc", command=add_std_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=False)
         e_s_back_btn.place(x=670, y=20, anchor="center")
+        e_s_back_btn.bind("<Enter>", lambda event: self.hover_on(event, "red", e_s_back_btn))
+        e_s_back_btn.bind("<Leave>", lambda event: self.hover_off(event, "black", e_s_back_btn))
 
         error_l = CTkLabel(self.admin_frame, text="", height=1, width=1, fg_color="transparent", text_color="red")
         error_l.place(x=350, y=100, anchor="center")
@@ -300,7 +302,7 @@ class admin_panel:
                 update_fee = self.sql.update_fees(find_s_username, t_fee, p_fee)
             
                 if update_fee == True:
-                    header_label.configure(text="✔️ Fees Update Successful", text_color="green")
+                    header_label.configure(text="✔️ Fees Update Successful", text_color="#2e7d32")
                     header_label.update()
             
                     # Refresh only the display box, not the entire UI
@@ -333,7 +335,7 @@ class admin_panel:
                 if tec == 0:
                     ck = self.sql.delete_student(username)
                     if ck == True:
-                        header_label.configure(text="✔️ Delete Student Successfull", text_color="green")
+                        header_label.configure(text="✔️ Delete Student Successfull", text_color="#2e7d32")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -342,7 +344,7 @@ class admin_panel:
                 else:
                     ck = self.sql.delete_teacher(username)
                     if ck == True:
-                        header_label.configure(text="✔️ Delete Teacher Successfull", text_color="green")
+                        header_label.configure(text="✔️ Delete Teacher Successfull", text_color="#2e7d32")
                         header_label.update
                     else:
                         header_label.configure(text=ck, text_color="red")
@@ -352,10 +354,10 @@ class admin_panel:
             find_std_result_frame.place(x=4*263, y=200, anchor="center")
 
 
-            header_label = CTkLabel(find_std_result_frame, text="", text_color="green", fg_color="transparent", width=1, height=1, font=("Helvetica",14, "bold"))
+            header_label = CTkLabel(find_std_result_frame, text="", text_color="#2e7d32", fg_color="transparent", width=1, height=1, font=("Helvetica",14, "bold"))
             header_label.place(x=350, y=25, anchor="center")
 
-            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=True, scrollbar_button_color="sky blue", fg_color="transparent", width=520, height=200, font=("Helvetica",16, "bold"))             # change sky blue to fg color
+            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=True, scrollbar_button_color="#C8D3Cc", fg_color="transparent", width=520, height=200, font=("Helvetica",16, "bold"))             # change sky blue to fg color
             show_s_f_result.place(x=350, y=160, anchor="center")
 
             find_s_username = e_s_username.get()
@@ -371,7 +373,7 @@ class admin_panel:
                 s_f_result = self.sql.find_teacher(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="✔️ Found", text_color="green")
+                    header_label.configure(text="✔️ Found", text_color="#2e7d32")
                     header_label.update
 
                     show_s_f_result.insert(END,
@@ -390,7 +392,7 @@ class admin_panel:
                 s_f_result = self.sql.find_student(find_s_username)
 
                 if s_f_result is not None:
-                    header_label.configure(text="✔️ Found", text_color="green")
+                    header_label.configure(text="✔️ Found", text_color="#2e7d32")
                     header_label.update
 
                     tuition_fee = float(s_f_result[9])
@@ -427,12 +429,14 @@ class admin_panel:
 
             self.add_std_slide_left(find_std_result_frame, int(4*263))
 
-            e_s_back_btn = CTkButton(find_std_result_frame, text="❌", command=find_std_result_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
+            e_s_back_btn = CTkButton(find_std_result_frame, text="❌", text_color="black", fg_color="#C8D3Cc", command=find_std_result_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=False)
             e_s_back_btn.place(x=670, y=20, anchor="center")
+            e_s_back_btn.bind("<Enter>", lambda event: self.hover_on(event, "red", e_s_back_btn))
+            e_s_back_btn.bind("<Leave>", lambda event: self.hover_off(event, "black", e_s_back_btn))
 
             if delete == 1:
 
-                e_s_delete_btn = CTkButton(find_std_result_frame, text="Delete", command=lambda: std_del(find_s_username), font=("Helvetica",14, "bold"), hover=True)
+                e_s_delete_btn = CTkButton(find_std_result_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="🗑 Delete", command=lambda: std_del(find_s_username), font=("Helvetica",14, "bold"), hover=True)
                 e_s_delete_btn.place(x=350, y=280, anchor="center")
 
             if fees == 1:
@@ -452,7 +456,7 @@ class admin_panel:
                 f_p_entry = CTkEntry(update_fees_frame, font=("Helvetica",14), placeholder_text="Now Payed", fg_color="transparent")
                 f_p_entry.place(x=100, y=115, anchor="center")
 
-                update_btn = CTkButton(update_fees_frame, text="Update", command=lambda: updat_fee(), font=("Helvetica",14, "bold"), hover=True)
+                update_btn = CTkButton(update_fees_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Update", command=lambda: updat_fee(), font=("Helvetica",14, "bold"), hover=True)
                 update_btn.place(x=100, y=155, anchor="center")
                 # self.fees = 0
 
@@ -466,11 +470,13 @@ class admin_panel:
         
         # print(find_s_username)
         e_s_username.bind("<Return>", std_find_result)
-        e_s_submit_btn = CTkButton(find_std_frame, text="Find", command= lambda: std_find_result(), font=("Helvetica",14, "bold"), hover=True)
+        e_s_submit_btn = CTkButton(find_std_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="🔍 Find", command= lambda: std_find_result(), font=("Helvetica",14, "bold"),  hover=True)
         e_s_submit_btn.place(x=350, y=180, anchor="center")
 
-        e_s_back_btn = CTkButton(find_std_frame, text="❌", command=find_std_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
+        e_s_back_btn = CTkButton(find_std_frame, text="❌", text_color="black", fg_color="#C8D3Cc", command=find_std_frame.destroy, width=1, height=1, corner_radius=500, font=("Helvetica",14, "bold"), hover=False)
         e_s_back_btn.place(x=670, y=20, anchor="center")
+        e_s_back_btn.bind("<Enter>", lambda event: self.hover_on(event, "red", e_s_back_btn))
+        e_s_back_btn.bind("<Leave>", lambda event: self.hover_off(event, "black", e_s_back_btn))
 
         self.add_std_slide_left(find_std_frame, int(4*263))
 
@@ -558,12 +564,12 @@ class admin_panel:
                 return
             
             if self.sw:
-                e_s_class.configure(border_color="green")
-                e_s_sub.configure(border_color="green")
-                e_s_section.configure(border_color="green")
-                e_cs_time.configure(border_color="green")
-                e_ce_time.configure(border_color="green")
-                e_s_username.configure(border_color="green")
+                e_s_class.configure(border_color="#2e7d32")
+                e_s_sub.configure(border_color="#2e7d32")
+                e_s_section.configure(border_color="#2e7d32")
+                e_cs_time.configure(border_color="#2e7d32")
+                e_ce_time.configure(border_color="#2e7d32")
+                e_s_username.configure(border_color="#2e7d32")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -598,7 +604,7 @@ class admin_panel:
             ck_s = self.sql.add_subject(sub_info)
 
             if (ck_t == True) and (ck_s == True) and (ck_u == True):
-                error_l.configure(text="✔️ Teacher Add Successfully", text_color="green")
+                error_l.configure(text="✔️ Teacher Add Successfully", text_color="#2e7d32")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -651,11 +657,13 @@ class admin_panel:
         e_s_adderss.bind("<FocusIn>", remove_placeholder)
         e_s_adderss.bind("<FocusOut>", add_placeholder)
 
-        e_t_submit_btn = CTkButton(add_tec_frame, text="ADD Teacher", command= add_tec , font=("Helvetica",14, "bold"), hover=True,)
+        e_t_submit_btn = CTkButton(add_tec_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="ADD Teacher", command= add_tec , font=("Helvetica",14, "bold"), hover=True,)
         e_t_submit_btn.place(x=350, y=280, anchor="center")
 
-        e_s_back_btn = CTkButton(add_tec_frame, text="❌", command=add_tec_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True,)
+        e_s_back_btn = CTkButton(add_tec_frame, text="❌", text_color="black", fg_color="#C8D3Cc", command=add_tec_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=False,)
         e_s_back_btn.place(x=670, y=20, anchor="center")
+        e_s_back_btn.bind("<Enter>", lambda event: self.hover_on(event, "red", e_s_back_btn))
+        e_s_back_btn.bind("<Leave>", lambda event: self.hover_off(event, "black", e_s_back_btn))
 
         error_l = CTkLabel(self.admin_frame, text="", height=1, width=1, fg_color="transparent", text_color="red")
         error_l.place(x=350, y=100, anchor="center")
@@ -739,11 +747,13 @@ class admin_panel:
         t_sa_subject = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Subject", width=200, fg_color="transparent")
         t_sa_subject.place(x=240, y=200, anchor="center")
 
-        t_sa_submit_btn = CTkButton(subject_asign_frame, text="Submit", command=lambda: asign_sub(self), font=("Helvetica",14, "bold"), hover=True)
+        t_sa_submit_btn = CTkButton(subject_asign_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Submit", command=lambda: asign_sub(self), font=("Helvetica",14, "bold"), hover=True)
         t_sa_submit_btn.place(x=350, y=280, anchor="center")
 
-        t_sa_back_btn = CTkButton(subject_asign_frame, text="❌", command=subject_asign_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=True)
+        t_sa_back_btn = CTkButton(subject_asign_frame, text="❌", text_color="black", fg_color="#C8D3Cc", command=subject_asign_frame.destroy, width=2, height=30, corner_radius=500, font=("Helvetica",14, "bold"), hover=False)
         t_sa_back_btn.place(x=670, y=20, anchor="center")
+        t_sa_back_btn.bind("<Enter>", lambda event: self.hover_on(event, "red", t_sa_back_btn))
+        t_sa_back_btn.bind("<Leave>", lambda event: self.hover_off(event, "black", t_sa_back_btn))
 
         error_l = CTkLabel(self.admin_frame, text="", height=1, width=1, fg_color="transparent", text_color="red")
         error_l.place(x=350, y=100, anchor="center")

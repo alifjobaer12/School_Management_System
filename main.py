@@ -120,7 +120,7 @@ class LoginApp:
                 return
 
             if self.swich:
-                sql_error_l.configure(text=self.s, text_color="green")
+                sql_error_l.configure(text=self.s, text_color="#276a2b")
                 sql_error_l.update()
                 time.sleep(2)
                 sql_error_l.configure(text="")
@@ -137,7 +137,7 @@ class LoginApp:
                 if user:
                     stored_password, role = user
                     if password == stored_password:
-                        self.error_lable.configure(text="Login Successful", text_color="green")
+                        self.error_lable.configure(text="Login Successful", text_color="#276a2b")
                         self.error_lable.update()
                         time.sleep(0.7)
                         with open("remember.txt", "w") as f:
@@ -238,7 +238,7 @@ class LoginApp:
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
 
             click = IntVar(value=0)
-            CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=click, checkbox_width=15, checkbox_height=15, fg_color="green", corner_radius=50, border_width=2, hover=False, onvalue=1, offvalue=0).place(x=115, y=260, anchor="center")
+            CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=click, checkbox_width=15, checkbox_height=15, fg_color="#276a2b", corner_radius=50, border_width=2, hover=False, onvalue=1, offvalue=0).place(x=115, y=260, anchor="center")
             t_c = CTkButton(self.e_lf_frame, width=1, height=1, text_color="blue", fg_color="transparent", text="T & C", hover=False)
             t_c.place(x=195, y=260, anchor="center")
 

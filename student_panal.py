@@ -25,7 +25,7 @@ class student_panel:
 
 
     def create_student_panel(self):
-        self.std_panal_frame = CTkFrame(self.std_root_frame, fg_color="sky blue", width=800, height=400)
+        self.std_panal_frame = CTkFrame(self.std_root_frame, fg_color="#cef2ff", width=800, height=400)
         self.std_panal_frame.place(x=350, y=200, anchor="center")
 
         # Header

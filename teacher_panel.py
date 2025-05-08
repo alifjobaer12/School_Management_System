@@ -33,7 +33,7 @@ class teacher_panal:
 
     def create_main_frame(self):
         # Teacher panel main frame
-        self.tec_panal_frame = CTkFrame(self.teacher_windo, fg_color="sky blue", width=700, height=400)
+        self.tec_panal_frame = CTkFrame(self.teacher_windo, fg_color="#cef2ff", width=700, height=400)
         self.tec_panal_frame.place(x=350, y=200, anchor="center")
 
         self.tec_h_label = CTkLabel(self.tec_panal_frame, text=f"Teacher\nHi! {self.tec_username}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica", 22, "bold"))
