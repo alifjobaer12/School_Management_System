@@ -8,7 +8,12 @@ from student_panal import student_panel
 import threading
 import time
 from sql_query import MySQLQuery
+from dotenv import load_dotenv
+import os
+from cryptography.fernet import Fernet
 
+
+load_dotenv()
 
 class LoginApp:
     def __init__(self):
@@ -17,6 +22,8 @@ class LoginApp:
         self.anime_y = 200
         self.s = ""
         self.swich = 0
+        self.encripn_key = os.getenv("ENC_KEY")
+        self.fernet = Fernet(self.encripn_key.encode())
 
 
         # UI Setup
@@ -136,6 +143,7 @@ class LoginApp:
 
                 if user:
                     stored_password, role = user
+                    stored_password = self.fernet.decrypt(stored_password).decode()
                     if password == stored_password:
                         self.error_lable.configure(text="Login Successful", text_color="#276a2b")
                         self.error_lable.update()
