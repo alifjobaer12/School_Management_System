@@ -522,6 +522,14 @@ class admin_panel:
                 error_l.configure(text="") 
                 error_l.update()
 
+            if not sub.isalpha():
+                error_l.configure(text="⚠️ Subject Name will be string with only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
+
             sub_info = { 'subject': sub,
                         'username': username,
                         'name': name,
