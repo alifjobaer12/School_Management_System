@@ -4,6 +4,8 @@ from tkinter import messagebox
 from animasion import SlideAnimation
 import time
 from sql_query import MySQLQuery
+from pathlib import Path
+from PIL import Image
 
 
 class admin_panel:
@@ -125,6 +127,12 @@ class admin_panel:
                         fild.configure(border_color="#979da2")
                     fild.update()
 
+            if e_s_adderss.get("1.0", "end-1c").strip() == "Address":
+                e_s_adderss.configure(border_color="red")
+            else:
+                e_s_adderss.configure(border_color="#979da2")
+            e_s_adderss.update()
+
             if not all([username, name, std_class, roll, section, grade, phone, address]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
@@ -137,6 +145,22 @@ class admin_panel:
             else:
                 error_l.configure(text="") 
                 error_l.update()
+
+            if not std_class.isdigit() and roll.isdigit() and phone.isdigit():
+                error_l.configure(text="⚠️ Class, Roll & Phone will be only number")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
+            
+            if not section.isalpha():
+                error_l.configure(text="⚠️ Section will be only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
 
             # student_info = [username, name, std_class, roll, section, grade, phone, address]
 
@@ -357,7 +381,7 @@ class admin_panel:
             header_label = CTkLabel(find_std_result_frame, text="", text_color="#2e7d32", fg_color="transparent", width=1, height=1, font=("Helvetica",14, "bold"))
             header_label.place(x=350, y=25, anchor="center")
 
-            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=True, scrollbar_button_color="#C8D3Cc", fg_color="transparent", width=520, height=200, font=("Helvetica",16, "bold"))             # change sky blue to fg color
+            show_s_f_result = CTkTextbox(find_std_result_frame, wrap="none", activate_scrollbars=True, scrollbar_button_color="#C8D3Cc", fg_color="transparent", width=540, height=220, font=("Helvetica",16, "bold"))             # change sky blue to fg color
             show_s_f_result.place(x=350, y=160, anchor="center")
 
             find_s_username = e_s_username.get()
@@ -511,6 +535,12 @@ class admin_panel:
                         fild.configure(border_color="#979da2")
                     fild.update()
 
+            if e_s_adderss.get("1.0", "end-1c").strip() == "Address":
+                e_s_adderss.configure(border_color="red")
+            else:
+                e_s_adderss.configure(border_color="#979da2")
+            e_s_adderss.update()
+
             if not all([username, name, std_class, sub, section, phone, class_et, class_st]) or address == "Address":
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
@@ -522,8 +552,16 @@ class admin_panel:
                 error_l.configure(text="") 
                 error_l.update()
 
-            if not sub.isalpha():
-                error_l.configure(text="⚠️ Subject Name will be string with only letters")
+            if not sub.isalpha() and section.isalpha():
+                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
+
+            if not std_class.isdigit():
+                error_l.configure(text="⚠️ Class will be only number")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
@@ -773,22 +811,57 @@ class admin_panel:
         admin_label = CTkLabel(self.admin_frame, text=f"Admin\nHi! {self.username}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica",22, "bold"))
         admin_label.place(x=350, y=50, anchor="center")
 
+        BASE_DIR = Path(__file__).resolve().parent
+        ICON_DIR = BASE_DIR / "image"
+
+        # Load icons using pathlib paths
+        def load_icon(filename):
+            return CTkImage(Image.open(ICON_DIR / filename), size=(30, 30))
+
+        # Define icons
+        self.icons = {
+            "add_student": load_icon("add_student.png"),
+            "find_student": load_icon("find_student.png"),
+            "delete_student": load_icon("delete_student.png"),
+            "see_student": load_icon("all_students.png"),
+            "add_teacher": load_icon("add_teacher.png"),
+            "find_teacher": load_icon("find_teacher.png"),
+            "delete_teacher": load_icon("teacher_delete.png"),
+            "see_teacher": load_icon("all_teacher.png"),
+            "update_fees": load_icon("fees_update.png"),
+            "subject_assign": load_icon("subject_asign.png"),
+        }
+
+        # Button data
         buttons = [
-            ("ADD Student", self.std_add, 250, 130),
-            ("Find Student", lambda: self.std_find(0, 0, 0), 250, 180),
-            ("Delete Student", lambda: self.std_delete(1, 0, 0), 250, 230),
-            ("See All Student Info", self.see_all_std_info, 250, 330),
-            ("ADD Teacher", self.tec_add, 450, 130),
-            ("Find Teacher", lambda: self.tec_find(0, 0, 1), 450, 180),
-            ("Delete Teacher", lambda: self.tec_delete(1, 0, 1), 450, 230),
-            ("See All Teacher Info", self.see_all_tec_info, 450, 330),
-            ("Update Fees", lambda: self.fee_update(0, 1, 0), 250, 280),
-            ("Subject Assign", self.subject_asign, 450, 280)
+            ("ADD Student", self.std_add, 150, 130, "add_student"),
+            ("Find Student", lambda: self.std_find(0, 0, 0), 265, 130, "find_student"),
+            ("Delete Student", lambda: self.std_delete(1, 0, 0), 395, 130, "delete_student"),
+            ("See All Student Info", self.see_all_std_info, 220, 290, "see_student"),
+            ("ADD Teacher", self.tec_add, 150, 210, "add_teacher"),
+            ("Find Teacher", lambda: self.tec_find(0, 0, 1), 265, 210, "find_teacher"),
+            ("Delete Teacher", lambda: self.tec_delete(1, 0, 1), 395, 210, "delete_teacher"),
+            ("See All Teacher Info", self.see_all_tec_info, 420, 290, "see_teacher"),
+            ("Update Fees", lambda: self.fee_update(0, 1, 0), 520, 130, "update_fees"),
+            ("Subject Assign", self.subject_asign, 520, 210, "subject_assign"),
         ]
 
-        for text, command, x, y in buttons:
-            btn = CTkButton(self.admin_frame, text=text, width=1, height=1, fg_color="transparent", command=command, text_color="black", font=("Helvetica",16, "bold"), hover=False)
-            btn.place(x=x, y=y, anchor="center")
+        for text, command, x, y, icon_key in buttons:
+            btn = CTkButton(
+                self.admin_frame,
+                text=text,
+                image=self.icons[icon_key],
+                compound="top",
+                width=11,
+                height=1,
+                fg_color="#C8D3Cc",
+                command=command,
+                text_color="black",
+                font=("Helvetica", 14, "bold"),
+                hover_color="#e0e0e0",
+                hover=False,
+            )
+            btn.place(x=x+17, y=y+25, anchor="center")
             btn.bind("<Enter>", lambda e, b=btn: self.hover_on(e, "blue", b))
             btn.bind("<Leave>", lambda e, b=btn: self.hover_off(e, "black", b))
 
