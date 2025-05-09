@@ -245,6 +245,8 @@ class LoginApp:
             signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Sign Up", text_color="#b2fff5")
             signup_btn.place(x=150, y=300, anchor="center")
 
+            CTkLabel(self.e_lf_frame, text="Allrady have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=127, y=330, anchor="center")
+            CTkButton(self.e_lf_frame, text="Log in", font=("Harvatika", 12), width=1, height=1, hover=False, command=self.slide_left, fg_color="transparent", text_color="#2a63db").place(x=217, y=330, anchor="center")
 
         if fpass == 1:
 
