@@ -1,4 +1,5 @@
 import mysql.connector
+from cryptography.fernet import Fernet
 import os
 from dotenv import load_dotenv
 
@@ -14,12 +15,28 @@ class MySQLQuery:
             port=os.getenv("PORT")
         )
         self.cursor = self.db.cursor()
+        self.encript_key = os.getenv("ENC_KEY")
+        self.fernet = Fernet(self.encript_key)
 
     def log_in(self, username):
         try:
             sql = "SELECT password, role FROM users WHERE username = %s"
             self.cursor.execute(sql, (username,))
-            return self.cursor.fetchone()
+            access = self.cursor.fetchone()
+
+            if access is None:
+                return False
+            
+            password, role = access
+
+            try:
+                decrypted_password = self.fernet.decrypt(password.encode()).decode()
+            except Exception as e:
+                print(f"Decryption failed: {e}")
+                return False
+
+            return (decrypted_password, role)
+            
         except:
             return False
 
@@ -28,6 +45,8 @@ class MySQLQuery:
         try:
             sql = """INSERT INTO users (username, password, role)
             VALUES (%s, %s, %s);"""
+
+            user_info['pass'] = self.fernet.encrypt(user_info['pass'].encode())
 
             values = (user_info['username'], user_info['pass'], user_info['role'] )
             
