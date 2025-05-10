@@ -38,6 +38,9 @@ class LoginApp:
         self.loading_l = CTkLabel(self.uper_main_frame ,text="", font=("Harvatika", 18), height=1, width=1, fg_color="transparent")
         self.loading_l.place(x=350, y=200, anchor="center")
 
+        self.tc_frame = None
+        self.e_lf_frame = None
+
         # Add GIF beside loading label
         gif_path = Path(__file__).resolve().parent / "image" / "loading-gif.gif"
         self.gif_image = Image.open(gif_path)
@@ -241,6 +244,60 @@ class LoginApp:
         CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=90, y=255, anchor="center")
         CTkButton(frame_right, text="Sign up", font=("Harvatika", 12), width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", text_color="#2a63db").place(x=180, y=255, anchor="center")
 
+    def show_tc(self):
+        if self.tc_frame:
+            # If it's already visible, destroy it
+            self.tc_frame.destroy()
+            self.tc_frame = None
+            self.e_lf_frame.unbind("<Button-1>")
+            self.e_lf_frame.unbind("<Escape>")
+        else:
+            # Create frame
+            self.tc_frame = CTkFrame(self.e_lf_frame, width=205, height=90)
+            self.tc_frame.place(x=150, y=200, anchor="center")
+
+            s = (   "By using this app, you agree:\n\n"
+                    "- Your data is used for login.\n"
+                    "- Admins may view your data.\n"
+                    "- Keep your password safe.\n"
+                    "- Misuse may block your access.\n"
+                    "- No guarantees are provided.\n"
+                    "- Terms may change anytime."
+                )
+
+            tc_textbox = CTkTextbox(self.tc_frame, wrap="none", fg_color="#37424e", bg_color="transparent", scrollbar_button_color="#37424e",text_color="white", height=90, width=200)
+            tc_textbox.pack()
+            tc_textbox.insert(1.0, s)
+            tc_textbox.configure(state="disable")
+
+
+
+            # Bind click outside and ESC
+            self.e_lf_frame.bind("<Button-1>", self.check_click_outside)
+            self.e_lf_frame.bind("<Escape>", self.check_click_outside)
+
+    def check_click_outside(self, event):
+        if self.tc_frame:
+            # Get frame coordinates
+            x1 = self.tc_frame.winfo_rootx()
+            y1 = self.tc_frame.winfo_rooty()
+            x2 = x1 + self.tc_frame.winfo_width()
+            y2 = y1 + self.tc_frame.winfo_height()
+
+            # ESC key
+            if event.keysym == "Escape":
+                destroy = True
+            else:
+                # Mouse click: check if it's outside the frame
+                destroy = not (x1 <= event.x_root <= x2 and y1 <= event.y_root <= y2)
+
+            if destroy:
+                self.tc_frame.destroy()
+                self.tc_frame = None
+                self.e_lf_frame.unbind("<Button-1>")
+                self.e_lf_frame.unbind("<Escape>")
+
+
     # registration & forgate pass
     def reg_forgatpass(self, reg, fpass):
         
@@ -279,7 +336,7 @@ class LoginApp:
 
             click = IntVar(value=0)
             CTkCheckBox(self.e_lf_frame, text="I read and agree to ", variable=click, checkbox_width=15, checkbox_height=15, fg_color="#276a2b", corner_radius=50, border_width=2, hover=False, onvalue=1, offvalue=0).place(x=115, y=260, anchor="center")
-            t_c = CTkButton(self.e_lf_frame, width=1, height=1, text_color="blue", fg_color="transparent", text="T & C", hover=False)
+            t_c = CTkButton(self.e_lf_frame, width=1, height=1, command=self.show_tc, text_color="blue", fg_color="transparent", text="T & C", hover=False)
             t_c.place(x=195, y=260, anchor="center")
 
             signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Sign Up", text_color="#b2fff5")
