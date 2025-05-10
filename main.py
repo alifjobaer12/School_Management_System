@@ -8,6 +8,7 @@ from student_panal import student_panel
 import threading
 import time
 from sql_query import MySQLQuery
+import webbrowser
 
 
 class LoginApp:
@@ -243,6 +244,58 @@ class LoginApp:
 
         CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=90, y=255, anchor="center")
         CTkButton(frame_right, text="Sign up", font=("Harvatika", 12), width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", text_color="#2a63db").place(x=180, y=255, anchor="center")
+
+        copyright_lable = CTkButton(self.frame_main, text="©Team_ChronoMate", command=self.show_dev_info, fg_color="transparent", text_color="#6a0dad", width=1, height=1, hover=False)
+        copyright_lable.place(x=350, y=395, anchor="center")
+
+    def show_dev_info(self):
+        if hasattr(self, "dev_frame") and self.dev_frame:
+            self.dev_frame.destroy()
+            self.dev_frame = None
+            return
+
+        self.dev_frame = CTkFrame(self.e_lf_frame, width=320, height=200, fg_color="black")
+        self.dev_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+        # ❌ Close button (top-right)
+        CTkButton(
+            self.dev_frame, text="❌", width=25, height=25,
+            fg_color="transparent", text_color="red", hover=False,
+            command=lambda: self.dev_frame.destroy()
+        ).place(relx=1.0, rely=0.0, anchor="ne", x=-5, y=5)
+
+        # Title & Dev info
+        CTkLabel(self.dev_frame, text="👥 Team Chronomate", text_color="lime", font=("Consolas", 14, "bold")).pack(pady=(20, 0))
+        CTkLabel(self.dev_frame, text="Developed by: Md Jobaer Islam Alif", text_color="lime", font=("Consolas", 14)).pack(padx=50)
+
+        # Social media icons & links
+        link_frame = CTkFrame(self.dev_frame, fg_color="black")
+        link_frame.pack(pady=(5, 5))
+
+        def open_link(url):
+            webbrowser.open_new(url)
+
+        CTkButton(link_frame, text="🐱 GitHub", width=90, fg_color="gray10", text_color="lime",
+                  command=lambda: open_link("https://github.com/alifjobaer12")).pack(side="left", padx=(15, 5))
+
+        CTkButton(link_frame, text="🔗 LinkedIn", width=90, fg_color="gray10", text_color="lime",
+                  command=lambda: open_link("https://linkedin.com/in/alifjobaer12")).pack(side="left", padx=5)
+
+        CTkButton(link_frame, text="📘 Facebook", width=90, fg_color="gray10", text_color="lime",
+                  command=lambda: open_link("https://facebook.com/jobaer.alif.3")).pack(side="left", padx=(5, 15))
+
+        # Feedback question
+        CTkLabel(self.dev_frame, text="\n\nAre you satisfied with this app?", text_color="lime", font=("Consolas", 11)).pack()
+
+        btn_frame = CTkFrame(self.dev_frame, fg_color="black")
+        btn_frame.pack(pady=(10,30))
+
+        def feedback(choice):
+            self.dev_frame.destroy()
+            self.dev_frame = None
+
+        CTkButton(btn_frame, text="Yes", width=70, fg_color="green4", text_color="black", command=lambda: feedback("Yes")).pack(side="left", padx=10)
+        CTkButton(btn_frame, text="No", width=70, fg_color="green4", text_color="black", command=lambda: feedback("No")).pack(side="left", padx=10)
 
     def show_tc(self):
         if self.tc_frame:
