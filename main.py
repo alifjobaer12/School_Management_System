@@ -161,6 +161,39 @@ class LoginApp:
         
         threading.Thread(target=handle_login, daemon=True).start()
 
+    def see_pass(self, login, reg, fpass):
+        if login == 1:    
+            if self.lsee == 0:
+                self.entry_password.configure(show="")
+                self.see_pass_btn.configure(text="🙉")
+                self.lsee = 1
+            elif self.lsee == 1:
+                self.entry_password.configure(show="*")
+                self.see_pass_btn.configure(text="🙈")
+                self.lsee = 0
+        if reg == 1:    
+            if self.rsee == 0:
+                self.r_Password.configure(show="")
+                self.r_C_Password.configure(show="")
+                self.see_pass_btn1.configure(text="🙉")
+                self.rsee = 1
+            elif self.rsee == 1:
+                self.r_Password.configure(show="*")
+                self.r_C_Password.configure(show="*")
+                self.see_pass_btn1.configure(text="🙈")
+                self.rsee = 0
+        if fpass == 1:    
+            if self.fsee == 0:
+                self.fp_Password.configure(show="")
+                self.fp_C_Password.configure(show="")
+                self.see_pass_btn2.configure(text="🙉")
+                self.fsee = 1
+            elif self.fsee == 1:
+                self.fp_Password.configure(show="*")
+                self.fp_C_Password.configure(show="*")
+                self.see_pass_btn2.configure(text="🙈")
+                self.fsee = 0
+
     def build_ui(self):
         frame_left = CTkFrame(self.frame_main, width=200, fg_color="transparent", corner_radius=0)
         frame_left.pack(side="left")
@@ -190,11 +223,15 @@ class LoginApp:
         except:
             pass
 
-        self.entry_password = CTkEntry(frame_right, border_width=0, font=("Harvatika", 14), fg_color="transparent", placeholder_text="Password", show="*", width=200)
-        self.entry_password.pack(pady=10)
+        self.entry_password = CTkEntry(frame_right, border_width=0, font=("Harvatika", 14), fg_color="transparent", placeholder_text="Password", show="*", width=180)
+        self.entry_password.pack(pady=10, padx=(0,20))
 
-        CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=110, anchor="center")
-        CTkFrame(frame_right, height=2, width=200, fg_color="gray").place(x=110, y=160, anchor="center")
+        self.see_pass_btn = CTkButton(frame_right, text="🙈", text_color="#8b5442", command=lambda: self.see_pass(1, 0, 0), width=1, height=1, font=("Harvatika", 22), border_width=0, corner_radius=50, fg_color="transparent", hover=False)
+        self.see_pass_btn.place(x=205, y=143, anchor="center")
+        self.lsee = 0
+
+        CTkFrame(frame_right, height=2, width=215, fg_color="gray").place(x=112, y=110, anchor="center")
+        CTkFrame(frame_right, height=2, width=215, fg_color="gray").place(x=112, y=160, anchor="center")
 
         CTkButton(frame_right, height=1, width=1, text="Forgot Password?", font=("Harvatika", 12), command=lambda: self.reg_forgatpass(0, 1), fg_color="transparent", text_color="#2a63db", hover=False).place(x=160, y=175, anchor="center")
 
@@ -224,12 +261,16 @@ class LoginApp:
             r_Username.place(x=150, y=105, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
 
-            r_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Password ", width=200, fg_color="transparent")
-            r_Password.place(x=150, y=145, anchor="center")
+            self.r_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Password ", width=178, fg_color="transparent", show="*")
+            self.r_Password.place(x=140, y=145, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
 
-            r_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform Password ", width=200, fg_color="transparent")
-            r_C_Password.place(x=150, y=185, anchor="center")
+            self.see_pass_btn1 = CTkButton(self.e_lf_frame, text="🙈", text_color="#8b5442", command=lambda: self.see_pass(0, 1, 0), width=1, height=1, font=("Harvatika", 22), border_width=0, corner_radius=50, fg_color="transparent", hover=False)
+            self.see_pass_btn1.place(x=240, y=138, anchor="center")
+            self.rsee = 0
+
+            self.r_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform Password ", width=178, fg_color="transparent", show="*")
+            self.r_C_Password.place(x=140, y=185, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
 
             r_sq = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent")
@@ -268,12 +309,16 @@ class LoginApp:
             fp_sq.place(x=150, y=145, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
 
-            fp_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text="New Password ", width=200, fg_color="transparent")
-            fp_Password.place(x=150, y=185, anchor="center")
+            self.fp_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text="New Password ", width=178, fg_color="transparent", show="*")
+            self.fp_Password.place(x=140, y=185, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=195, anchor="center")
 
-            fp_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform New Password ", width=200, fg_color="transparent")
-            fp_C_Password.place(x=150, y=225, anchor="center")
+            self.see_pass_btn2 = CTkButton(self.e_lf_frame, text="🙈", text_color="#8b5442", command=lambda: self.see_pass(0, 0, 1), width=1, height=1, font=("Harvatika", 22), border_width=0, corner_radius=50, fg_color="transparent", hover=False)
+            self.see_pass_btn2.place(x=240, y=178, anchor="center")
+            self.fsee = 0
+
+            self.fp_C_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Conform New Password ", width=178, fg_color="transparent", show="*")
+            self.fp_C_Password.place(x=140, y=225, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
 
             signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Reset Password", text_color="#b2fff5")
