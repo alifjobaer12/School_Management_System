@@ -293,6 +293,18 @@ class admin_panel:
                 error_l.update()
                 self.sw = 1
                 return
+            
+            e_s_username.delete(0, END)
+            e_s_name.delete(0, END)
+            e_s_class.delete(0, END)
+            e_s_roll.delete(0, END)
+            e_s_section.delete(0, END)
+            e_s_grade.delete(0, END)
+            e_s_pnumber.delete(0, END)
+            e_s_adderss.delete(1.0, END)
+            add_placeholder()
+            e_s_adderss.bind("<FocusIn>", remove_placeholder)
+            e_s_adderss.bind("<FocusOut>", add_placeholder)
 
 
         def add_placeholder(event=None):
@@ -739,6 +751,19 @@ class admin_panel:
                 error_l.configure(text="")
                 error_l.update()
 
+            e_s_username.delete(0, END)
+            e_s_name.delete(0, END)
+            e_s_class.delete(0, END)
+            e_s_sub.delete(0, END)
+            e_s_section.delete(0, END)
+            e_s_pn.delete(0, END)
+            e_cs_time.delete(0, END)
+            e_ce_time.delete(0, END)
+            e_s_adderss.delete(1.0, END)
+            add_placeholder()
+            e_s_adderss.bind("<FocusIn>", remove_placeholder)
+            e_s_adderss.bind("<FocusOut>", add_placeholder)
+
         def add_placeholder(event=None):
             if e_s_adderss.get("1.0", "end-1c").strip() == "":
                 e_s_adderss.insert("1.0", "Address")
@@ -915,6 +940,14 @@ class admin_panel:
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
+
+            t_sa_username.delete(0, END)
+            t_sa_name.configure(text="Name")
+            t_sa_class.delete(0, END)
+            t_sa_section.delete(0, END)
+            t_sa_subject.delete(0, END)
+            t_sa_Class_st.delete(0, END)
+            t_sa_Class_et.delete(0, END)
 
 
         def find_user(self,  event=None):
