@@ -146,13 +146,39 @@ class admin_panel:
                 error_l.configure(text="") 
                 error_l.update()
 
-            if not std_class.isdigit() and roll.isdigit() and phone.isdigit():
+            if not (std_class.isdigit() and roll.isdigit() and phone.isdigit()):
                 error_l.configure(text="⚠️ Class, Roll & Phone will be only number")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
+                if not std_class.isdigit():
+                    e_s_class.configure(border_color="red")
+                    c=1
+                if not roll.isdigit():
+                    e_s_roll.configure(border_color="red")
+                    r=1
+                if phone.isdigit():
+                    e_s_pnumber.configure(border_color="red")
+                    p=1
                 return
+            else:
+                if c and r and p:
+                    if c:
+                        e_s_class.configure(border_color="green")
+                        time.sleep(2)
+                        e_s_class.configure(border_color="#979da2")
+                        e_s_class.update()
+                    if r:
+                        e_s_roll.configure(border_color="green")
+                        time.sleep(2)
+                        e_s_roll.configure(border_color="#979da2")
+                        e_s_roll.update()
+                    if p:
+                        e_s_pnumber.configure(border_color="green")
+                        time.sleep(2)
+                        e_s_pnumber.configure(border_color="#979da2")
+                        e_s_pnumber.update()
             
             if not section.isalpha():
                 error_l.configure(text="⚠️ Section will be only letters")
@@ -160,7 +186,16 @@ class admin_panel:
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
+                e_s_section.configure(border_color="red")
+                s=1
                 return
+            else:
+                if s:
+                    e_s_section.configure(border_color="green")
+                    time.sleep(2)
+                    e_s_section.configure(border_color="#979da2")
+                    e_s_section.update()
+
 
             # student_info = [username, name, std_class, roll, section, grade, phone, address]
 
@@ -552,21 +587,48 @@ class admin_panel:
                 error_l.configure(text="") 
                 error_l.update()
 
-            if not sub.isalpha() and section.isalpha():
-                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
-                error_l.update()
-                time.sleep(2)
-                error_l.configure(text="")
-                error_l.update()
-                return
-
             if not std_class.isdigit():
                 error_l.configure(text="⚠️ Class will be only number")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
+                e_s_class.configure(border_color="red")
+                s=1
                 return
+            else:
+                if s:
+                    e_s_class.configure(border_color="green")
+                    time.sleep(2)
+                    e_s_class.configure(border_color="#979da2")
+                    e_s_class.update()
+                
+            if not (sub.isalpha() and section.isalpha()):
+                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                if not sub.isalpha():
+                    e_s_sub.configure(border_color="red")
+                    c=1
+                if not section.isalpha():
+                    e_s_section.configure(border_color="red")
+                    r=1
+                return
+            else:
+                if c and r:
+                    if c:
+                        e_s_sub.configure(border_color="green")
+                        time.sleep(2)
+                        e_s_sub.configure(border_color="#979da2")
+                        e_s_sub.update()
+                    if r:
+                        e_s_section.configure(border_color="green")
+                        time.sleep(2)
+                        e_s_section.configure(border_color="#979da2")
+                        e_s_section.update()
+                    
 
             sub_info = { 'subject': sub,
                         'username': username,
@@ -762,6 +824,23 @@ class admin_panel:
             else:
                 error_l.configure(text="") 
                 error_l.update()
+
+            if not subject.isalpha() and section.isalpha():
+                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                
+                return
+
+            if not std_class.isdigit():
+                error_l.configure(text="⚠️ Class will be only number")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
 
 
             print("sub asign")
