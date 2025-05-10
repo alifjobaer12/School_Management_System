@@ -281,7 +281,7 @@ class LoginApp:
         CTkButton(link_frame, text="🔗 LinkedIn", width=90, fg_color="gray10", text_color="lime",
                   command=lambda: open_link("https://linkedin.com/in/alifjobaer12")).pack(side="left", padx=5)
 
-        CTkButton(link_frame, text="📘 Facebook", width=90, fg_color="gray10", text_color="lime",
+        CTkButton(link_frame, text="ⓕ Facebook", width=90, fg_color="gray10", text_color="lime",
                   command=lambda: open_link("https://facebook.com/jobaer.alif.3")).pack(side="left", padx=(5, 15))
 
         # Feedback question
