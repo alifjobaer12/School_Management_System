@@ -6,7 +6,7 @@ import time
 from sql_query import MySQLQuery
 from pathlib import Path
 from PIL import Image
-
+from datetime import datetime
 
 class admin_panel:
     def __init__(self,admin_root_frame, a_username, anime_y, frame_main, login_window):
@@ -23,6 +23,10 @@ class admin_panel:
         self.frame_main = frame_main
         self.login_window = login_window
         self.sw = 0
+        self.s = 0
+        self.c = 0
+        self.r = 0
+        self.p = 0
 
         # self.login_window.geometry("700x400")
         # self.login_window.title("Login - School Management System")
@@ -154,27 +158,27 @@ class admin_panel:
                 error_l.update()
                 if not std_class.isdigit():
                     e_s_class.configure(border_color="red")
-                    c=1
+                    self.c=1
                 if not roll.isdigit():
                     e_s_roll.configure(border_color="red")
-                    r=1
+                    self.r=1
                 if phone.isdigit():
                     e_s_pnumber.configure(border_color="red")
-                    p=1
+                    self.p=1
                 return
             else:
-                if c and r and p:
-                    if c:
+                if self.c and self.r and self.p:
+                    if self.c:
                         e_s_class.configure(border_color="green")
                         time.sleep(2)
                         e_s_class.configure(border_color="#979da2")
                         e_s_class.update()
-                    if r:
+                    if self.r:
                         e_s_roll.configure(border_color="green")
                         time.sleep(2)
                         e_s_roll.configure(border_color="#979da2")
                         e_s_roll.update()
-                    if p:
+                    if self.p:
                         e_s_pnumber.configure(border_color="green")
                         time.sleep(2)
                         e_s_pnumber.configure(border_color="#979da2")
@@ -187,10 +191,10 @@ class admin_panel:
                 error_l.configure(text="")
                 error_l.update()
                 e_s_section.configure(border_color="red")
-                s=1
+                self.s=1
                 return
             else:
-                if s:
+                if self.s:
                     e_s_section.configure(border_color="green")
                     time.sleep(2)
                     e_s_section.configure(border_color="#979da2")
@@ -594,10 +598,10 @@ class admin_panel:
                 error_l.configure(text="")
                 error_l.update()
                 e_s_class.configure(border_color="red")
-                s=1
+                self.s=1
                 return
             else:
-                if s:
+                if self.s:
                     e_s_class.configure(border_color="green")
                     time.sleep(2)
                     e_s_class.configure(border_color="#979da2")
@@ -611,31 +615,41 @@ class admin_panel:
                 error_l.update()
                 if not sub.isalpha():
                     e_s_sub.configure(border_color="red")
-                    c=1
+                    self.c=1
                 if not section.isalpha():
                     e_s_section.configure(border_color="red")
-                    r=1
+                    self.r=1
                 return
             else:
-                if c and r:
-                    if c:
+                if self.c and self.r:
+                    if self.c:
                         e_s_sub.configure(border_color="green")
                         time.sleep(2)
                         e_s_sub.configure(border_color="#979da2")
                         e_s_sub.update()
-                    if r:
+                    if self.r:
                         e_s_section.configure(border_color="green")
                         time.sleep(2)
                         e_s_section.configure(border_color="#979da2")
                         e_s_section.update()
-                    
+            
+            try:
+                start_t = datetime.strptime(class_st, "%H:%M").time()
+                end_t = datetime.strptime(class_et, "%H:%M").time()
+            except ValueError:
+                error_l.configure(text="⚠️ Time must be in HH:MM format", text_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
 
             sub_info = { 'subject': sub,
                         'username': username,
                         'name': name,
                         'class': std_class,
-                        'start_t': class_st,
-                        'end_t':class_et,
+                        'start_t': start_t,
+                        'end_t':end_t,
                         'section': section
             }
 
@@ -652,7 +666,7 @@ class admin_panel:
 
             # sql backend
             ck_crs = self.sql.ck_tec_class_sub_section(sub_info)
-            if ck_crs == False:
+            if not ck_crs:
                 error_l.configure(text="Check Subject, Class, Section, Class Start & End time", text_color="red")
                 e_s_class.configure(border_color="red")
                 e_s_sub.configure(border_color="red")
@@ -662,11 +676,6 @@ class admin_panel:
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
-                e_s_class.configure(border_color="#979da2")
-                e_s_sub.configure(border_color="#979da2")
-                e_s_section.configure(border_color="#979da2")
-                e_cs_time.configure(border_color="#979da2")
-                e_ce_time.configure(border_color="#979da2")
                 error_l.update()
                 self.sw = 1
                 return
@@ -790,20 +799,24 @@ class admin_panel:
         self.std_find(delete, fees, tec)
 
     def subject_asign(self):
+        query = self.sql
 
         def asign_sub(self):
-            nonlocal t_sa_username, t_sa_name, t_sa_class, t_sa_section, error_l, t_sa_subject, t_sa_Class_et, t_sa_Class_st
+            nonlocal query, t_sa_username, t_sa_name, t_sa_class, t_sa_section, error_l, t_sa_subject, t_sa_Class_et, t_sa_Class_st
 
             # Retrieve all input values
             username = t_sa_username.get().strip()
-            name = t_sa_name.get().strip()
+            name = query.teacher_info(username)
+            # t_sa_name.configure(text = name[0])
+            if name == False:
+                return
             std_class = t_sa_class.get().strip()
             section = t_sa_section.get().strip()
             subject = t_sa_subject.get().strip() 
-            Class_st = t_sa_Class_et.get().strip() 
+            Class_st = t_sa_Class_st.get().strip() 
             Class_et = t_sa_Class_et.get().strip() 
 
-            enter_fild = [t_sa_username, t_sa_name, t_sa_class, t_sa_section, t_sa_subject, t_sa_Class_et, t_sa_Class_st]
+            enter_fild = [t_sa_username, t_sa_class, t_sa_section, t_sa_subject, t_sa_Class_et, t_sa_Class_st]
 
             for fild in enter_fild:
                     if not fild.get().strip():
@@ -813,7 +826,7 @@ class admin_panel:
                     fild.update()
 
             # Check for missing fields
-            if not all([username, name, std_class, section,  subject, Class_et, Class_st]):
+            if not all([username, std_class, section,  subject, Class_et, Class_st]):
                 error_l.configure(text="⚠️ All fields are required.")
                 error_l.update()
                 time.sleep(2)
@@ -825,34 +838,118 @@ class admin_panel:
                 error_l.configure(text="") 
                 error_l.update()
 
-            if not subject.isalpha() and section.isalpha():
-                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
-                error_l.update()
-                time.sleep(2)
-                error_l.configure(text="")
-                error_l.update()
-                
-                return
-
             if not std_class.isdigit():
                 error_l.configure(text="⚠️ Class will be only number")
                 error_l.update()
                 time.sleep(2)
                 error_l.configure(text="")
                 error_l.update()
+                t_sa_class.configure(border_color="red")
+                self.s=1
+                return
+            else:
+                if self.s:
+                    t_sa_class.configure(border_color="green")
+                    time.sleep(2)
+                    t_sa_class.configure(border_color="#979da2")
+                    t_sa_class.update()
+
+            if not (subject.isalpha() and section.isalpha()):
+                error_l.configure(text="⚠️ Section & Subject Name will be string with only letters")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                if not subject.isalpha():
+                    t_sa_subject.configure(border_color="red")
+                    self.c=1
+                if not section.isalpha():
+                    t_sa_section.configure(border_color="red")
+                    self.r=1
+                return
+            else:
+                if self.c and self.r:
+                    if self.c:
+                        t_sa_subject.configure(border_color="green")
+                        time.sleep(2)
+                        t_sa_subject.configure(border_color="#979da2")
+                        t_sa_subject.update()
+                    if self.r:
+                        t_sa_section.configure(border_color="green")
+                        time.sleep(2)
+                        t_sa_section.configure(border_color="#979da2")
+                        t_sa_section.update()
+
+            try:
+                start_t = datetime.strptime(Class_st, "%H:%M").time()
+                end_t = datetime.strptime(Class_et, "%H:%M").time()
+            except ValueError:
+                error_l.configure(text="⚠️ Time must be in HH:MM format", text_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
                 return
 
 
-            print("sub asign")
+            sub_info = { 'subject': subject,
+                        'username': username,
+                        'name': name[0],
+                        'class': std_class,
+                        'start_t': start_t,
+                        'end_t': end_t,
+                        'section': section
+            }
+
+            ck = query.add_subject(sub_info)
+
+            if ck:
+                error_l.configure(text="✔️ Subject Asign Successfully", text_color="#2e7d32")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+            else:
+                error_l.configure(text="❌ Subject Asign Faild", text_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+
+
+        def find_user(self,  event=None):
+            nonlocal t_sa_username, t_sa_name, error_l, query
+
+            username = t_sa_username.get().strip()
+            name = query.teacher_info(username)
+            if name == False or name is None:
+                t_sa_name.configure(text_color="red", text="Not Found")
+                error_l.configure(text="Teacher Not Found", text_color="red")
+                t_sa_username.configure(border_color="red")
+                error_l.update()
+                time.sleep(2)
+                error_l.configure(text="")
+                error_l.update()
+                return
+            if name is not False and name is not None:
+                t_sa_name.configure(text_color="green", text=name[0])
+                t_sa_username.configure(border_color="green")
+
+            pass
 
         subject_asign_frame = CTkFrame(self.admin_frame, fg_color="transparent", width=700, height=350)
         subject_asign_frame.place(x=4*263, y=260, anchor="center")
 
         t_sa_username = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Username", width=200, fg_color="transparent")
         t_sa_username.place(x=240, y=50, anchor="center")
+        t_sa_username.bind("<KeyRelease>",find_user)
 
-        t_sa_name = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Name", width=200, fg_color="transparent")
-        t_sa_name.place(x=460, y=50, anchor="center")
+        name_frame = CTkFrame(subject_asign_frame, width=200, height=30, fg_color="transparent", border_width=2, border_color="#979da2")
+        name_frame.place(x=460, y=50, anchor="center")
+
+        t_sa_name = CTkLabel(subject_asign_frame, font=("Helvetica",14), text="Name", text_color="#858585", width=1, height=1, fg_color="transparent",)
+        t_sa_name.place(x=370, y=41)
+        
 
         t_sa_class = CTkEntry(subject_asign_frame, font=("Helvetica",14), placeholder_text="Class", width=200, fg_color="transparent")
         t_sa_class.place(x=240, y=100, anchor="center")
