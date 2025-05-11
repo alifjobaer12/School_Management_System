@@ -3,24 +3,26 @@ from customtkinter import *
 from customtkinter import *
 from animasion import SlideAnimation
 from sql_query import MySQLQuery
+import threading
 
 
 class teacher_panal:
     def __init__(self, tec_root_frame, t_username, anime_y, frame_main, login_window):
-        set_appearance_mode("light")
-        set_default_color_theme("blue")
+        def first():
+            set_appearance_mode("light")
+            set_default_color_theme("blue")
 
-        self.sql = MySQLQuery()
-        self.teacher_windo = tec_root_frame
-        self.tec_username = t_username
-        self.anime_y = anime_y 
-        self.frame_main = frame_main
-        self.login_window = login_window
+            self.sql = MySQLQuery()
+            self.teacher_windo = tec_root_frame
+            self.tec_username = t_username
+            self.anime_y = anime_y 
+            self.frame_main = frame_main
+            self.login_window = login_window
 
-        self.create_main_frame()
-        self.create_info_frame()
-        self.create_class_routine()
-
+            self.create_main_frame()
+            self.create_info_frame()
+            self.create_class_routine()
+        threading.Thread(target=first, daemon=True).start()
 
     def logout(self, log_out_f) :
         confirm = messagebox.askyesno("Confirm Exit", "Are you sure you want to logout?")
