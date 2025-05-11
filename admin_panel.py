@@ -11,33 +11,35 @@ import threading
 
 class admin_panel:
     def __init__(self,admin_root_frame, a_username, anime_y, frame_main, login_window):
-        set_appearance_mode("light")
-        set_default_color_theme("blue")
-
-        self.sql = MySQLQuery()
-        self.delete = 0
-        self.fees = 0
-        self.username = a_username
-
-        self.login_window = admin_root_frame
-        self.anime_y = anime_y 
-        self.frame_main = frame_main
-        self.login_window = login_window
-        self.sw = 0
-        self.s = 0
-        self.c = 0
-        self.r = 0
-        self.p = 0
-
-        # self.login_window.geometry("700x400")
-        # self.login_window.title("Login - School Management System")
-
-        self.admin_frame = CTkFrame(self.login_window, fg_color="#C8D3Cc", width=700, height=400)
-        self.admin_frame.place(x=350, y=200, anchor="center")
-
-        self.setup_admin_ui()
+        def first():
+            set_appearance_mode("light")
+            set_default_color_theme("blue")
+    
+            self.sql = MySQLQuery()
+            self.delete = 0
+            self.fees = 0
+            self.username = a_username
+    
+            self.login_window = admin_root_frame
+            self.anime_y = anime_y 
+            self.frame_main = frame_main
+            self.login_window = login_window
+            self.sw = 0
+            self.s = 0
+            self.c = 0
+            self.r = 0
+            self.p = 0
+    
+            # self.login_window.geometry("700x400")
+            # self.login_window.title("Login - School Management System")
+    
+            self.admin_frame = CTkFrame(self.login_window, fg_color="#C8D3Cc", width=700, height=400)
+            self.admin_frame.place(x=350, y=200, anchor="center")
+    
+            self.setup_admin_ui()
 
         # self.login_window.mainloop()
+        threading.Thread(target=first, daemon=True).start()
 
     def hover_on(self, event, color, btn_name):
         btn_name.configure(text_color=color)
@@ -58,7 +60,7 @@ class admin_panel:
             self.login_window.after(3, lambda: self.add_std_slide_left(frame, int(add_std_anime_x)))
 
     def see_all_std_info(self):
-        def theding_see_std():
+        # def theding_see_std():
             all_std_info = CTk()
             all_std_info.geometry("1150x900")
             all_std_info.title("All Student Info")
@@ -81,11 +83,11 @@ class admin_panel:
             all_std_textbox.configure(state="disable")
 
             all_std_info.mainloop()
-        threading.Thread(target=theding_see_std, daemon=True).start()
+        # threading.Thread(target=theding_see_std, daemon=True).start()
 
 
     def see_all_tec_info(self):
-        def theding_see_tec():
+        # def theding_see_tec():
             all_tec_info = CTk()
             all_tec_info.geometry("720x900")
             all_tec_info.title("All Teacher Info")
@@ -109,7 +111,7 @@ class admin_panel:
 
 
             all_tec_info.mainloop()
-        threading.Thread(target=theding_see_tec, daemon=True).start()
+        # threading.Thread(target=theding_see_tec, daemon=True).start()
 
 
     def std_add(self):
@@ -414,7 +416,7 @@ class admin_panel:
                                 f"Name \t\t:  {s_f_result[2]}\t\t\n"
                                 f"Class\t\t:  {s_f_result[3]}\n"
                                 f"Roll \t\t:  {s_f_result[4]}\nSection \t\t:  {s_f_result[5]}\n\n"
-                                f"Tution Fee \t\t:  {s_f_result[9]}/-\nPaid Fee \t\t:  {paid_fee}/-\nDue \t\t:  {due_fee}/-"
+                                f"Tution Fee \t\t:  {float(updated_data[9])}/-\nPaid Fee \t\t:  {float(updated_data[10])}/-\nDue \t\t:  {due_fee}/-"
                             )
                             show_s_f_result.configure(state="disable")
                     else:
@@ -562,10 +564,10 @@ class admin_panel:
 
             e_s_username = CTkEntry(find_std_frame, font=("Helvetica",14), placeholder_text="Username", width=200, fg_color="transparent")
             e_s_username.place(x=350, y=100, anchor="center")
+            e_s_username.bind("<Return>", std_find_result)
 
 
             # print(find_s_username)
-            e_s_username.bind("<Return>", std_find_result)
             e_s_submit_btn = CTkButton(find_std_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="🔍 Find", command= lambda: std_find_result(), font=("Helvetica",14, "bold"),  hover=True)
             e_s_submit_btn.place(x=350, y=180, anchor="center")
 
@@ -977,9 +979,9 @@ class admin_panel:
                     t_sa_Class_et.configure(border_color="red")
                     error_l.configure(text="⚠️ Time must be in HH:MM format", text_color="red")
                     error_l.update()
-                    time.sleep(2)
-                    error_l.configure(text="")
-                    error_l.update()
+                    # time.sleep(2)
+                    # error_l.configure(text="")
+                    # error_l.update()
                     return
 
 
@@ -1020,6 +1022,8 @@ class admin_panel:
                 t_sa_class.configure(border_color="#979da2")
                 t_sa_subject.configure(border_color="#979da2")
                 t_sa_section.configure(border_color="#979da2")
+                t_sa_Class_st.configure(border_color="#979da2")
+                t_sa_Class_et.configure(border_color="#979da2")
 
 
             def find_user(self,  event=None):

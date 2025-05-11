@@ -5,23 +5,26 @@ from animasion import SlideAnimation
 from pathlib import Path
 from sql_query import MySQLQuery
 import time
+import threading
 
 class student_panel:
     def __init__(self, std_root_frame, s_username, anime_y, frame_main, login_window):
-        set_appearance_mode("light")
-        set_default_color_theme("blue")
+        def first():
+            set_appearance_mode("light")
+            set_default_color_theme("blue")
 
-        self.sql = MySQLQuery()
-        self.std_root_frame = std_root_frame
-        self.s_username = s_username
-        self.anime_y = anime_y 
-        self.frame_main = frame_main
-        self.login_window = login_window
+            self.sql = MySQLQuery()
+            self.std_root_frame = std_root_frame
+            self.s_username = s_username
+            self.anime_y = anime_y 
+            self.frame_main = frame_main
+            self.login_window = login_window
 
-        self.create_student_panel()
-        self.show_student_info()
-        self.show_fee_info()
-        self.show_class_routine()
+            self.create_student_panel()
+            self.show_student_info()
+            self.show_fee_info()
+            self.show_class_routine()
+        threading.Thread(target=first, daemon=True).start()
 
 
     def create_student_panel(self):
