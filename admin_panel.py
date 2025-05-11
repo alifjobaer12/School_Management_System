@@ -60,11 +60,11 @@ class admin_panel:
             self.login_window.after(3, lambda: self.add_std_slide_left(frame, int(add_std_anime_x)))
 
     def see_all_std_info(self):
-        # def theding_see_std():
-            all_std_info = CTk()
-            all_std_info.geometry("1150x900")
-            all_std_info.title("All Student Info")
+        all_std_info = CTk()
+        all_std_info.geometry("1150x900")
+        all_std_info.title("All Student Info")
 
+        def theding_see_std():
             all_std_textbox = CTkTextbox(all_std_info, font=("Helvetica", 12))
             all_std_textbox.pack(fill="both", expand=True, side="top")
 
@@ -81,17 +81,17 @@ class admin_panel:
                 all_std_textbox.insert('end', line)
 
             all_std_textbox.configure(state="disable")
+        threading.Thread(target=theding_see_std, daemon=True).start()
 
-            all_std_info.mainloop()
-        # threading.Thread(target=theding_see_std, daemon=True).start()
+        all_std_info.mainloop()
 
 
     def see_all_tec_info(self):
-        # def theding_see_tec():
-            all_tec_info = CTk()
-            all_tec_info.geometry("720x900")
-            all_tec_info.title("All Teacher Info")
+        all_tec_info = CTk()
+        all_tec_info.geometry("720x900")
+        all_tec_info.title("All Teacher Info")
 
+        def theding_see_tec():
             all_tec_textbox = CTkTextbox(all_tec_info, font=("Helvetica", 12))
             all_tec_textbox.pack(fill="both", expand=True, side="top")
 
@@ -108,10 +108,9 @@ class admin_panel:
                 all_tec_textbox.insert('end', line)
 
             all_tec_textbox.configure(state="disable")
+        threading.Thread(target=theding_see_tec, daemon=True).start()
 
-
-            all_tec_info.mainloop()
-        # threading.Thread(target=theding_see_tec, daemon=True).start()
+        all_tec_info.mainloop()
 
 
     def std_add(self):
