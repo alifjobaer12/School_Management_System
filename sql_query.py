@@ -43,12 +43,12 @@ class MySQLQuery:
 
     def add_users(self, user_info: dict):
         try:
-            sql = """INSERT INTO users (username, password, role)
-            VALUES (%s, %s, %s);"""
+            sql = """INSERT INTO users (username, password, role, s_q_a)
+            VALUES (%s, %s, %s, %s);"""
 
             user_info['pass'] = self.fernet.encrypt(user_info['pass'].encode())
 
-            values = (user_info['username'], user_info['pass'], user_info['role'] )
+            values = (user_info['username'], user_info['pass'], user_info['role'], user_info['qna'])
             
             self.cursor.execute(sql, values)
             self.db.commit()

@@ -205,7 +205,8 @@ class admin_panel:
 
             user_info = {'username': username,
                          'pass': phone,
-                         'role': "student"
+                         'role': "student",
+                         'qna': username
             }
 
             student_info = {'username': username,
@@ -221,8 +222,8 @@ class admin_panel:
             }
 
             # sql backend
-
             ck_crs = self.sql.ck_class_roll_section(student_info)
+
             if ck_crs == False:
                 error_l.configure(text="Check Class, Roll, Section", text_color="red")
                 e_s_class.configure(border_color="red")
@@ -269,6 +270,7 @@ class admin_panel:
                 self.sw = 1
                 return
 
+            #sql backend
             ck_s = self.sql.add_student(student_info)
 
             if ck_s == True and ck_u == True and ck_crs == True:
@@ -380,7 +382,7 @@ class admin_panel:
                     header_label.configure(text="✔️ Fees Update Successful", text_color="#2e7d32")
                     header_label.update()
             
-                    # Refresh only the display box, not the entire UI
+                    #sql backend
                     updated_data = self.sql.find_student(find_s_username)
                     if updated_data:
                         tuition_fee = float(updated_data[9])
@@ -408,6 +410,7 @@ class admin_panel:
             def std_del(username):
 
                 if tec == 0:
+                    #sql backend
                     ck = self.sql.delete_student(username)
                     if ck == True:
                         header_label.configure(text="✔️ Delete Student Successfull", text_color="#2e7d32")
@@ -417,6 +420,7 @@ class admin_panel:
                         header_label.update
                 
                 else:
+                    #sql backend
                     ck = self.sql.delete_teacher(username)
                     if ck == True:
                         header_label.configure(text="✔️ Delete Teacher Successfull", text_color="#2e7d32")
@@ -445,6 +449,7 @@ class admin_panel:
             
             # sql backend
             if tec == 1:
+                #sql backend
                 s_f_result = self.sql.find_teacher(find_s_username)
 
                 if s_f_result is not None:
@@ -464,6 +469,7 @@ class admin_panel:
 
 
             else:
+                #sql backend
                 s_f_result = self.sql.find_student(find_s_username)
 
                 if s_f_result is not None:
@@ -648,6 +654,13 @@ class admin_panel:
             try:
                 start_t = datetime.strptime(class_st, "%H:%M").time()
                 end_t = datetime.strptime(class_et, "%H:%M").time()
+                if start_t == end_t:
+                    error_l.configure(text="⚠️ Class Start and End time not be same", text_color="red")
+                    error_l.update()
+                    time.sleep(2)
+                    error_l.configure(text="")
+                    error_l.update()
+                    return
             except ValueError:
                 error_l.configure(text="⚠️ Time must be in HH:MM format", text_color="red")
                 error_l.update()
@@ -673,7 +686,8 @@ class admin_panel:
 
             user_info = {'username': username,
                          'pass': phone,
-                         'role': "teacher"
+                         'role': "teacher",
+                         'qna': username
             }
 
             # sql backend
@@ -729,6 +743,7 @@ class admin_panel:
                 self.sw = 1
                 return
             
+            #sql backend
             ck_t = self.sql.add_teacher(teacher_info)
             ck_s = self.sql.add_subject(sub_info)
 
@@ -908,6 +923,14 @@ class admin_panel:
             try:
                 start_t = datetime.strptime(Class_st, "%H:%M").time()
                 end_t = datetime.strptime(Class_et, "%H:%M").time()
+                if start_t == end_t:
+                    error_l.configure(text="⚠️ Class Start and End time not be same", text_color="red")
+                    error_l.update()
+                    time.sleep(2)
+                    error_l.configure(text="")
+                    error_l.update()
+                    return
+
             except ValueError:
                 error_l.configure(text="⚠️ Time must be in HH:MM format", text_color="red")
                 error_l.update()
@@ -926,6 +949,7 @@ class admin_panel:
                         'section': section
             }
 
+            #sql backend
             ck = query.add_subject(sub_info)
 
             if ck:
@@ -968,7 +992,6 @@ class admin_panel:
                 t_sa_name.configure(text_color="green", text=name[0])
                 t_sa_username.configure(border_color="green")
 
-            pass
 
         subject_asign_frame = CTkFrame(self.admin_frame, fg_color="transparent", width=700, height=350)
         subject_asign_frame.place(x=4*263, y=260, anchor="center")
