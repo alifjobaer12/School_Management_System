@@ -276,6 +276,34 @@ class MySQLQuery:
         except Exception as e:
             return f"❌ Error updating fees: {e}"
 
+    def register(self, username, old_pass, new_pass, c_new_pass, qna):
+        try:
+            db_pass = self.log_in(username)  # Should return (password, role)
+            if not db_pass:
+                return "User not found"
+
+            pswd, role = db_pass
+            if pswd != old_pass:
+                return "Incorrect Default Password"
+
+            if new_pass != c_new_pass:
+                return "Password & Confirm Password do not match"
+
+            new_pass = self.fernet.encrypt(new_pass.encode())
+
+            sql = """UPDATE users SET password = %s, s_q_a = %s WHERE username = %s"""
+            values = (new_pass, qna, username,)
+            self.cursor.execute(sql, values)
+            self.db.commit()  # Ensure changes are saved
+            return True
+
+        except mysql.connector.IntegrityError as e:
+            return f"Integrity Error: {e}"
+
+        except Exception as e:
+            return f"Error: {e}"
+
+
     def close_db(self):
         try:
             self.cursor.close()
