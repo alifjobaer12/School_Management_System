@@ -72,6 +72,8 @@ class LoginApp:
         self.login_window.after(10, self.animate_gif)
 
     def slide_right(self):
+        self.copyright_lable.place_forget()
+
         self.anime_x += 3
         self.anime_r_x += 3
         if self.anime_r_x <= 30 or self.anime_x <= 650:
@@ -80,6 +82,8 @@ class LoginApp:
             self.login_window.after(1, self.slide_right)
 
     def slide_left(self):
+        self.copyright_lable.place(x=350, y=395, anchor="center")
+
         self.anime_x -= 3
         self.anime_r_x -= 3
         if self.anime_r_x >= -303 or self.anime_x >= 350:
@@ -248,8 +252,8 @@ class LoginApp:
         CTkLabel(frame_right, text="Don't have an account?", width=1, height=1, font=("Harvatika", 12)).place(x=90, y=255, anchor="center")
         CTkButton(frame_right, text="Sign up", font=("Harvatika", 12), width=1, height=1, hover=False, command=lambda: self.reg_forgatpass(1, 0), fg_color="transparent", text_color="#2a63db").place(x=180, y=255, anchor="center")
 
-        copyright_lable = CTkButton(self.frame_main, text="©Team_ChronoMate", command=self.show_dev_info, fg_color="transparent", text_color="#6a0dad", width=1, height=1, hover=False)
-        copyright_lable.place(x=350, y=395, anchor="center")
+        self.copyright_lable = CTkButton(self.frame_main, text="©Team_ChronoMate", command=self.show_dev_info, fg_color="transparent", text_color="#6a0dad", width=1, height=1, hover=False)
+        self.copyright_lable.place(x=350, y=395, anchor="center")
 
     def show_dev_info(self):
         if hasattr(self, "dev_frame") and self.dev_frame:
@@ -257,7 +261,7 @@ class LoginApp:
             self.dev_frame = None
             return
 
-        self.dev_frame = CTkFrame(self.e_lf_frame, width=320, height=200, fg_color="black")
+        self.dev_frame = CTkFrame(self.frame_main, width=320, height=200, fg_color="black")
         self.dev_frame.place(relx=0.5, rely=0.5, anchor="center")
 
         # ❌ Close button (top-right)
