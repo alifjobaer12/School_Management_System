@@ -365,11 +365,11 @@ class LoginApp:
         # Required for password strength check
 
         def registration(self):
-            username = self.r_Username.get().strip()
-            old_pass = self.r_defoltpass.get().strip()
-            new_pass = self.r_Password.get().strip()
-            c_new_pass = self.r_C_Password.get().strip()
-            qna = self.r_sq.get().strip()
+            username = self.r_Username.get()
+            old_pass = self.r_defoltpass.get()
+            new_pass = self.r_Password.get()
+            c_new_pass = self.r_C_Password.get()
+            qna = self.r_sq.get()
 
             # Check T&C
             if not self.click.get():
@@ -412,6 +412,45 @@ class LoginApp:
             self.re_lable.update()
             # threading.Thread(target=lambda: registration(self), daemon=True).start()
 
+        def forget_password(self):
+            username = self.fp_Username.get()
+            new_pass = self.fp_Password.get()
+            c_new_pass = self.fp_C_Password.get()
+            qna = self.fp_sq.get()
+
+            # Check for empty fields
+            if not all([username, new_pass, c_new_pass, qna]):
+                self.fpe_lable.configure(text="All fields are required", text_color="red")
+                self.fpe_lable.update()
+                return
+
+            # Password strength validation
+            if len(new_pass) < 8:
+                self.fpe_lable.configure(text="Password must be at least 8 characters", text_color="red")
+                self.fpe_lable.update()
+                return
+
+            if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", new_pass):
+                self.fpe_lable.configure(text="Password must contain a special character", text_color="red")
+                self.fpe_lable.update()
+                return
+
+            # If all checks passed, proceed with registration
+            result = self.sql_new.forget_pass(username, qna, new_pass, c_new_pass)
+            if result == True:
+                self.fpe_lable.configure(text="Password Reset Successful", text_color="green")
+            else:
+                self.fpe_lable.configure(text=result, text_color="red")
+
+            self.fpe_lable.update()
+            self.fp_Username.delete(0,END)
+            self.fp_Password.delete(0,END)
+            self.fp_C_Password.delete(0,END)
+            self.fp_sq.delete(0,END)
+            time.sleep(2)
+            self.fpe_lable.configure(text="",)
+            self.fpe_lable.update()
+            # threading.Thread(target=lambda: registration(self), daemon=True).start()
 
         if reg == 1:
 
@@ -467,19 +506,19 @@ class LoginApp:
             self.e_lf_frame.place(x=-302, y=40)
 
             h1_lable = CTkLabel(self.e_lf_frame, text="Reset Your Password", text_color="#3e4d5c", width=1, height=1, font=("Helvetica",19,"bold"), fg_color="transparent")
-            h1_lable.place(x=150, y=45, anchor="center")
+            h1_lable.place(x=150, y=35, anchor="center")
             h2_lable = CTkLabel(self.e_lf_frame, text="Fill All The Box", text_color="#607c84", width=1, height=1, font=("Helvetica",13, "bold"), fg_color="transparent")
-            h2_lable.place(x=150, y=70, anchor="center")
+            h2_lable.place(x=150, y=60, anchor="center")
 
-            fpe_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", font=("Helvetica",12), width=1, height=1, text_color="red")
-            fpe_lable.place(x=150, y=75, anchor="center")
+            self.fpe_lable = CTkLabel(self.e_lf_frame, text="", fg_color="transparent", font=("Helvetica",12), width=1, height=1, text_color="red")
+            self.fpe_lable.place(x=150, y=80, anchor="center")
 
-            fp_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
-            fp_Username.place(x=150, y=105, anchor="center")
+            self.fp_Username = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Username ", width=200, fg_color="transparent")
+            self.fp_Username.place(x=150, y=105, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=115, anchor="center")
 
-            fp_sq = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent")
-            fp_sq.place(x=150, y=145, anchor="center")
+            self.fp_sq = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text=" Security Question ", width=200, fg_color="transparent")
+            self.fp_sq.place(x=150, y=145, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=155, anchor="center")
 
             self.fp_Password = CTkEntry(self.e_lf_frame, font=("Helvetica",14), border_width=0, corner_radius=0, placeholder_text="New Password ", width=178, fg_color="transparent", show="*")
@@ -494,8 +533,11 @@ class LoginApp:
             self.fp_C_Password.place(x=140, y=225, anchor="center")
             line = CTkFrame(self.e_lf_frame, height=2, width=200, fg_color="#9a9a9a").place(x=150, y=235, anchor="center")
 
-            signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=self.slide_left, text="Reset Password", text_color="#b2fff5")
+            signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=lambda: forget_password(self), text="Reset Password", text_color="#b2fff5")
             signup_btn.place(x=150, y=285, anchor="center")
+
+            CTkLabel(self.e_lf_frame, text="Password Reset Successfull?", width=1, height=1, font=("Harvatika", 12)).place(x=135, y=320, anchor="center")
+            CTkButton(self.e_lf_frame, text="Log in", font=("Harvatika", 12), width=1, height=1, hover=False, command=self.slide_left, fg_color="transparent", text_color="#2a63db").place(x=235, y=320, anchor="center")
 
         self.slide_right()
 

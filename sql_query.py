@@ -303,6 +303,31 @@ class MySQLQuery:
         except Exception as e:
             return f"Error: {e}"
 
+    def forget_pass(self, username, qna, new_pass, c_new_pass):
+        try:
+            sql = """ SELECT s_q_a FROM users WHERE username = %s """
+            self.cursor.execute(sql, (username,))
+            access = self.cursor.fetchone()
+
+            if access[0] != qna:
+                return f"Security Question  do not match"
+            
+            if new_pass != c_new_pass:
+                return f"New Password & Confirm New Password do not match"
+            
+            new_pass = self.fernet.encrypt(new_pass.encode())
+
+            sql = """UPDATE users SET password = %s WHERE username = %s"""
+            values = (new_pass, username,)
+            self.cursor.execute(sql, values)
+            self.db.commit()  # Ensure changes are saved
+            return True
+
+        except mysql.connector.IntegrityError as e:
+            return f"Integrity Error: {e}"
+
+        except Exception as e:
+            return f"Error: {e}"
 
     def close_db(self):
         try:
