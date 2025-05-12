@@ -4,6 +4,7 @@ from customtkinter import *
 from animasion import SlideAnimation
 from sql_query import MySQLQuery
 import threading
+from atendance import open_attendance_form
 
 
 class teacher_panal:
@@ -58,26 +59,29 @@ class teacher_panal:
         tec_name_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Username", font=("Helvetica", 15, "bold"), anchor="w")
         tec_name_label.place(x=220, y=10)
         tec_name_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Name", font=("Helvetica", 15, "bold"), anchor="w")
-        tec_name_label.place(x=220, y=40)
+        tec_name_label.place(x=220, y=35)
         tec_tclass_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Total Class", font=("Helvetica", 15, "bold"), anchor="w")
-        tec_tclass_label.place(x=220, y=70)
+        tec_tclass_label.place(x=220, y=60)
+
+        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Take Attendance", command=lambda: open_attendance_form(self.tec_username), font=("Helvetica",14, "bold"), hover=True)
+        atend_btn.place(x=350, y=110, anchor="center")
 
         if (info and t_sub) is not None:
 
             name_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {self.tec_username}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            name_value_label.place(x=320, y=10)
+            name_value_label.place(x=350, y=10)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {info[0]}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=40)
+            class_value_label.place(x=350, y=35)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {t_sub[0]}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=70)
+            class_value_label.place(x=350, y=60)
         
         elif info is None:
             name_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {self.tec_username}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
             name_value_label.place(x=320, y=10)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     Not Found", text_color="red", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=40)
+            class_value_label.place(x=320, y=35)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {t_sub[0]}", text_color="red", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=70)
+            class_value_label.place(x=320, y=60)
 
 
     def create_class_routine(self):
@@ -86,12 +90,12 @@ class teacher_panal:
         results = self.sql.teacher_routine(self.tec_username)
 
         ruttin_label = CTkLabel(self.tec_info_view_frame, text="Class Routine", text_color="black", width=1, height=1, fg_color="transparent", font=("Helvetica", 13, "bold"))
-        ruttin_label.place(x=350, y=130, anchor="center")
+        ruttin_label.place(x=350, y=140, anchor="center")
 
         subject_box = CTkTextbox(self.tec_info_view_frame, wrap="none", activate_scrollbars=True,
                                  width=500, height=160, fg_color="transparent",
                                  scrollbar_button_color="sky blue", font=("Helvetica", 13, "bold"))
-        subject_box.place(x=360, y=230, anchor="center")
+        subject_box.place(x=360, y=240, anchor="center")
 
         subject_box.delete('0.0', 'end')
         header = "Subject\t\t\tClass\tSection\t   Start Time\t\tEnd Time\n"
