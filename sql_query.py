@@ -5,6 +5,14 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+# ✅ Helper function to safely fetch env variables
+def get_env_var(var_name):
+    value = os.getenv(var_name)
+    if value is None:
+        raise EnvironmentError(f"❌ Required environment variable '{var_name}' is missing.")
+    return value
+
+
 class MySQLQuery:
     def __init__(self):
         self.db = mysql.connector.connect(
@@ -12,7 +20,7 @@ class MySQLQuery:
             user=os.getenv("USER"),
             password=os.getenv("PASSWORD"),
             database=os.getenv("DATABASE"),
-            port=os.getenv("PORT")
+            port=int(os.getenv("PORT"))
         )
         self.cursor = self.db.cursor()
         self.encript_key = os.getenv("ENC_KEY")
@@ -64,12 +72,13 @@ class MySQLQuery:
             sql = """SELECT COUNT(*) AS total FROM students WHERE class = %s AND roll = %s AND section = %s GROUP BY class, roll, LOWER(section) HAVING COUNT(*) > 0;"""
             self.cursor.execute(sql, (student_data['class'], student_data['roll'], student_data['section']))
             ck = self.cursor.fetchone()
-            if ck is not None:
-                return False
-            else:
+            if ck is None or ck[0] == 0:
                 return True
+            else:
+                return False
         except mysql.connector.IntegrityError as e:
-            pass
+            print (f"Error : {e}")
+            return False
 
     def ck_tec_class_sub_section(self, sub_info: dict):
         try:
@@ -81,7 +90,8 @@ class MySQLQuery:
             else:
                 return True
         except mysql.connector.IntegrityError as e:
-            pass
+            print (f"Error : {e}")
+            return False
 
     # 1. Add Student
     def add_student(self, student_data: dict):
@@ -112,15 +122,23 @@ class MySQLQuery:
     def delete_student(self, username):
         try:
             ck = self.find_student(username)
-            if ck is not None:
-                sql = "DELETE FROM students WHERE username = %s;"
-                self.cursor.execute(sql, (username,))
-                self.db.commit()
-                return True
-            else:
+
+            while self.cursor.nextset():  # clear the cursor for next exicution
+                pass
+
+            if ck is None:
                 return "❌ Student Not Found"
-            
+
+            self.db.start_transaction()  # START TRANSACTION
+
+            self.cursor.execute("DELETE FROM students WHERE username = %s;", (username,))
+            self.cursor.execute("DELETE FROM users WHERE username = %s;", (username,))
+
+            self.db.commit()  # COMMIT if all succeed
+            return True
+
         except Exception as e:
+            self.db.rollback()  # ROLLBACK if any fail
             return f"❌ [Error] Failed to delete student: {e}"
 
     # 4. All Students
@@ -136,6 +154,8 @@ class MySQLQuery:
             self.cursor.execute(sql, (username,))
             s_class = self.cursor.fetchone()
             # print(s_class)
+            while self.cursor.nextset():  # clear the cursor for next exicution
+                pass  
 
             sql = "SELECT sub_name, t_name, class_start_time, class_end_time FROM subjects WHERE class = %s;"
             self.cursor.execute(sql, (s_class[0],))
@@ -173,16 +193,28 @@ class MySQLQuery:
     def delete_teacher(self, username):
         try:
             ck = self.find_teacher(username)
-            if ck is not None:
-                sql = "DELETE FROM teacher WHERE username = %s;"
-                self.cursor.execute(sql, (username,))
-                self.db.commit()
-                return True
-            else:
-                return "❌ Teacher Not Found"
+
+            while self.cursor.nextset():  # clear the cursor for next execution
+                pass
             
+            if ck is None:
+                return "❌ Teacher Not Found"
+    
+            # Start transaction
+            self.db.start_transaction()
+    
+            # Delete from all related tables
+            self.cursor.execute("DELETE FROM teacher WHERE username = %s;", (username,))
+            self.cursor.execute("DELETE FROM users WHERE username = %s;", (username,))
+            self.cursor.execute("DELETE FROM subjects WHERE username = %s;", (username,))
+    
+            # Commit if all succeed
+            self.db.commit()
+            return True
+    
         except Exception as e:
-            return f"❌ [Error] Failed to delete student: {e}"
+            self.db.rollback()  # Roll back if any delete fails
+            return f"❌ [Error] Failed to delete Teacher: {e}"
 
     # 9. Teacher Info
     def teacher_info(self, username):
@@ -198,7 +230,7 @@ class MySQLQuery:
 
     def teacher_total_sub(self, username):
         try:
-            sql = "SELECT COUNT(sub_name) FROM subjects WHERE username= %s GROUP BY t_name;"
+            sql = "SELECT COUNT(*) FROM subjects WHERE username = %s;"
             self.cursor.execute(sql, (username,))
             t_t_sub = self.cursor.fetchone()
 
@@ -213,11 +245,18 @@ class MySQLQuery:
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
-    # 11. Teacher Routine
+        # 11. Teacher Routine
     def teacher_routine(self, username):
-        sql = "SELECT sub_name, class, section, class_start_time, class_end_time FROM subjects WHERE username = %s"
-        self.cursor.execute(sql, (username,))
-        return self.cursor.fetchall()
+        try:
+            while self.cursor.nextset():  # clear the cursor for next exicution
+                pass            
+
+            sql = "SELECT sub_name, class, section, class_start_time, class_end_time FROM subjects WHERE username = %s"
+            self.cursor.execute(sql, (username,))
+            return self.cursor.fetchall()
+        except mysql.connector.errors.InternalError as e:
+            print("MySQL Error:", e)
+            return []
     
     def add_subject(self, sub_info: dict):
 
@@ -283,6 +322,9 @@ class MySQLQuery:
                 return "User not found"
 
             pswd, role = db_pass
+            while self.cursor.nextset():   # clear the cursor for next exicution
+                pass 
+
             if pswd != old_pass:
                 return "Incorrect Default Password"
 
@@ -309,6 +351,9 @@ class MySQLQuery:
             self.cursor.execute(sql, (username,))
             access = self.cursor.fetchone()
 
+            while self.cursor.nextset():  # clear the cursor for next exicution
+                pass
+
             if access[0] != qna:
                 return f"Security Question  do not match"
             
@@ -332,7 +377,7 @@ class MySQLQuery:
     def close_db(self):
         try:
             self.cursor.close()
-            self.conn.close()
-            return 0
+            self.db.close()
+            return True
         except Exception as e:
             return f"Error : {e}"
