@@ -2,28 +2,29 @@ import customtkinter as ctk
 from tkinter import messagebox
 import mysql.connector
 from datetime import date
+import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 
 class AttendanceForm:
     def __init__(self, master, teacher_username):
-        # # super().__init__(master)
-        # self.title("Take Attendance")
-        # self.geometry("700x850")
 
         # Database connection setup
         self.db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="alifjobaer12",
-            database="sms_p_db_backup",
-            port=3306
-        ) 
-        # self.db = mysql.connector.connect(**self.db_config)
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
+            port=int(os.getenv("PORT"))
+        )
+
         self.cursor = self.db.cursor()
         self.attendence_frame = master
         self.teacher_username = teacher_username
 
         # Variables
-        # self.teacher_username = ctk.StringVar()
         self.class_var = ctk.StringVar()
         self.section_var = ctk.StringVar()
         self.subject_var = ctk.StringVar()
@@ -38,19 +39,16 @@ class AttendanceForm:
 
     def create_form(self):
         ctk.CTkLabel(self.attendence_frame, text=f"Teacher {self.teacher_username}", font=("Helvetica", 20, "bold"),).pack(pady=5)
-        # self.teacher_entry = ctk.CTkEntry(self.attendence_frame, textvariable=self.teacher_username.pack(pady=5)
 
-        # ctk.CTkButton(self.attendence_frame, text="Load Teacher Subjects", command=self.load_teacher_subjects).pack(pady=10)
-
-        ctk.CTkLabel(self.attendence_frame, text="Select Class",font=("Helvetica", 16, "bold")).place(x=100, y=70, anchor="center")
+        ctk.CTkLabel(self.attendence_frame, text="Class",font=("Helvetica", 16, "bold")).place(x=100, y=70, anchor="center")
         self.class_menu = ctk.CTkComboBox(self.attendence_frame, font=("Helvetica", 16, "bold"), values=self.classes, variable=self.class_var)
         self.class_menu.place(x=100, y=100, anchor="center")
 
-        ctk.CTkLabel(self.attendence_frame, text="Select Section", font=("Helvetica", 16, "bold")).place(x=350, y=70, anchor="center")
+        ctk.CTkLabel(self.attendence_frame, text="Section", font=("Helvetica", 16, "bold")).place(x=350, y=70, anchor="center")
         self.section_menu = ctk.CTkComboBox(self.attendence_frame, font=("Helvetica", 16, "bold"), values=self.sections, variable=self.section_var)
         self.section_menu.place(x=350, y=100, anchor="center")
 
-        ctk.CTkLabel(self.attendence_frame, text="Select Subject", font=("Helvetica", 16, "bold"),).place(x=600, y=70, anchor="center")
+        ctk.CTkLabel(self.attendence_frame, text="Subject", font=("Helvetica", 16, "bold"),).place(x=600, y=70, anchor="center")
         self.subject_menu = ctk.CTkComboBox(self.attendence_frame, font=("Helvetica", 16, "bold"), values=self.subjects, variable=self.subject_var)
         self.subject_menu.place(x=600, y=100, anchor="center")
 
@@ -58,22 +56,25 @@ class AttendanceForm:
         self.load_btn.place(x=350, y=170, anchor="center")
 
         self.header_frame = ctk.CTkFrame(self.attendence_frame,)
-        self.header_frame.place(x=350, y=230, anchor="center",)
-        headers = ["SL No", "Roll", "Name", "Present", "Absent", "Today"]
-        widths = [50, 80, 250, 85, 70, 80]
+        self.header_frame.place(x=350, y=275, anchor="center",)
+        Today = date.today()
+        headers = ["SL No", "Roll", "Name", "Present", "Absent", Today]
+        widths = [65, 80, 250, 85, 70, 95]
         for i, header in enumerate(headers):
             ctk.CTkLabel(self.header_frame, text=header, width=widths[i], anchor="center").grid(row=0, column=i, padx=2)
 
-        self.student_frame = ctk.CTkScrollableFrame(self.attendence_frame, width=650, height=550)
-        self.student_frame.place(x=350, y=530, anchor="center")
+        self.student_frame = ctk.CTkScrollableFrame(self.attendence_frame, width=650, height=500)
+        self.student_frame.place(x=350, y=550, anchor="center")
 
         self.save_btn = ctk.CTkButton(self.attendence_frame, font=("Helvetica", 14, "bold"), text="Save Attendance", command=self.save_attendance).place(x=350, y=850, anchor="center")
+
+        ctk.CTkLabel(self.attendence_frame, text=f"Today Date : {date.today()} ", font=("Helvetica", 13, "bold"), width=1, height=1).place(x=100, y=23, anchor="center")
 
         self.load_teacher_subjects()
 
     def load_teacher_subjects(self):
         username = self.cursor.execute(
-            "SELECT DISTINCT class, section, sub_name FROM subjects_backup WHERE username=%s",
+            "SELECT DISTINCT class, section, sub_name FROM subjects WHERE username=%s",
             (self.teacher_username,)
         )
         results = self.cursor.fetchall()
@@ -100,9 +101,9 @@ class AttendanceForm:
         if not class_val or not section_val:
             messagebox.showerror("Input Error", "Subject, Class and Section are required.")
             return
-
+        
         self.cursor.execute(
-            "SELECT id, roll, s_name FROM students_backup WHERE class=%s AND section=%s order by roll",
+            "SELECT id, roll, s_name FROM students WHERE class=%s AND section=%s ORDER BY roll",
             (class_val, section_val)
         )
         students = self.cursor.fetchall()
@@ -110,25 +111,29 @@ class AttendanceForm:
 
         for i, (sid, roll, name) in enumerate(students, start=1):
             self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=1", (sid,))
-            present_count = self.cursor.fetchone()[0]
+            self.present_count = self.cursor.fetchone()[0]
 
             self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=0", (sid,))
-            absent_count = self.cursor.fetchone()[0]
+            self.absent_count = self.cursor.fetchone()[0]
 
             row = ctk.CTkFrame(self.student_frame)
             row.pack(fill="x", pady=2, padx=5)
 
-            entries = [str(i), str(roll), name, str(present_count), str(absent_count)]
-            widths = [45, 75, 250, 90, 110]
+            entries = [str(i), str(roll), name, str(self.present_count), str(self.absent_count)]
+            widths = [45, 95, 250, 75, 90]
 
             for j, val in enumerate(entries):
                 ctk.CTkLabel(row, text=val, width=widths[j], anchor="center").grid(row=0, column=j, padx=2)
 
             var = ctk.BooleanVar(value=True)
-            checkbox = ctk.CTkCheckBox(row, text="", variable=var, onvalue=True, offvalue=False, width=80)
-            checkbox.grid(row=0, column=5)
+            checkbox = ctk.CTkCheckBox(row, text="", variable=var, onvalue=True, offvalue=False, width=50, height=35)
+            checkbox.grid(row=0, column=5, padx=(20,0))
 
             self.attendance_data[sid] = var
+
+            ctk.CTkLabel(self.attendence_frame, text=f"All Student of Subject {self.subject_menu.get()}, Class {self.class_menu.get()} & Section {self.section_menu.get()} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=245, anchor="center")
+
+            ctk.CTkLabel(self.attendence_frame, text=f"Total Class of Subject {self.subject_menu.get()} = {self.present_count + self.absent_count} ", font=("Helvetica", 13, "bold"), width=1, height=1).place(x=350, y=220, anchor="center")
 
     def save_attendance(self):
         subject = self.subject_var.get()
@@ -165,7 +170,7 @@ def open_attendance_form():
     AttendanceForm(alif, "@rabbiler")
     alif.mainloop()
 
-# open_attendance_form()
+open_attendance_form()
 # For testing as standalone
 # if __name__ == "__main__":
 #     root = ctk.CTk()
