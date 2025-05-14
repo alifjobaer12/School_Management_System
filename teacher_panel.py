@@ -4,7 +4,7 @@ from customtkinter import *
 from animasion import SlideAnimation
 from sql_query import MySQLQuery
 import threading
-from atendance import open_attendance_form
+from atendance import AttendanceForm
 
 
 class teacher_panal:
@@ -32,6 +32,15 @@ class teacher_panal:
             animation.slide_down()
             log_out_f.destroy()
             self.sql.close_db()
+
+    def take_attendence(self):
+        attendence = CTk()
+        attendence.geometry("700x900")
+        attendence.title("Attendance Sheet")
+
+        AttendanceForm(attendence, self.tec_username)
+
+        attendence.mainloop()
 
 
     def create_main_frame(self):
@@ -63,7 +72,7 @@ class teacher_panal:
         tec_tclass_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Total Class", font=("Helvetica", 15, "bold"), anchor="w")
         tec_tclass_label.place(x=220, y=60)
 
-        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Take Attendance", command=lambda: open_attendance_form(self.tec_username), font=("Helvetica",14, "bold"), hover=True)
+        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Take Attendance", command=self.take_attendence, font=("Helvetica",14, "bold"), hover=True)
         atend_btn.place(x=350, y=110, anchor="center")
 
         if (info and t_sub) is not None:
