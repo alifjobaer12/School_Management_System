@@ -374,6 +374,63 @@ class MySQLQuery:
         except Exception as e:
             return f"Error: {e}"
 
+
+    def att_find_class(self, t_username):
+        sql = """SELECT DISTINCT class FROM subjects WHERE username = %s;"""            
+        self.cursor.execute(sql, (t_username,))
+        class_list = self.cursor.fetchall()
+
+        all_class_list = sorted([row[0] for row in class_list])
+        return all_class_list
+
+    def att_find_section(self, t_username, selected_class):
+        sql = """select DISTINCT section from subjects where username = %s and class = %s;"""            
+        self.cursor.execute(sql, (t_username, selected_class,))
+        section_list = self.cursor.fetchall()
+
+        all_sections_list = sorted([row[0] for row in section_list])
+        return all_sections_list
+
+    def att_find_subject(self, t_username, selected_class, selected_section):
+        sql = """select DISTINCT sub_name from subjects where username = %s and class = %s and section = %s;"""            
+        self.cursor.execute(sql, (t_username, selected_class, selected_section))
+        subject_list = self.cursor.fetchall()
+
+        all_subject_list = sorted([row[0] for row in subject_list])
+        return all_subject_list
+
+    def att_load_student(self, class_val, section_val):
+        sql = """SELECT id, roll, s_name FROM students WHERE class=%s AND section=%s ORDER BY roll;"""
+        self.cursor.execute(sql, (class_val, section_val,))
+        student_list = self.cursor.fetchall()
+
+        return student_list
+    
+    def att_std_present(self, sid):
+        sql = """SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=1;"""
+        self.cursor.execute(sql, (sid,))
+        present_count = self.cursor.fetchone()[0]
+        return present_count
+    
+    def att_std_absent(self, sid):
+        sql = """SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=0;"""
+        self.cursor.execute(sql, (sid,))
+        absent_count = self.cursor.fetchone()[0]
+        return absent_count
+    
+    def att_save_attendance(self, student_id, class_val, section_val, subject, today, status, t_username):
+        try:
+            sql = """INSERT INTO attendance (student_id, class, section, subject, date, status, t_username)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s);"""
+            self.cursor.execute(sql, (student_id, class_val, section_val, subject, today, status, t_username,) )
+            self.db.commit()
+            return True
+        except Exception as e:
+            self.db.rollback()
+            return f"Error, Failed to save attendance.\n{e}"
+            
+
+
     def close_db(self):
         try:
             self.cursor.close()
