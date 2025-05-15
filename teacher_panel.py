@@ -5,6 +5,9 @@ from animasion import SlideAnimation
 from sql_query import MySQLQuery
 import threading
 from atendance import AttendanceForm
+from pathlib import Path
+from PIL import Image
+import os
 
 
 class teacher_panal:
@@ -67,31 +70,35 @@ class teacher_panal:
         t_sub = self.sql.teacher_total_sub(self.tec_username)
 
         tec_name_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Username", font=("Helvetica", 15, "bold"), anchor="w")
-        tec_name_label.place(x=220, y=10)
+        tec_name_label.place(x=160, y=20)
         tec_name_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Name", font=("Helvetica", 15, "bold"), anchor="w")
-        tec_name_label.place(x=220, y=35)
+        tec_name_label.place(x=160, y=45)
         tec_tclass_label = CTkLabel(self.tec_info_view_frame, text_color="black", text="Total Class", font=("Helvetica", 15, "bold"), anchor="w")
-        tec_tclass_label.place(x=220, y=60)
+        tec_tclass_label.place(x=160, y=70)
 
-        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#C8D3Cc", fg_color="#2c3e50", hover_color="#3e5770", text="Take Attendance", command=self.take_attendence, font=("Helvetica",14, "bold"), hover=True)
-        atend_btn.place(x=350, y=110, anchor="center")
+        BASE_DIR = Path(__file__).resolve().parent
+        ICON_DIR = BASE_DIR / "image"
+        attendence_icon = CTkImage(Image.open(ICON_DIR / "attendence.png"), size=(30, 30))
+
+        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#2c3e50", fg_color="transparent", hover_color="#d4e9ff", text="Take Attendance", image=attendence_icon, compound="top", command=self.take_attendence, font=("Helvetica",16, "bold"), hover=True)
+        atend_btn.place(x=480, y=56, anchor="center")
 
         if (info and t_sub) is not None:
 
             name_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {self.tec_username}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            name_value_label.place(x=350, y=10)
+            name_value_label.place(x=280, y=20)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {info[0]}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=350, y=35)
+            class_value_label.place(x=280, y=45)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {t_sub[0]}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=350, y=60)
+            class_value_label.place(x=280, y=70)
         
         elif info is None:
             name_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {self.tec_username}", text_color="black", font=("Helvetica", 14, "bold"), anchor="w")
-            name_value_label.place(x=320, y=10)
+            name_value_label.place(x=280, y=20)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     Not Found", text_color="red", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=35)
+            class_value_label.place(x=280, y=45)
             class_value_label = CTkLabel(self.tec_info_view_frame, text=f":     {t_sub[0]}", text_color="red", font=("Helvetica", 14, "bold"), anchor="w")
-            class_value_label.place(x=320, y=60)
+            class_value_label.place(x=280, y=70)
 
 
     def create_class_routine(self):
