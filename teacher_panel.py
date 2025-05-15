@@ -37,8 +37,9 @@ class teacher_panal:
         attendence = CTk()
         attendence.geometry("700x900")
         attendence.title("Attendance Sheet")
-
-        AttendanceForm(attendence, self.tec_username)
+        def theading_attendence():
+            AttendanceForm(attendence, self.tec_username)
+        threading.Thread(target=theading_attendence, daemon=True).start()
 
         attendence.mainloop()
 

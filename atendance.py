@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox
 from sql_query import MySQLQuery
 from datetime import date
+import threading
 # import os
 # from dotenv import load_dotenv
 
@@ -11,33 +12,38 @@ from datetime import date
 class AttendanceForm:
     def __init__(self, master, teacher_username):
 
-        # Database connection setup
-        # self.db = mysql.connector.connect(
-        #     host=os.getenv("HOST"),
-        #     user=os.getenv("USER"),
-        #     password=os.getenv("PASSWORD"),
-        #     database=os.getenv("DATABASE"),
-        #     port=int(os.getenv("PORT"))
-        # )
+        def first():
 
-        # self.cursor = self.db.cursor()
-        self.sql = MySQLQuery()
+            # Database connection setup
+            # self.db = mysql.connector.connect(
+            #     host=os.getenv("HOST"),
+            #     user=os.getenv("USER"),
+            #     password=os.getenv("PASSWORD"),
+            #     database=os.getenv("DATABASE"),
+            #     port=int(os.getenv("PORT"))
+            # )
 
-        self.attendence_frame = master
-        self.teacher_username = teacher_username
+            # self.cursor = self.db.cursor()
+            self.sql = MySQLQuery()
 
-        # Variables
-        self.class_var = ctk.StringVar()
-        self.section_var = ctk.StringVar()
-        self.subject_var = ctk.StringVar()
+            self.attendence_frame = master
+            self.teacher_username = teacher_username
 
-        self.attendance_data = {}
-        self.classes = []
-        self.sections = []
-        self.subjects = []
+            # Variables
+            self.class_var = ctk.StringVar()
+            self.section_var = ctk.StringVar()
+            self.subject_var = ctk.StringVar()
 
-        # UI
-        self.create_form()
+            self.attendance_data = {}
+            self.classes = []
+            self.sections = []
+            self.subjects = []
+
+            # UI
+            self.create_form()
+
+        threading.Thread(target=first, daemon=True).start()
+
 
     def create_form(self):
 
@@ -77,135 +83,161 @@ class AttendanceForm:
 
     def find_section(self, selected_class):
 
-        self.selected_class = selected_class
-        # sql = """select section from subjects where username = %s and class = %s;"""            
-        # self.cursor.execute(sql, (self.teacher_username, self.selected_class,))
-        # section_list = self.cursor.fetchall()
-        
-        # print(section_list)
-        self.all_sections_list = self.sql.att_find_section(self.teacher_username, self.selected_class)
-        # self.all_sections_list = sorted(self.all_sections_list)
+        def theading_find_section():
 
-        # print(self.all_sections_list)
-        self.section_menu.configure(values=self.all_sections_list, state="readonly")
+            self.selected_class = selected_class
+            # sql = """select section from subjects where username = %s and class = %s;"""            
+            # self.cursor.execute(sql, (self.teacher_username, self.selected_class,))
+            # section_list = self.cursor.fetchall()
+            
+            # print(section_list)
+            self.all_sections_list = self.sql.att_find_section(self.teacher_username, self.selected_class)
+            # self.all_sections_list = sorted(self.all_sections_list)
+    
+            # print(self.all_sections_list)
+            self.section_menu.configure(values=self.all_sections_list, state="readonly")
+    
+            self.section_menu.set("")
+            self.subject_menu.set("")
+            self.subject_menu.configure(values=[], state="disabled")
 
-        self.section_menu.set("")
-        self.subject_menu.set("")
-        self.subject_menu.configure(values=[], state="disabled")
+        threading.Thread(target=theading_find_section, daemon=True).start()
     
     def find_subject(self, selected_section):
 
-        self.selected_section = selected_section
-        # sql = """select sub_name from subjects where username = %s and class = %s and section = %s;"""            
-        # self.cursor.execute(sql, (self.teacher_username, self.selected_class, self.selected_section))
-        # subject_list = self.cursor.fetchall()
+        def theading_find_subject():
 
-        # print(subject_list)
-        self.all_subject_list = self.sql.att_find_subject(self.teacher_username, self.selected_class, self.selected_section)
-        # self.all_subject_list = sorted(self.all_subject_list)
 
-        # print(self.all_subject_list)
-        self.subject_menu.configure(values=self.all_subject_list, state="readonly")
+            self.selected_section = selected_section
+            # sql = """select sub_name from subjects where username = %s and class = %s and section = %s;"""            
+            # self.cursor.execute(sql, (self.teacher_username, self.selected_class, self.selected_section))
+            # subject_list = self.cursor.fetchall()
+
+            # print(subject_list)
+            self.all_subject_list = self.sql.att_find_subject(self.teacher_username, self.selected_class, self.selected_section)
+            # self.all_subject_list = sorted(self.all_subject_list)
+
+            # print(self.all_subject_list)
+            self.subject_menu.configure(values=self.all_subject_list, state="readonly")
+
+        threading.Thread(target=theading_find_subject, daemon=True).start()
 
     def find_class(self):
-        # username = self.cursor.execute(
-        #     "SELECT DISTINCT class FROM subjects WHERE username=%s",
-        #     (self.teacher_username,)
-        # )
-        # results = self.sql.att_find_class(self.teacher_username)
 
-        self.classes = self.sql.att_find_class(self.teacher_username)
-        # self.sections = sorted(set([row[1] for row in results]))
-        # self.subjects = sorted(set([row[2] for row in results]))
+        def theading_find_class():
 
-        self.class_menu.configure(values=self.classes)
-        # self.section_menu.configure(values=self.sections)
-        # self.subject_menu.configure(values=self.subjects)
+            # username = self.cursor.execute(
+            #     "SELECT DISTINCT class FROM subjects WHERE username=%s",
+            #     (self.teacher_username,)
+            # )
+            # results = self.sql.att_find_class(self.teacher_username)
 
-        # if self.classes: self.class_var.set(self.classes[0])
-        # if self.sections: self.section_var.set(self.sections[0])
-        # if self.subjects: self.subject_var.set(self.subjects[0])
+            self.classes = self.sql.att_find_class(self.teacher_username)
+            # self.sections = sorted(set([row[1] for row in results]))
+            # self.subjects = sorted(set([row[2] for row in results]))
+
+            self.class_menu.configure(values=self.classes)
+            # self.section_menu.configure(values=self.sections)
+            # self.subject_menu.configure(values=self.subjects)
+
+            # if self.classes: self.class_var.set(self.classes[0])
+            # if self.sections: self.section_var.set(self.sections[0])
+            # if self.subjects: self.subject_var.set(self.subjects[0])
+
+        threading.Thread(target=theading_find_class, daemon=True).start()
 
     def load_students(self):
-        for widget in self.student_frame.winfo_children():
-            widget.destroy()
 
-        class_val = self.class_menu.get()
-        section_val = self.section_menu.get()
-        subject_val = self.subject_menu.get()
+        def theading_load_student():
 
-        if not class_val or not section_val or not subject_val:
-            messagebox.showerror("Input Error", "Subject, Class and Section are required.")
-            return
-        
-        # self.cursor.execute(
-        #     "SELECT id, roll, s_name FROM students WHERE class=%s AND section=%s ORDER BY roll",
-        #     (class_val, section_val)
-        # )
-        # students = self.cursor.fetchall()
-        students = self.sql.att_load_student(class_val, section_val)
-        self.attendance_data.clear()
+            for widget in self.student_frame.winfo_children():
+                widget.destroy()
 
-        for i, (sid, roll, name) in enumerate(students, start=1):
-            # self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=1", (sid,))
-            # self.present_count = self.cursor.fetchone()[0]
-            self.present_count = self.sql.att_std_present(sid,)
+            class_val = self.class_menu.get()
+            section_val = self.section_menu.get()
+            subject_val = self.subject_menu.get()
 
-            # self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=0", (sid,))
-            # self.absent_count = self.cursor.fetchone()[0]
-            self.absent_count = self.sql.att_std_absent(sid)
+            if not class_val or not section_val or not subject_val:
+                messagebox.showerror("Input Error", "Subject, Class and Section are required.")
+                return
 
-            row = ctk.CTkFrame(self.student_frame)
-            row.pack(fill="x", pady=2, padx=5)
+            # self.cursor.execute(
+            #     "SELECT id, roll, s_name FROM students WHERE class=%s AND section=%s ORDER BY roll",
+            #     (class_val, section_val)
+            # )
+            # students = self.cursor.fetchall()
+            students = self.sql.att_load_student(class_val, section_val)
+            self.attendance_data.clear()
 
-            entries = [str(i), str(roll), name, str(self.present_count), str(self.absent_count)]
-            widths = [45, 95, 250, 75, 90]
+            for i, (sid, roll, name) in enumerate(students, start=1):
+                # self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=1", (sid,))
+                # self.present_count = self.cursor.fetchone()[0]
+                self.present_count = self.sql.att_std_present(sid,)
 
-            for j, val in enumerate(entries):
-                ctk.CTkLabel(row, text=val, width=widths[j], anchor="center").grid(row=0, column=j, padx=2)
+                # self.cursor.execute("SELECT COUNT(*) FROM attendance WHERE student_id=%s AND status=0", (sid,))
+                # self.absent_count = self.cursor.fetchone()[0]
+                self.absent_count = self.sql.att_std_absent(sid)
 
-            var = ctk.BooleanVar(value=True)
-            checkbox = ctk.CTkCheckBox(row, text="", variable=var, onvalue=True, offvalue=False, width=50, height=35)
-            checkbox.grid(row=0, column=5, padx=(20,0))
+                row = ctk.CTkFrame(self.student_frame)
+                row.pack(fill="x", pady=2, padx=5)
 
-            self.attendance_data[sid] = var
+                entries = [str(i), str(roll), name, str(self.present_count), str(self.absent_count)]
+                widths = [45, 95, 250, 75, 90]
 
-            ctk.CTkLabel(self.attendence_frame, text=f"All Student of Subject {subject_val}, Class {class_val} & Section {section_val} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=245, anchor="center")
+                for j, val in enumerate(entries):
+                    ctk.CTkLabel(row, text=val, width=widths[j], anchor="center").grid(row=0, column=j, padx=2)
 
-            ctk.CTkLabel(self.attendence_frame, text=f"Total Class of Subject {self.subject_menu.get()} = {self.present_count + self.absent_count} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=220, anchor="center")
+                var = ctk.BooleanVar(value=True)
+                checkbox = ctk.CTkCheckBox(row, text="", variable=var, onvalue=True, offvalue=False, width=50, height=35)
+                checkbox.grid(row=0, column=5, padx=(20,0))
+
+                self.attendance_data[sid] = var
+
+                ctk.CTkLabel(self.attendence_frame, text=f"All Student of Subject {subject_val}, Class {class_val} & Section {section_val} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=245, anchor="center")
+
+                ctk.CTkLabel(self.attendence_frame, text=f"Total Class of Subject {self.subject_menu.get()} = {self.present_count + self.absent_count} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=220, anchor="center")
+
+        threading.Thread(target=theading_load_student, daemon=True).start()
+
 
     def save_attendance(self):
-        class_val = self.class_menu.get()
-        section_val = self.section_menu.get()
-        subject = self.subject_menu.get()
-        t_username = self.teacher_username
 
-        if not subject or not t_username or not class_val or not section_val:
-            messagebox.showerror("Input Error", "All fields are required.")
-            return
+        # def theading_save_student():
 
-        today = date.today()
-        try:
-            for student_id, present_var in self.attendance_data.items():
-                status = 1 if present_var.get() else 0
-            #     self.cursor.execute("""
-            #         INSERT INTO attendance (student_id, class, section, subject, date, status, t_username)
-            #         VALUES (%s, %s, %s, %s, %s, %s, %s)
-            #     """, (student_id, class_val, section_val, subject, today, status, t_username))
+            class_val = self.class_menu.get()
+            section_val = self.section_menu.get()
+            subject = self.subject_menu.get()
+            t_username = self.teacher_username
 
-            # self.db.commit()
-            # messagebox.showinfo("Success", "Attendance saved successfully.")
-            save = self.sql.att_save_attendance(student_id, class_val, section_val, subject, today, status, t_username)
+            if not subject or not t_username or not class_val or not section_val:
+                messagebox.showerror("Input Error", "All fields are required.")
+                return
 
-            if save is True:
-                messagebox.showinfo("Success", "Attendance saved successfully.")
-                self.attendence_frame.destroy()
-            else:
-                messagebox.showerror(save)
+            today = date.today()
+            try:
+                for student_id, present_var in self.attendance_data.items():
+                    status = 1 if present_var.get() else 0
+                #     self.cursor.execute("""
+                #         INSERT INTO attendance (student_id, class, section, subject, date, status, t_username)
+                #         VALUES (%s, %s, %s, %s, %s, %s, %s)
+                #     """, (student_id, class_val, section_val, subject, today, status, t_username))
 
-        except Exception as e:
-            # self.db.rollback()
-            messagebox.showerror("Error", f"Failed to save attendance.\n{e}")
+                # self.db.commit()
+                # messagebox.showinfo("Success", "Attendance saved successfully.")
+                save = self.sql.att_save_attendance(student_id, class_val, section_val, subject, today, status, t_username)
+
+                if save is True:
+                    messagebox.showinfo("Success", "Attendance saved successfully.")
+                    self.attendence_frame.destroy()
+                else:
+                    messagebox.showerror(save)
+
+            except Exception as e:
+                # self.db.rollback()
+                messagebox.showerror("Error", f"Failed to save attendance.\n{e}")
+
+        # threading.Thread(target=theading_save_student, daemon=True).start()
+
 
 
 
