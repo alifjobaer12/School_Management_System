@@ -28,7 +28,9 @@ class SmartSchool:
 
         self.login_window = CTk()
         self.login_window.geometry("700x400")
-        self.login_window.title("School Management System")
+        self.login_window.title("SmartSchool")
+        appicon_path = Path(__file__).resolve().parent / "image" / "SmartSchool.ico"
+        self.login_window.iconbitmap(appicon_path)
 
         self.main_windo = CTkFrame(self.login_window, width=700, height=400, fg_color="#b2fff5")
         self.main_windo.pack(fill="both", expand=True)
