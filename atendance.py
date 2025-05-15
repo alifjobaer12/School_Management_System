@@ -13,6 +13,8 @@ class AttendanceForm:
     def __init__(self, master, teacher_username):
 
         def first():
+            ctk.set_appearance_mode("light")
+            ctk.set_default_color_theme("blue")
 
             # Database connection setup
             # self.db = mysql.connector.connect(
@@ -27,6 +29,7 @@ class AttendanceForm:
             self.sql = MySQLQuery()
 
             self.attendence_frame = master
+            self.attendence_frame.configure(fg_color="#D7E6FF")
             self.teacher_username = teacher_username
 
             # Variables
@@ -50,21 +53,21 @@ class AttendanceForm:
         ctk.CTkLabel(self.attendence_frame, text=f"Teacher {self.teacher_username}", font=("Helvetica", 20, "bold"),).pack(pady=5)
 
         ctk.CTkLabel(self.attendence_frame, text="Class",font=("Helvetica", 16, "bold")).place(x=100, y=70, anchor="center")
-        self.class_menu = ctk.CTkComboBox(self.attendence_frame, state="readonly", font=("Helvetica", 16, "bold"), values=self.classes, variable=self.class_var, command=self.find_section)
+        self.class_menu = ctk.CTkComboBox(self.attendence_frame, justify="center", state="readonly", font=("Helvetica", 16, "bold"), corner_radius=7, border_width=0, fg_color="#ffffff", text_color="#2c3e50", button_color="#4a6fa5", button_hover_color="#3b5c86", dropdown_fg_color="#f0f4fa", dropdown_text_color="#2c3e50", dropdown_hover_color="#d0e0f5", values=self.classes, variable=self.class_var, command=self.find_section)
         self.class_menu.place(x=100, y=100, anchor="center")
 
         ctk.CTkLabel(self.attendence_frame, text="Section", font=("Helvetica", 16, "bold")).place(x=350, y=70, anchor="center")
-        self.section_menu = ctk.CTkComboBox(self.attendence_frame, state="disabled", font=("Helvetica", 16, "bold"), values=self.sections, variable=self.section_var, command=self.find_subject)
+        self.section_menu = ctk.CTkComboBox(self.attendence_frame, justify="center", state="disabled", font=("Helvetica", 16, "bold"), corner_radius=7, border_width=0, fg_color="#ffffff", text_color="#2c3e50", button_color="#4a6fa5", button_hover_color="#3b5c86", dropdown_fg_color="#f0f4fa", dropdown_text_color="#2c3e50", dropdown_hover_color="#d0e0f5", values=self.sections, variable=self.section_var, command=self.find_subject)
         self.section_menu.place(x=350, y=100, anchor="center")
 
         ctk.CTkLabel(self.attendence_frame, text="Subject", font=("Helvetica", 16, "bold"),).place(x=600, y=70, anchor="center")
-        self.subject_menu = ctk.CTkComboBox(self.attendence_frame, state="disabled", font=("Helvetica", 16, "bold"), values=self.subjects, variable=self.subject_var)
+        self.subject_menu = ctk.CTkComboBox(self.attendence_frame, justify="center", state="disabled", font=("Helvetica", 16, "bold"), corner_radius=7, border_width=0, fg_color="#ffffff", text_color="#2c3e50", button_color="#4a6fa5", button_hover_color="#3b5c86", dropdown_fg_color="#f0f4fa", dropdown_text_color="#2c3e50", dropdown_hover_color="#d0e0f5", values=self.subjects, variable=self.subject_var)
         self.subject_menu.place(x=600, y=100, anchor="center")
 
         self.load_btn = ctk.CTkButton(self.attendence_frame, text="Load Students", font=("Helvetica", 14, "bold"), command=self.load_students)
         self.load_btn.place(x=350, y=170, anchor="center")
 
-        self.header_frame = ctk.CTkFrame(self.attendence_frame,)
+        self.header_frame = ctk.CTkFrame(self.attendence_frame, fg_color="white")
         self.header_frame.place(x=350, y=275, anchor="center",)
         Today = date.today()
         headers = ["SL No", "Roll", "Name", "Present", "Absent", Today]
@@ -72,7 +75,7 @@ class AttendanceForm:
         for i, header in enumerate(headers):
             ctk.CTkLabel(self.header_frame, text=header, width=widths[i], anchor="center").grid(row=0, column=i, padx=2)
 
-        self.student_frame = ctk.CTkScrollableFrame(self.attendence_frame, width=650, height=500)
+        self.student_frame = ctk.CTkScrollableFrame(self.attendence_frame, width=650, height=500, fg_color="white")
         self.student_frame.place(x=350, y=550, anchor="center")
 
         self.save_btn = ctk.CTkButton(self.attendence_frame, font=("Helvetica", 14, "bold"), text="Save Attendance", command=self.save_attendance).place(x=350, y=850, anchor="center")
@@ -185,7 +188,7 @@ class AttendanceForm:
                 widths = [45, 95, 250, 75, 90]
 
                 for j, val in enumerate(entries):
-                    ctk.CTkLabel(row, text=val, width=widths[j], anchor="center").grid(row=0, column=j, padx=2)
+                    ctk.CTkLabel(row, text=val, width=widths[j], fg_color="#D7E6FF", anchor="center").grid(row=0, column=j, padx=2)
 
                 var = ctk.BooleanVar(value=True)
                 checkbox = ctk.CTkCheckBox(row, text="", variable=var, onvalue=True, offvalue=False, width=50, height=35)
@@ -193,9 +196,9 @@ class AttendanceForm:
 
                 self.attendance_data[sid] = var
 
-                ctk.CTkLabel(self.attendence_frame, text=f"All Student of Subject {subject_val}, Class {class_val} & Section {section_val} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=245, anchor="center")
+                ctk.CTkLabel(self.attendence_frame, text=f"All Student of Subject {subject_val}, Class {class_val} & Section {section_val} ", font=("Helvetica", 14, "bold"), width=1, height=1, fg_color="transparent").place(x=350, y=245, anchor="center")
 
-                ctk.CTkLabel(self.attendence_frame, text=f"Total Class of Subject {self.subject_menu.get()} = {self.present_count + self.absent_count} ", font=("Helvetica", 14, "bold"), width=1, height=1).place(x=350, y=220, anchor="center")
+                ctk.CTkLabel(self.attendence_frame, text=f"Total Class of Subject {self.subject_menu.get()} = {self.present_count + self.absent_count} ", font=("Helvetica", 14, "bold"), width=1, height=1, fg_color="transparent").place(x=350, y=220, anchor="center")
 
         threading.Thread(target=theading_load_student, daemon=True).start()
 

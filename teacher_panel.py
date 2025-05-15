@@ -49,7 +49,7 @@ class teacher_panal:
 
     def create_main_frame(self):
         # Teacher panel main frame
-        self.tec_panal_frame = CTkFrame(self.teacher_windo, fg_color="#cef2ff", width=700, height=400)
+        self.tec_panal_frame = CTkFrame(self.teacher_windo, fg_color="#D7E6FF", width=700, height=400)
         self.tec_panal_frame.place(x=350, y=200, anchor="center")
 
         self.tec_h_label = CTkLabel(self.tec_panal_frame, text=f"Teacher\nHi! {self.tec_username}", width=1, height=1, fg_color="transparent", text_color="black", font=("Helvetica", 22, "bold"))
@@ -80,7 +80,7 @@ class teacher_panal:
         ICON_DIR = BASE_DIR / "image"
         attendence_icon = CTkImage(Image.open(ICON_DIR / "attendence.png"), size=(30, 30))
 
-        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#2c3e50", fg_color="transparent", hover_color="#d4e9ff", text="Take Attendance", image=attendence_icon, compound="top", command=self.take_attendence, font=("Helvetica",16, "bold"), hover=True)
+        atend_btn = CTkButton(self.tec_info_view_frame, text_color="#2c3e50", fg_color="transparent", hover_color="#d0e0f5", text="Take Attendance", image=attendence_icon, compound="top", command=self.take_attendence, font=("Helvetica",16, "bold"), hover=True)
         atend_btn.place(x=480, y=56, anchor="center")
 
         if (info and t_sub) is not None:
