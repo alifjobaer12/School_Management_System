@@ -809,6 +809,7 @@ class admin_panel:
                 e_s_adderss.bind("<FocusOut>", add_placeholder)
                 error_l.configure(text="")
                 error_l.update()
+                e_s_username.configure(border_color="#979da2")
                 e_s_class.configure(border_color="#979da2")
                 e_s_sub.configure(border_color="#979da2")
                 e_s_section.configure(border_color="#979da2")
