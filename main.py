@@ -12,7 +12,7 @@ import webbrowser
 import re  
 
 
-class LoginApp:
+class SmartSchool:
     def __init__(self):
         self.anime_x = 320
         self.anime_r_x = -302
@@ -160,6 +160,8 @@ class LoginApp:
                         elif role == "student":
                             self.slide_up(lambda: student_panel(self.uper_main_frame, username, self.anime_y, self.frame_main, self.login_window))
                         self.error_lable.configure(text="")
+                        self.entry_username.delete(0, END)
+                        self.entry_password.delete(0, END)
                     else:
                         self.error_lable.configure(text="Invalid password.", text_color="red")
                         self.error_lable.update()
@@ -536,10 +538,10 @@ class LoginApp:
             signup_btn = CTkButton(self.e_lf_frame,  fg_color="#3a506b", hover_color="#2e6f72", font=("Harvatika", 12, "bold"), command=lambda: forget_password(self), text="Reset Password", text_color="#b2fff5")
             signup_btn.place(x=150, y=285, anchor="center")
 
-            CTkLabel(self.e_lf_frame, text="Password Reset Successfull?", width=1, height=1, font=("Harvatika", 12)).place(x=135, y=320, anchor="center")
-            CTkButton(self.e_lf_frame, text="Log in", font=("Harvatika", 12), width=1, height=1, hover=False, command=self.slide_left, fg_color="transparent", text_color="#2a63db").place(x=235, y=320, anchor="center")
+            CTkLabel(self.e_lf_frame, text="Password Reset Successfull?", width=1, height=1, font=("Harvatika", 12)).place(x=132, y=320, anchor="center")
+            CTkButton(self.e_lf_frame, text="Log in", font=("Harvatika", 12), width=1, height=1, hover=False, command=self.slide_left, fg_color="transparent", text_color="#2a63db").place(x=237, y=320, anchor="center")
 
         self.slide_right()
 
 if __name__ == "__main__":
-    LoginApp()
+    SmartSchool()
