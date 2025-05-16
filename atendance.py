@@ -180,8 +180,8 @@ class AttendanceForm:
                 for student_id, present_var in self.attendance_data.items():
                     status = 1 if present_var.get() else 0
 
-                # sql backend
-                save = self.sql.att_save_attendance(student_id, class_val, section_val, subject, today, status, t_username)
+                    # sql backend
+                    save = self.sql.att_save_attendance(student_id, class_val, section_val, subject, today, status, t_username)
 
                 if save is True:
                     messagebox.showinfo("Success", "Attendance saved successfully.")

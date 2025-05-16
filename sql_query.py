@@ -129,7 +129,7 @@ class MySQLQuery:
             if ck is None:
                 return "❌ Student Not Found"
 
-            self.db.start_transaction()  # START TRANSACTION
+            # self.db.start_transaction()  # START TRANSACTION
 
             self.cursor.execute("DELETE FROM students WHERE username = %s;", (username,))
             self.cursor.execute("DELETE FROM users WHERE username = %s;", (username,))
@@ -201,12 +201,12 @@ class MySQLQuery:
                 return "❌ Teacher Not Found"
     
             # Start transaction
-            self.db.start_transaction()
+            # self.db.start_transaction()
     
             # Delete from all related tables
             self.cursor.execute("DELETE FROM teacher WHERE username = %s;", (username,))
-            self.cursor.execute("DELETE FROM users WHERE username = %s;", (username,))
             self.cursor.execute("DELETE FROM subjects WHERE username = %s;", (username,))
+            self.cursor.execute("DELETE FROM users WHERE username = %s;", (username,))
     
             # Commit if all succeed
             self.db.commit()
