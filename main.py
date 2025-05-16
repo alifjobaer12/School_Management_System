@@ -29,6 +29,7 @@ class SmartSchool:
         self.login_window = CTk()
         self.login_window.geometry("700x400")
         self.login_window.title("SmartSchool")
+        self.login_window.resizable(False, False)
         appicon_path = Path(__file__).resolve().parent / "image" / "SmartSchool.ico"
         self.login_window.iconbitmap(appicon_path)
 
