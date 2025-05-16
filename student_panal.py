@@ -74,7 +74,12 @@ class student_panel:
                                        font=("Helvetica", 14, "bold"), anchor="w")
             label_field.place(x=150, y=10 + i * 25)
 
-            label_value = CTkLabel(self.std_info_view_frame, text=f":     {value}", text_color="black",
+            if len(value) >= 17:
+                name = ' '.join(value.split()[:2])
+                label_value = CTkLabel(self.std_info_view_frame, text=f":     {name}", text_color="black",
+                                       font=("Helvetica", 14, "bold"), anchor="w")
+            else:
+                label_value = CTkLabel(self.std_info_view_frame, text=f":     {value}", text_color="black",
                                        font=("Helvetica", 14, "bold"), anchor="w")
             label_value.place(x=250, y=10 + i * 25)
 
