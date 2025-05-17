@@ -62,6 +62,7 @@ class admin_panel:
     def see_all_std_info(self):
         all_std_info = CTk()
         all_std_info.geometry("1150x900")
+        all_std_info.resizable(False, False)
         all_std_info.title("All Student Info")
 
         def theding_see_std():
@@ -89,6 +90,7 @@ class admin_panel:
     def see_all_tec_info(self):
         all_tec_info = CTk()
         all_tec_info.geometry("720x900")
+        all_tec_info.resizable(False, False)
         all_tec_info.title("All Teacher Info")
 
         def theding_see_tec():

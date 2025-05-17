@@ -39,6 +39,7 @@ class teacher_panal:
     def take_attendence(self):
         attendence = CTk()
         attendence.geometry("700x900")
+        attendence.resizable(False, False)
         attendence.title("Attendance Sheet")
         def theading_attendence():
             AttendanceForm(attendence, self.tec_username)

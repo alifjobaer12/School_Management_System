@@ -1,4 +1,4 @@
-# 🎓 School Management System
+# 🎓 School Management System (SmartSchool)
 
 Welcome to our first full-fledged **Database Application Project** designed to simplify school operations for administrators, teachers, and students.
 
@@ -8,24 +8,25 @@ Welcome to our first full-fledged **Database Application Project** designed to s
 
 The **School Management System** is a desktop software solution to efficiently handle routine school management tasks. It features role-based access and custom dashboards for each user type:
 
-- 🏫 **Admin**: Manage students, teachers, and school settings  
-- 👨‍🏫 **Teacher**: View class routines and daily schedules  
-- 👨‍🎓 **Student**: Access personal details, class schedules, fee status, and grades
+- 🏫 **Admin**: Manage students, teachers, and school settings.
+- 👨‍🏫 **Teacher**: Take attendance of students, view class routines and daily schedules.
+- 👨‍🎓 **Student**: Access personal details, class schedules, fee status, and grades.
 
 ---
 
 ## ✨ Features
 
 ### 🛠️ Admin Capabilities
-- ➕ Add, 🔍 search, and ❌ delete students and teachers
-- 👁️ View all student and teacher records
-- 💸 Update student tuition fees
-- 🔐 Reset forgotten passwords (for registered users)
-- 📝 New user registration
+- ➕ Add, 🔍 search, and ❌ delete students and teachers.
+- 👁️ View all student and teacher records.
+- 💸 Update student tuition fees and assign subject to teacher.
+- 🔐 Reset forgotten passwords (for registered users).
+- 📝 New user registration.
 
 ### 📚 Teacher Dashboard
-- 📅 View daily class routine with exact timings
-- 📊 See total number of classes for the current day
+- 🧑‍🏫 Take attendance of students.
+- 📅 View daily class routine with exact timings.
+- 📊 See total number of classes for the current day.
 
 ### 📖 Student Dashboard
 - 🆔 View personal details
@@ -47,8 +48,8 @@ The **School Management System** is a desktop software solution to efficiently h
 
 ## ⚙️ Setup
 
-🟢 **No installation required!**  
-Just run the provided `.exe` file on any Windows desktop to launch the software.
+🟢 **One small installation required!**  
+Just run the provided `sutup.exe` file for the first time than you can run our app `SmartSchool.exe` on any Windows desktop to launch the software.
 
 ---
 
@@ -69,6 +70,18 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 </p>
 
 <p align="center">
+  <em>Registration Page</em>
+  <br>
+  <img src="assets/screenshots/registeration.png" alt="Login Page" width="600"/>
+</p>
+
+<p align="center">
+  <em>Password Reset Page</em>
+  <br>
+  <img src="assets/screenshots/password_reset.png" alt="Login Page" width="600"/>
+</p>
+
+<p align="center">
   <em>Admin Dashboard</em>
   <br>
   <img src="assets/screenshots/admin_panel.png" alt="Admin Dashboard" width="600"/>
@@ -78,6 +91,12 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
   <em>Teacher Dashboard</em>
   <br>
   <img src="assets/screenshots/teacher_panel.png" alt="Teacher Dashboard" width="600"/>
+</p>
+
+<p align="center">
+  <em>Attendance Sheet</em>
+  <br>
+  <img src="assets/screenshots/teacher_attendance.png" alt="Teacher Dashboard" width="600"/>
 </p>
 
 <p align="center">
@@ -94,17 +113,16 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 | Name                         | Role             | GitHub Profile |
 |------------------------------|------------------|----------------|
 | **MD JOBAER ISLAM ALIF**     | Main Developer   | [GitHub](https://github.com/alifjobaer12) |
-| **MD. ISMAIL HOSSAIN SHEZAN**| Developer        | [GitHub](https://github.com/kenshiro147) |
-| **MD RAKIB ALI**             | Developer        | [GitHub](https://github.com/Rakibislam22) |
-| **PRANTA KUMER PANDIT**      | Developer        | [GitHub](https://github.com/pandit2003) |
-| **JUBAER RAHMAN**            | Developer        | [GitHub](https://github.com/jubaerjisan) |
+| **MD. ISMAIL HOSSAIN SHEZAN**| App Tester        | [GitHub](https://github.com/kenshiro147) |
+| **MD RAKIB ALI**             | App Tester        | [GitHub](https://github.com/Rakibislam22) |
+| **PRANTA KUMER PANDIT**      | -        | [GitHub](https://github.com/pandit2003) |
+| **JUBAER RAHMAN**            | -        | [GitHub](https://github.com/jubaerjisan) |
 
 
 ---
 
 ## 🔮 Future Enhancements
 
-- 📌 Attendance tracking system
 - 📬 Notification system for teachers and students
 - 📤 Export reports to PDF
 - 📱 SMS or email alerts for parents
@@ -113,10 +131,12 @@ Just run the provided `.exe` file on any Windows desktop to launch the software.
 
 ## 📄 License
 
-> This project is developed for educational purposes only.
+> This project was created for learning and educational use only. If you're interested in using or running it, please reach out and get permission from the original developer first. Thanks!
+<p align="right"><sub>©️Team_Chronomate</sub></p>
+
 
 ---
 
 🚀 *Thank you for exploring our project!*  
-Made with ❤️ by our team.
+Made with ❤️ by our team "Team_Chronomate".
 
